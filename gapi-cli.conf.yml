@@ -1,0 +1,4 @@
+config:
+  app:
+    local:
+      TEST_CONFIG: 'dadada'

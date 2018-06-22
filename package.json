@@ -1,0 +1,32 @@
+{
+  "name": "@rxdi/core",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "gapi start --local --path=./src/testing-app/main.ts",
+    "lint": "dir",
+    "fakelint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "test": "gapi test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rxdi/core"
+  },
+  "author": "Kristiyan Tachev (@Stradivario)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rxdi/core/issues"
+  },
+  "homepage": "https://github.com/rxdi/core#readme",
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "reflect-metadata": "^0.1.12",
+    "rxjs": "^6.2.1",
+    "systemjs": "^0.21.4"
+  },
+  "devDependencies": {
+    "@types/node": "^10.3.3",
+    "@types/systemjs": "^0.20.6"
+  }
+}
