@@ -17,6 +17,11 @@ function Service(optionsOrServiceName) {
             moduleName: target['originalName'],
             moduleHash: uniqueHashForClass,
             type: 'service',
+            raw: `
+            ---- @Service '${target['originalName']}' metadata----
+            @Service()
+            ${target.name}
+            `
         };
         const service = {
             type: target

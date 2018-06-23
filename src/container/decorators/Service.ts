@@ -46,6 +46,11 @@ export function Service<T, K extends keyof T>(optionsOrServiceName?: ServiceOpti
             moduleName: target['originalName'],
             moduleHash: uniqueHashForClass,
             type: 'service',
+            raw: `
+            ---- @Service '${target['originalName']}' metadata----
+            @Service()
+            ${target.name}
+            `
         };
 
 
