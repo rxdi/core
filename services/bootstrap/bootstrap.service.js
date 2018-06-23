@@ -63,7 +63,6 @@ let BootstrapService = class BootstrapService {
     registerPlugin(pluggable) {
         return __awaiter(this, void 0, void 0, function* () {
             const plugin = container_1.Container.get(pluggable);
-            console.log(plugin);
             yield plugin.register();
             return plugin;
         });

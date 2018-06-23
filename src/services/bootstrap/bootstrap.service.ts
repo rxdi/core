@@ -68,7 +68,6 @@ export class BootstrapService {
 
     private async registerPlugin(pluggable: Function | PluginInterface) {
         const plugin = Container.get<PluginInterface>(pluggable);
-        console.log(plugin);
         await plugin.register();
         return plugin;
     }
