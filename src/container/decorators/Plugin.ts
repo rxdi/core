@@ -4,6 +4,7 @@ import { ServiceOptions } from '../types/ServiceOptions';
 import { Token } from '../Token';
 import { Container } from '../Container';
 import { createUniqueHash } from '../../helpers/create-unique-hash';
+import { DecoratorType, Metadata } from '../../decorators/module/module.interfaces';
 export interface PluginInterface {
     name?: string;
     version?: string;
@@ -19,11 +20,13 @@ export function Plugin<T, K extends keyof T>(optionsOrServiceName?: ServiceOptio
         Object.defineProperty(target, 'originalName', { value: target.name || target.constructor.name, writable: false });
         Object.defineProperty(target, 'name', { value: uniqueHashForClass, writable: true });
 
-        target['metadata'] = {
+        target['metadata'] = <Metadata>{
             useFactory: optionsOrServiceName && optionsOrServiceName['useFactory'] || null,
             provideIn: optionsOrServiceName && optionsOrServiceName['provideIn'] || 'root',
             moduleName: target['originalName'],
-            hash: uniqueHashForClass
+            moduleHash: target['name'],
+            raw: `${target}`,
+            type: <DecoratorType>'plugin',
         };
 
         const service: ServiceMetadata<T, K> = {

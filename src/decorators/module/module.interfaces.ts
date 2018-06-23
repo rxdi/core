@@ -22,11 +22,13 @@ export interface ModuleWithServices {
     services?: Array<ServiceArguments | Function>;
 }
 
+export type DecoratorType = 'module' | 'service' | 'plugin';
+
 export interface Metadata {
     moduleHash?: string;
     moduleName?: string;
     raw?: string;
-    type?: 'module' | 'service';
+    type?: DecoratorType;
 }
 
 export interface ServiceArgumentsInternal {

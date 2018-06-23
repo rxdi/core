@@ -15,7 +15,9 @@ function Plugin(optionsOrServiceName) {
             useFactory: optionsOrServiceName && optionsOrServiceName['useFactory'] || null,
             provideIn: optionsOrServiceName && optionsOrServiceName['provideIn'] || 'root',
             moduleName: target['originalName'],
-            hash: uniqueHashForClass
+            moduleHash: target['name'],
+            raw: `${target}`,
+            type: 'plugin',
         };
         const service = {
             type: original
