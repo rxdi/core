@@ -60,8 +60,15 @@ export class ModuleService {
         });
     }
 
-    setPlugins(plugins) {
-        plugins.forEach(plugin => this.pluginService.register(plugin));
+    setPlugins(plugins, currentModule) {
+
+        plugins.forEach(plugin =>{
+            currentModule.putItem({
+                data: plugin,
+                key: plugin.name
+            });
+            this.pluginService.register(plugin);
+        });
     }
 
     setAfterPlugins(plugins) {

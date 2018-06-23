@@ -19,7 +19,7 @@ function GenericConstruct(module, original, currentModule) {
             moduleService.setBeforePlugins(module.beforePlugins);
         }
         if (module.plugins) {
-            moduleService.setPlugins(module.plugins);
+            moduleService.setPlugins(module.plugins, currentModule);
         }
         if (module.afterPlugins && module.afterPlugins.length) {
             moduleService.setAfterPlugins(module.afterPlugins);

@@ -24,7 +24,7 @@ export function GenericConstruct(module: any, original, currentModule) {
         }
 
         if (module.plugins) {
-            moduleService.setPlugins(module.plugins);
+            moduleService.setPlugins(module.plugins, currentModule);
         }
 
         if (module.afterPlugins && module.afterPlugins.length) {

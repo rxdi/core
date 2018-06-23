@@ -67,7 +67,7 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
                 }
 
                 if (result.plugins) {
-                    moduleService.setPlugins(result.plugins);
+                    moduleService.setPlugins(result.plugins, currentModule);
                 }
 
                 if (result.afterPlugins) {

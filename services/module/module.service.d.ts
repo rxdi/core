@@ -6,7 +6,7 @@ export declare class ModuleService {
     setServices(services: ServiceArgumentsInternal[], original: {
         metadata: Metadata;
     }, currentModule: any): void;
-    setPlugins(plugins: any): void;
+    setPlugins(plugins: any, currentModule: any): void;
     setAfterPlugins(plugins: any): void;
     setBeforePlugins(plugins: any): void;
     validateImports(m: any, original: {

@@ -54,7 +54,7 @@ function Module(module) {
                     moduleService.setBeforePlugins(result.beforePlugins);
                 }
                 if (result.plugins) {
-                    moduleService.setPlugins(result.plugins);
+                    moduleService.setPlugins(result.plugins, currentModule);
                 }
                 if (result.afterPlugins) {
                     moduleService.setAfterPlugins(result.afterPlugins);
