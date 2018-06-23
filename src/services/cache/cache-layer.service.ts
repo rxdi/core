@@ -4,7 +4,7 @@ import { CacheLayer } from '../cache/cache-layer';
 import { CacheLayerItem, CacheLayerInterface, Duplicates } from '../cache/cache-layer.interfaces';
 import { InternalEvents, InternalLayers } from '../../helpers/events';
 import { Service } from '../../container';
-import { Metadata } from 'decorators/module/module.interfaces';
+import { Metadata } from '../../decorators/module/module.interfaces';
 import { BootstrapLogger } from '../bootstrap-logger';
 
 const FRIENDLY_ERROR_MESSAGES = {

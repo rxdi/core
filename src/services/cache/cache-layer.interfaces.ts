@@ -1,4 +1,4 @@
-import { Metadata } from 'decorators/module/module.interfaces';
+import { Metadata } from '../../decorators/module/module.interfaces';
 
 export interface CacheLayerItem<T> {
   key: string;
