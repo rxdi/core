@@ -7,8 +7,8 @@ export declare class ModuleService {
         metadata: Metadata;
     }, currentModule: any): void;
     setPlugins(plugins: any, currentModule: any): void;
-    setAfterPlugins(plugins: any): void;
-    setBeforePlugins(plugins: any): void;
+    setAfterPlugins(plugins: any, currentModule: any): void;
+    setBeforePlugins(plugins: any, currentModule: any): void;
     validateImports(m: any, original: {
         metadata: Metadata;
     }): void;

@@ -61,7 +61,6 @@ export class ModuleService {
     }
 
     setPlugins(plugins, currentModule) {
-
         plugins.forEach(plugin =>{
             currentModule.putItem({
                 data: plugin,
@@ -71,12 +70,24 @@ export class ModuleService {
         });
     }
 
-    setAfterPlugins(plugins) {
-        plugins.forEach(plugin => this.pluginService.registerAfter(plugin));
+    setAfterPlugins(plugins, currentModule) {
+        plugins.forEach(plugin => {
+            currentModule.putItem({
+                data: plugin,
+                key: plugin.name
+            });
+            this.pluginService.registerAfter(plugin);
+        });
     }
 
-    setBeforePlugins(plugins) {
-        plugins.forEach(plugin => this.pluginService.registerBefore(plugin));
+    setBeforePlugins(plugins, currentModule) {
+        plugins.forEach(plugin => {
+            currentModule.putItem({
+                data: plugin,
+                key: plugin.name
+            });
+            this.pluginService.registerBefore(plugin);
+        });
     }
 
     validateImports(m, original: { metadata: Metadata }) {
