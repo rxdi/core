@@ -3,8 +3,33 @@
 import { UserService } from './services';
 import { Observable } from 'rxjs';
 import { Module } from '../../../decorators/module/module.decorator';
+import { PluginInterface, Plugin } from '../../../container/decorators/Plugin';
+
+@Plugin()
+export class TestHapiPlugin implements PluginInterface {
+
+    constructor(
+        // @Inject(HAPI_SERVER) private server: Server
+    ) {
+        console.log("PLUGIN");
+    }
+
+    async register() {
+        // this.server.route({
+        //     method: 'GET',
+        //     path: '/test',
+        //     handler: this.handler.bind(this)
+        // });
+    }
+
+    async handler(request, h) {
+        return 'dada1';
+    }
+
+}
 
 @Module({
+    plugins: [TestHapiPlugin],
     services: [
         UserService,
         {

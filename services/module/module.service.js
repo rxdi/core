@@ -117,12 +117,12 @@ let ModuleService = class ModuleService {
             return;
         }
         if (m.metadata.type !== 'service') {
+            const moduleType = m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1);
             throw new Error(`
             ${original.metadata.raw}
             -> @Module: '${original.metadata.moduleName}'
             -> @Module hash: '${original.metadata.moduleHash}'
-                --> @${m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1)} '${m.metadata.moduleName}' provided, where expected class decorated with '@Service' instead,
-            
+                --> @${moduleType} '${m.metadata.moduleName}' provided, where expected class decorated with '@Service' instead,
             -> @Hint: please provide class with @Service decorator or remove ${m.metadata.moduleName} from services
             `);
         }

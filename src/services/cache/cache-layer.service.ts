@@ -80,15 +80,16 @@ export class CacheService {
     const duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1);
     if (duplicates.length) {
       const dups = this.searchForDuplicatesByHash(duplicates[0]);
+      const moduleType = dups[0].class['metadata']['type'].charAt(0).toUpperCase() +  dups[0].class['metadata']['type'].slice(1);
       throw new Error(`
                 ${dups[0].class['metadata'].raw}
-                ${dups[0].type.charAt(0)}: '${dups[0].originalName}' found multiple times!
-                ${dups[0].type.charAt(0)} hash: ${dups[0].moduleHash}
+                ${moduleType}: '${dups[0].originalName}' found multiple times!
+                ${moduleType} hash: ${dups[0].moduleHash}
                 Modules: [${dups[0].moduleName}, ${dups[1].moduleName}]
 
                 Hint: '${dups[0].originalName}' class identity hash is identical in both
                 imported files inside ${dups[0].moduleName} and ${dups[1].moduleName}
-                consider removing one of the '${dups[0].originalName}' classes
+                consider removing one of the '${dups[0].originalName}'
             `);
     }
     return duplicates;
