@@ -186,3 +186,28 @@ export class YourModule {
   }
 }
 ```
+
+
+Build with [Parcel](https://parceljs.org/getting_started.html)
+
+Install Parcel:
+```bash
+npm install -g parcel-bundler
+```
+
+Build single bundle from first bootstrapped file in this case `main.ts`
+
+```bash
+parcel build src/main.ts --target node
+```
+
+This command will generate single file from this application inside `dist/main.js` with mappings `dist/main.map`
+
+Starting bundled application
+```bash
+node ./dist/main.js
+```
+
+Important!
+
+This will not bundle your node modules only rxdi application.
