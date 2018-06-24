@@ -15,56 +15,70 @@ const plugin_service_1 = require("../plugin/plugin.service");
 const external_importer_1 = require("../external-importer");
 const rxjs_1 = require("rxjs");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
+const validators_1 = require("./helpers/validators");
 let ModuleService = class ModuleService {
     setServices(services, original, currentModule) {
         services.forEach(service => {
-            this.validateServices(service, original);
-            service.deps = service.deps || [];
+            this.validators.validateServices(service, original);
+            this.setInjectedDependencies(service);
             if (service.provide && service.provide.constructor === Function) {
                 service.provide = service.provide['name'];
             }
-            if (service.deps.length) {
-                service.deps = service.deps.map(dep => container_1.Container.get(dep));
-            }
             if (service.provide && service.useFactory) {
-                const factory = service.useFactory;
-                service.useFactory = () => factory(...service.deps);
-                if (service.lazy) {
-                    this.lazyFactoryService.setLazyFactory(service.provide, service.useFactory());
-                }
-                else {
-                    container_1.Container.set(service.provide, service.useFactory());
-                }
+                this.setUseFactory(service);
             }
             else if (service.provide && service.useDynamic) {
-                const factory = this.externalImporter.importModule(service.useDynamic);
-                this.lazyFactoryService.setLazyFactory(service.provide, factory);
+                this.setUseDynamic(service);
             }
             else if (service.provide && service.useClass && service.useClass.constructor === Function) {
-                const currentClass = new service.useClass(...service.deps);
-                if (service.lazy) {
-                    this.lazyFactoryService.setLazyFactory(service.provide, rxjs_1.of(currentClass));
-                }
-                else {
-                    container_1.Container.get(service.useClass);
-                }
+                this.setUseClass(service);
             }
             else if (service.provide && service.useValue) {
-                container_1.Container.set(service.provide, service.useValue);
-                if (service.lazy) {
-                    this.lazyFactoryService.setLazyFactory(service.provide, rxjs_1.of(container_1.Container.get(service.provide)));
-                }
+                this.setUseValue(service);
             }
             else {
-                currentModule.putItem({
-                    data: service,
-                    key: service.name
-                });
+                currentModule.putItem({ data: service, key: service.name });
             }
         });
     }
-    setPlugins(plugins, currentModule) {
+    setInjectedDependencies(service) {
+        service.deps = service.deps || [];
+        if (service.deps.length) {
+            service.deps = service.deps.map(dep => container_1.Container.get(dep));
+        }
+    }
+    setUseValue(service) {
+        container_1.Container.set(service.provide, service.useValue);
+        if (service.lazy) {
+            this.lazyFactoryService.setLazyFactory(service.provide, rxjs_1.of(container_1.Container.get(service.provide)));
+        }
+    }
+    setUseClass(service) {
+        const currentClass = new service.useClass(...service.deps);
+        if (service.lazy) {
+            this.lazyFactoryService.setLazyFactory(service.provide, rxjs_1.of(currentClass));
+        }
+        else {
+            container_1.Container.get(service.useClass);
+        }
+    }
+    setUseDynamic(service) {
+        const factory = this.externalImporter.importModule(service.useDynamic);
+        this.lazyFactoryService.setLazyFactory(service.provide, factory);
+    }
+    setUseFactory(service) {
+        const factory = service.useFactory;
+        service.useFactory = () => factory(...service.deps);
+        if (service.lazy) {
+            this.lazyFactoryService.setLazyFactory(service.provide, service.useFactory());
+        }
+        else {
+            container_1.Container.set(service.provide, service.useFactory());
+        }
+    }
+    setPlugins(plugins, original, currentModule) {
         plugins.forEach(plugin => {
+            this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
                 key: plugin.name
@@ -72,8 +86,9 @@ let ModuleService = class ModuleService {
             this.pluginService.register(plugin);
         });
     }
-    setAfterPlugins(plugins, currentModule) {
+    setAfterPlugins(plugins, original, currentModule) {
         plugins.forEach(plugin => {
+            this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
                 key: plugin.name
@@ -81,8 +96,9 @@ let ModuleService = class ModuleService {
             this.pluginService.registerAfter(plugin);
         });
     }
-    setBeforePlugins(plugins, currentModule) {
+    setBeforePlugins(plugins, original, currentModule) {
         plugins.forEach(plugin => {
+            this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
                 key: plugin.name
@@ -90,46 +106,9 @@ let ModuleService = class ModuleService {
             this.pluginService.registerBefore(plugin);
         });
     }
-    validateImports(m, original) {
-        if (m.metadata.type !== 'module') {
-            throw new Error(`
-            ${original.metadata.raw}
-            -> @Module: '${original.metadata.moduleName}'
-            -> @Module hash: '${original.metadata.moduleHash}'
-                --> @${m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1)} '${m.originalName}' provided, where expected class decorated with '@Module' instead,
-            
-            -> @Hint: please provide class with @Module decorator or remove ${m.originalName} from imports
-            `);
-        }
-    }
-    validateServices(m, original) {
-        if (!m) {
-            throw new Error(`
-            ${original.metadata.raw}
-            -> @Module: ${original.metadata.moduleName}
-            -> @Module hash: ${original.metadata.moduleHash}
-                --> Maybe you forgot to import some service inside ${original.metadata.moduleName} ?
-
-                Hint: run ts-lint again, looks like imported service is undefined or null inside ${original.metadata.moduleName}
-            `);
-        }
-        if (m.provide) {
-            return;
-        }
-        if (m.metadata.type !== 'service') {
-            const moduleType = m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1);
-            throw new Error(`
-            ${original.metadata.raw}
-            -> @Module: '${original.metadata.moduleName}'
-            -> @Module hash: '${original.metadata.moduleHash}'
-                --> @${moduleType} '${m.metadata.moduleName}' provided, where expected class decorated with '@Service' instead,
-            -> @Hint: please provide class with @Service decorator or remove ${m.metadata.moduleName} from services
-            `);
-        }
-    }
     setImports(module, original) {
         module.imports.forEach((m) => {
-            this.validateImports(m, original);
+            this.validators.validateImports(m, original);
             if (!m) {
                 throw new Error('Missing import module');
             }
@@ -151,6 +130,10 @@ __decorate([
     injector_decorator_1.Injector(external_importer_1.ExternalImporter),
     __metadata("design:type", external_importer_1.ExternalImporter)
 ], ModuleService.prototype, "externalImporter", void 0);
+__decorate([
+    injector_decorator_1.Injector(validators_1.ModuleValidators),
+    __metadata("design:type", validators_1.ModuleValidators)
+], ModuleService.prototype, "validators", void 0);
 ModuleService = __decorate([
     container_1.Service()
 ], ModuleService);

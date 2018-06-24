@@ -102,12 +102,10 @@ export class BootstrapService {
     }
 
     private attachLazyLoadedChainables(res, chainables) {
+        // Remove first chainable unused observable
         chainables.splice(0, 1);
         let count = 0;
-        res.forEach(name => {
-            Container.set(name, chainables[count]);
-            count++;
-        });
+        res.map(name => Container.set(name, chainables[count++]));
         return true;
     }
 

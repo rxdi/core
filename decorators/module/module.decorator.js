@@ -51,13 +51,13 @@ function Module(module) {
                     moduleService.setServices(result.services, original, currentModule);
                 }
                 if (result.beforePlugins) {
-                    moduleService.setBeforePlugins(result.beforePlugins, currentModule);
+                    moduleService.setBeforePlugins(result.beforePlugins, original, currentModule);
                 }
                 if (result.plugins) {
-                    moduleService.setPlugins(result.plugins, currentModule);
+                    moduleService.setPlugins(result.plugins, original, currentModule);
                 }
                 if (result.afterPlugins) {
-                    moduleService.setAfterPlugins(result.afterPlugins, currentModule);
+                    moduleService.setAfterPlugins(result.afterPlugins, original, currentModule);
                 }
                 return result.module ? result.module : result;
             };

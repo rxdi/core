@@ -5,6 +5,7 @@ import { ServiceArgumentsInternal, Metadata } from '../../decorators/module/modu
 import { ExternalImporter } from '../external-importer';
 import { of } from 'rxjs';
 import { Injector } from '../../decorators/injector/injector.decorator';
+import { ModuleValidators } from './helpers/validators';
 
 @Service()
 export class ModuleService {
@@ -12,56 +13,74 @@ export class ModuleService {
     @Injector(LazyFactory) private lazyFactoryService: LazyFactory;
     @Injector(PluginService) private pluginService: PluginService;
     @Injector(ExternalImporter) private externalImporter: ExternalImporter;
+    @Injector(ModuleValidators) private validators: ModuleValidators;
 
     setServices(services: ServiceArgumentsInternal[], original: { metadata: Metadata }, currentModule) {
         services.forEach(service => {
-            this.validateServices(service, original);
+            this.validators.validateServices(service, original);
 
-            service.deps = service.deps || [];
+            this.setInjectedDependencies(service);
 
             if (service.provide && service.provide.constructor === Function) {
                 service.provide = service.provide['name'];
             }
 
-            if (service.deps.length) {
-                service.deps = service.deps.map(dep => Container.get(dep));
+            if (service.provide && service.useFactory) {
+                this.setUseFactory(service);
+            } else if (service.provide && service.useDynamic) {
+                this.setUseDynamic(service);
+            } else if (service.provide && service.useClass && service.useClass.constructor === Function) {
+                this.setUseClass(service);
+            } else if (service.provide && service.useValue) {
+                this.setUseValue(service);
+            } else {
+                currentModule.putItem({ data: service, key: service.name });
             }
 
-            if (service.provide && service.useFactory) {
-                const factory = service.useFactory;
-                service.useFactory = () => factory(...service.deps);
-                if (service.lazy) {
-                    this.lazyFactoryService.setLazyFactory(service.provide, service.useFactory());
-                } else {
-                    Container.set(service.provide, service.useFactory());
-                }
-            } else if (service.provide && service.useDynamic) {
-                const factory = this.externalImporter.importModule(service.useDynamic);
-                this.lazyFactoryService.setLazyFactory(service.provide, factory);
-            } else if (service.provide && service.useClass && service.useClass.constructor === Function) {
-                const currentClass = new service.useClass(...service.deps);
-                if (service.lazy) {
-                    this.lazyFactoryService.setLazyFactory(service.provide, of(currentClass));
-                } else {
-                    Container.get(service.useClass);
-                }
-            } else if (service.provide && service.useValue) {
-                Container.set(service.provide, service.useValue);
-                if (service.lazy) {
-                    this.lazyFactoryService.setLazyFactory(service.provide, of(Container.get(service.provide)));
-                }
-            }
-            else {
-                currentModule.putItem({
-                    data: service,
-                    key: service.name
-                });
-            }
         });
     }
 
-    setPlugins(plugins, currentModule) {
-        plugins.forEach(plugin =>{
+    setInjectedDependencies(service) {
+        service.deps = service.deps || [];
+        if (service.deps.length) {
+            service.deps = service.deps.map(dep => Container.get(dep));
+        }
+    }
+
+    setUseValue(service) {
+        Container.set(service.provide, service.useValue);
+        if (service.lazy) {
+            this.lazyFactoryService.setLazyFactory(service.provide, of(Container.get(service.provide)));
+        }
+    }
+
+    setUseClass(service) {
+        const currentClass = new service.useClass(...service.deps);
+        if (service.lazy) {
+            this.lazyFactoryService.setLazyFactory(service.provide, of(currentClass));
+        } else {
+            Container.get(service.useClass);
+        }
+    }
+
+    setUseDynamic(service) {
+        const factory = this.externalImporter.importModule(service.useDynamic);
+        this.lazyFactoryService.setLazyFactory(service.provide, factory);
+    }
+
+    setUseFactory(service) {
+        const factory = service.useFactory;
+        service.useFactory = () => factory(...service.deps);
+        if (service.lazy) {
+            this.lazyFactoryService.setLazyFactory(service.provide, service.useFactory());
+        } else {
+            Container.set(service.provide, service.useFactory());
+        }
+    }
+
+    setPlugins(plugins, original: { metadata: Metadata }, currentModule) {
+        plugins.forEach(plugin => {
+            this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
                 key: plugin.name
@@ -70,8 +89,9 @@ export class ModuleService {
         });
     }
 
-    setAfterPlugins(plugins, currentModule) {
+    setAfterPlugins(plugins, original: { metadata: Metadata }, currentModule) {
         plugins.forEach(plugin => {
+            this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
                 key: plugin.name
@@ -80,8 +100,9 @@ export class ModuleService {
         });
     }
 
-    setBeforePlugins(plugins, currentModule) {
+    setBeforePlugins(plugins, original: { metadata: Metadata }, currentModule) {
         plugins.forEach(plugin => {
+            this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
                 key: plugin.name
@@ -90,49 +111,9 @@ export class ModuleService {
         });
     }
 
-    validateImports(m, original: { metadata: Metadata }) {
-        if (m.metadata.type !== 'module') {
-            throw new Error(`
-            ${original.metadata.raw}
-            -> @Module: '${original.metadata.moduleName}'
-            -> @Module hash: '${original.metadata.moduleHash}'
-                --> @${m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1)} '${m.originalName}' provided, where expected class decorated with '@Module' instead,
-            
-            -> @Hint: please provide class with @Module decorator or remove ${m.originalName} from imports
-            `);
-        }
-    }
-
-    validateServices(m, original: { metadata: Metadata }) {
-        if (!m) {
-            throw new Error(`
-            ${original.metadata.raw}
-            -> @Module: ${original.metadata.moduleName}
-            -> @Module hash: ${original.metadata.moduleHash}
-                --> Maybe you forgot to import some service inside ${original.metadata.moduleName} ?
-
-                Hint: run ts-lint again, looks like imported service is undefined or null inside ${original.metadata.moduleName}
-            `);
-        }
-        if (m.provide) {
-            return;
-        }
-     
-        if (m.metadata.type !== 'service') {
-            const moduleType = m.metadata.type.charAt(0).toUpperCase() +  m.metadata.type.slice(1);
-            throw new Error(`
-            ${original.metadata.raw}
-            -> @Module: '${original.metadata.moduleName}'
-            -> @Module hash: '${original.metadata.moduleHash}'
-                --> @${moduleType} '${m.metadata.moduleName}' provided, where expected class decorated with '@Service' instead,
-            -> @Hint: please provide class with @Service decorator or remove ${m.metadata.moduleName} from services
-            `);
-        }
-    }
-
     setImports(module, original: { metadata: Metadata }) {
         module.imports.forEach((m: any) => {
-            this.validateImports(m, original);
+            this.validators.validateImports(m, original);
             if (!m) {
                 throw new Error('Missing import module');
             } else {

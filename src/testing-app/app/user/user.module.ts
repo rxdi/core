@@ -4,6 +4,7 @@ import { UserService } from './services';
 import { Observable } from 'rxjs';
 import { Module } from '../../../decorators/module/module.decorator';
 import { PluginInterface, Plugin } from '../../../container/decorators/Plugin';
+import { Service } from '../../../container';
 
 @Plugin()
 export class TestHapiPlugin implements PluginInterface {

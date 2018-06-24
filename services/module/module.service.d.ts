@@ -3,18 +3,24 @@ export declare class ModuleService {
     private lazyFactoryService;
     private pluginService;
     private externalImporter;
+    private validators;
     setServices(services: ServiceArgumentsInternal[], original: {
         metadata: Metadata;
     }, currentModule: any): void;
-    setPlugins(plugins: any, currentModule: any): void;
-    setAfterPlugins(plugins: any, currentModule: any): void;
-    setBeforePlugins(plugins: any, currentModule: any): void;
-    validateImports(m: any, original: {
+    setInjectedDependencies(service: any): void;
+    setUseValue(service: any): void;
+    setUseClass(service: any): void;
+    setUseDynamic(service: any): void;
+    setUseFactory(service: any): void;
+    setPlugins(plugins: any, original: {
         metadata: Metadata;
-    }): void;
-    validateServices(m: any, original: {
+    }, currentModule: any): void;
+    setAfterPlugins(plugins: any, original: {
         metadata: Metadata;
-    }): void;
+    }, currentModule: any): void;
+    setBeforePlugins(plugins: any, original: {
+        metadata: Metadata;
+    }, currentModule: any): void;
     setImports(module: any, original: {
         metadata: Metadata;
     }): void;

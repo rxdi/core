@@ -91,12 +91,10 @@ let BootstrapService = class BootstrapService {
         this.cacheService.searchForDuplicateDependenciesInsideApp();
     }
     attachLazyLoadedChainables(res, chainables) {
+        // Remove first chainable unused observable
         chainables.splice(0, 1);
         let count = 0;
-        res.forEach(name => {
-            container_1.Container.set(name, chainables[count]);
-            count++;
-        });
+        res.map(name => container_1.Container.set(name, chainables[count++]));
         return true;
     }
     loadApplication(plugins) {

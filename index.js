@@ -7,4 +7,4 @@ __export(require("./container"));
 __export(require("./decorators"));
 __export(require("./helpers"));
 __export(require("./services"));
-__export(require("./testing-app"));
+// export * from './testing-app'; 
