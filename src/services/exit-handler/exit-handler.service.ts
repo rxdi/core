@@ -33,7 +33,6 @@ export class ExitHandlerService {
     }
 
     onExitApp(events: Array<Signals | NodejsEvents>) {
-        
         return new Observable(o => {
             process.on(<any>event, () => o.next(true))
         });

@@ -1,7 +1,7 @@
 import { Service, Container, Inject } from '../../container';
 import { CacheService } from '../cache/cache-layer.service';
 import { InternalLayers, InternalEvents } from '../../helpers/events';
-import { switchMap, filter } from 'rxjs/operators';
+import { switchMap, filter, map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
@@ -24,14 +24,13 @@ export class ResolverService {
                     }
                     return currentModule.items.asObservable();
                 }),
-                filter((res) => this.resolveContainerDependencies(res, target, moduleName))
+                filter((res) => res && res.length),
+                map(this.resolveContainerDependencies(target, moduleName))
             );
     }
 
-    private resolveContainerDependencies(res, target, moduleName: string) {
-        if (!res || !res.length) {
-            return false;
-        } else {
+    private resolveContainerDependencies(target, moduleName: string) {
+        return (res) => {
             res.forEach((i) => {
                 if (i.key === InternalEvents.load || i.key === InternalEvents.config) {
                     return;

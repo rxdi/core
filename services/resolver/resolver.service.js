@@ -27,13 +27,10 @@ let ResolverService = class ResolverService {
                 return rxjs_1.of(null);
             }
             return currentModule.items.asObservable();
-        }), operators_1.filter((res) => this.resolveContainerDependencies(res, target, moduleName)));
+        }), operators_1.filter((res) => res && res.length), operators_1.map(this.resolveContainerDependencies(target, moduleName)));
     }
-    resolveContainerDependencies(res, target, moduleName) {
-        if (!res || !res.length) {
-            return false;
-        }
-        else {
+    resolveContainerDependencies(target, moduleName) {
+        return (res) => {
             res.forEach((i) => {
                 if (i.key === events_1.InternalEvents.load || i.key === events_1.InternalEvents.config) {
                     return;
@@ -48,7 +45,7 @@ let ResolverService = class ResolverService {
                 }
             });
             return res;
-        }
+        };
     }
 };
 __decorate([

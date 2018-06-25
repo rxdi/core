@@ -16,6 +16,7 @@ const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
 const bootstrap_logger_1 = require("../bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
+const path_1 = require("path");
 let FileService = class FileService {
     writeFileSync(folder, fileName, moduleName, file) {
         return this.mkdirp(folder)
@@ -37,6 +38,52 @@ let FileService = class FileService {
                 else {
                     observer.next(true);
                 }
+            });
+        });
+    }
+    fileWalker(dir) {
+        return rxjs_1.Observable.create(observer => {
+            this.filewalker(dir, (err, result) => {
+                if (err) {
+                    observer.error(err);
+                }
+                else {
+                    observer.next(result);
+                }
+            });
+        });
+    }
+    ;
+    filewalker(dir, done) {
+        let results = [];
+        const fileWalker = this.filewalker.bind(this);
+        fs_1.readdir(dir, function (err, list) {
+            if (err) {
+                return done(err);
+            }
+            var pending = list.length;
+            if (!pending) {
+                return done(null, results);
+            }
+            list.forEach(function (file) {
+                file = path_1.resolve(dir, file);
+                fs_1.stat(file, function (err, stat) {
+                    if (stat && stat.isDirectory()) {
+                        results.push(file);
+                        fileWalker(file, function (err, res) {
+                            results = results.concat(res);
+                            if (!--pending) {
+                                done(null, results);
+                            }
+                        });
+                    }
+                    else {
+                        results.push(file);
+                        if (!--pending) {
+                            done(null, results);
+                        }
+                    }
+                });
             });
         });
     }

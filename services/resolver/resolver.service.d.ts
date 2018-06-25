@@ -3,5 +3,5 @@ export declare class ResolverService {
     private bootstrapLogger;
     private cacheService;
     resolveDependencies(hash: any, target: any, moduleName: any): Observable<any[]>;
-    private resolveContainerDependencies(res, target, moduleName);
+    private resolveContainerDependencies(target, moduleName);
 }

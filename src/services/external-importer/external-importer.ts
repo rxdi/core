@@ -1,12 +1,14 @@
 import { Service } from '../../container';
 import { ExternalImporterConfig } from './external-importer-config';
-import { from, Observable } from 'rxjs';
-import * as SystemJS from 'systemjs';
+import { from, Observable, of } from 'rxjs';
 import { RequestService } from '../request';
 import { FileService } from '../file';
 import { map, switchMap, take } from 'rxjs/operators';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
+import SystemJS = require('systemjs');
+import { CompressionService } from '../compression/compression.service';
+import { ConfigService } from '../config';
 
 @Service()
 export class ExternalImporter {
@@ -14,6 +16,8 @@ export class ExternalImporter {
     @Injector(RequestService) requestService: RequestService;
     @Injector(FileService) fileService: FileService;
     @Injector(BootstrapLogger) logger: BootstrapLogger;
+    @Injector(CompressionService) compressionService: CompressionService;
+    @Injector(ConfigService) private configService: ConfigService;
 
     importExternalModule(module: string) {
         return from(SystemJS.import(module));
@@ -28,9 +32,26 @@ export class ExternalImporter {
         }
     }
 
+    encryptFile(fileFullPath: string) {
+        if (this.configService.config.experimental.crypto) {
+            return this.compressionService.readGzipFile(fileFullPath,'dada');
+        } else {
+            return of(null);
+        }
+    }
+
+    decryptFile(fileFullPath: string) {
+        if (this.configService.config.experimental.crypto) {
+            return this.compressionService.gZipFile(fileFullPath, 'dada');
+        } else {
+            return of(null);
+        }
+    }
+
     importModule(config: ExternalImporterConfig): Observable<Function> {
         this.validateConfig(config);
-        return new Observable(o => {
+        return Observable.create(async observer => {
+
             const moduleName = config.fileName;
             const moduleNamespace = config.namespace;
             const moduleLink = config.link;
@@ -38,9 +59,9 @@ export class ExternalImporter {
             const moduleSystemJsConfig = config.SystemJsConfig || {};
             const modulesFolder = config.outputFolder || `/external_modules/`;
             const fileFullPath = `${process.cwd()}${modulesFolder}/${moduleNamespace}/${moduleName}.${moduleExtension}`;
-
             const folder = `${process.cwd()}${modulesFolder}${moduleNamespace}`;
             const fileName = `${moduleName}.${moduleExtension}`;
+
             Object.assign(moduleSystemJsConfig, { paths: { [moduleName]: fileFullPath, ...moduleSystemJsConfig.paths } });
 
             SystemJS.config(moduleSystemJsConfig);
@@ -50,12 +71,13 @@ export class ExternalImporter {
                 this.importExternalModule(moduleName)
                     .pipe(take(1))
                     .subscribe(
-                        m => o.next(m),
-                        err => o.error(err)
+                        m => observer.next(m),
+                        err => observer.error(err)
                     );
             } else {
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): will be downloaded inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): ${moduleLink} downloading...`);
+
                 this.requestService.get(moduleLink)
                     .pipe(
                         take(1),
@@ -67,8 +89,8 @@ export class ExternalImporter {
                         switchMap(() => this.importExternalModule(moduleName))
                     )
                     .subscribe(
-                        (m) => o.next(m),
-                        err => o.error(err)
+                        (m) => observer.next(m),
+                        err => observer.error(err)
                     );
             }
         });

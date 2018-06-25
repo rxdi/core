@@ -10,9 +10,16 @@ class LoggerConfig {
     }
 }
 exports.LoggerConfig = LoggerConfig;
+class PrivateCryptoModel {
+}
+exports.PrivateCryptoModel = PrivateCryptoModel;
+class ExperimentalFeatures {
+}
+exports.ExperimentalFeatures = ExperimentalFeatures;
 class ConfigModel {
     constructor() {
         this.init = true;
+        this.experimental = new ExperimentalFeatures();
         this.logger = new LoggerConfig();
     }
 }

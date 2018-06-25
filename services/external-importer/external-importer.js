@@ -8,15 +8,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const container_1 = require("../../container");
 const rxjs_1 = require("rxjs");
-const SystemJS = require("systemjs");
 const request_1 = require("../request");
 const file_1 = require("../file");
 const operators_1 = require("rxjs/operators");
 const bootstrap_logger_1 = require("../bootstrap-logger/bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
+const SystemJS = require("systemjs");
+const compression_service_1 = require("../compression/compression.service");
+const config_1 = require("../config");
 let ExternalImporter = class ExternalImporter {
     importExternalModule(module) {
         return rxjs_1.from(SystemJS.import(module));
@@ -29,9 +39,25 @@ let ExternalImporter = class ExternalImporter {
             throw new Error('Bootstrap: missing fileName ');
         }
     }
+    encryptFile(fileFullPath) {
+        if (this.configService.config.experimental.crypto) {
+            return this.compressionService.readGzipFile(fileFullPath, 'dada');
+        }
+        else {
+            return rxjs_1.of(null);
+        }
+    }
+    decryptFile(fileFullPath) {
+        if (this.configService.config.experimental.crypto) {
+            return this.compressionService.gZipFile(fileFullPath, 'dada');
+        }
+        else {
+            return rxjs_1.of(null);
+        }
+    }
     importModule(config) {
         this.validateConfig(config);
-        return new rxjs_1.Observable(o => {
+        return rxjs_1.Observable.create((observer) => __awaiter(this, void 0, void 0, function* () {
             const moduleName = config.fileName;
             const moduleNamespace = config.namespace;
             const moduleLink = config.link;
@@ -47,7 +73,7 @@ let ExternalImporter = class ExternalImporter {
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): present inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
                 this.importExternalModule(moduleName)
                     .pipe(operators_1.take(1))
-                    .subscribe(m => o.next(m), err => o.error(err));
+                    .subscribe(m => observer.next(m), err => observer.error(err));
             }
             else {
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): will be downloaded inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
@@ -57,9 +83,9 @@ let ExternalImporter = class ExternalImporter {
                     this.logger.logImporter(`Done!`);
                     return res;
                 }), operators_1.switchMap((res) => this.fileService.writeFileSync(folder, fileName, moduleNamespace, res)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
-                    .subscribe((m) => o.next(m), err => o.error(err));
+                    .subscribe((m) => observer.next(m), err => observer.error(err));
             }
-        });
+        }));
     }
 };
 __decorate([
@@ -74,6 +100,14 @@ __decorate([
     injector_decorator_1.Injector(bootstrap_logger_1.BootstrapLogger),
     __metadata("design:type", bootstrap_logger_1.BootstrapLogger)
 ], ExternalImporter.prototype, "logger", void 0);
+__decorate([
+    injector_decorator_1.Injector(compression_service_1.CompressionService),
+    __metadata("design:type", compression_service_1.CompressionService)
+], ExternalImporter.prototype, "compressionService", void 0);
+__decorate([
+    injector_decorator_1.Injector(config_1.ConfigService),
+    __metadata("design:type", config_1.ConfigService)
+], ExternalImporter.prototype, "configService", void 0);
 ExternalImporter = __decorate([
     container_1.Service()
 ], ExternalImporter);
