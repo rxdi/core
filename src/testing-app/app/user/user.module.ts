@@ -31,8 +31,8 @@ export class TestHapiPlugin implements PluginInterface {
 }
 
 @Module({
+    controllers: [UserService],
     services: [
-        UserService,
         {
             provide: CREATE_UNIQUE_HASH,
             useDynamic: {

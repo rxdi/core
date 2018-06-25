@@ -5,8 +5,9 @@ import { Service } from "../../../../../container/decorators/Service";
 import { CompressionService } from "../../../../../services";
 import { FileService } from "../../../../../services/file";
 import { CREATE_UNIQUE_HASH } from "../../user.tokens";
+import { Controller } from "../../../../../decorators/controller/controller.decorator";
 
-@Service()
+@Controller()
 export class UserService {
     constructor(
         @Inject(CREATE_UNIQUE_HASH) private ipfsDownloadedFactory: { testKey: () => string },

@@ -75,14 +75,14 @@ export class BootstrapService {
     private asyncChainableEffects() {
         return [
             this.chainableObservable,
-            ...this.effectsService.getEffects().map(effect => Container.get(effect))
+            ...this.effectsService.getEffects().map(async effect => await Container.get(effect))
         ]
     }
 
     private asyncChainableControllers() {
         return [
             this.chainableObservable,
-            ...this.controllersService.getControllers().map(controller => Container.get(controller))
+            ...this.controllersService.getControllers().map(async controller => await Container.get(controller))
         ]
     }
 

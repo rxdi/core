@@ -67,13 +67,13 @@ let BootstrapService = class BootstrapService {
     asyncChainableEffects() {
         return [
             this.chainableObservable,
-            ...this.effectsService.getEffects().map(effect => container_1.Container.get(effect))
+            ...this.effectsService.getEffects().map((effect) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(effect); }))
         ];
     }
     asyncChainableControllers() {
         return [
             this.chainableObservable,
-            ...this.controllersService.getControllers().map(controller => container_1.Container.get(controller))
+            ...this.controllersService.getControllers().map((controller) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(controller); }))
         ];
     }
     registerPlugin(pluggable) {
