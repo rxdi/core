@@ -4,6 +4,8 @@ export declare class ModuleService {
     watcherService: ConstructorWatcherService;
     private lazyFactoryService;
     private pluginService;
+    private controllersService;
+    private effectsService;
     private externalImporter;
     private validators;
     setServices(services: ServiceArgumentsInternal[], original: {

@@ -7,12 +7,16 @@ import { of } from 'rxjs';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { ModuleValidators } from './helpers/validators';
 import { constructorWatcherService, ConstructorWatcherService } from '../constructor-watcher/constructor-watcher';
+import { ControllersService } from '../controllers';
+import { EffectsService } from '../effect';
 
 @Service()
 export class ModuleService {
     public watcherService: ConstructorWatcherService = constructorWatcherService;
     @Injector(LazyFactory) private lazyFactoryService: LazyFactory;
     @Injector(PluginService) private pluginService: PluginService;
+    @Injector(ControllersService) private controllersService: ControllersService;
+    @Injector(EffectsService) private effectsService: EffectsService;
     @Injector(ExternalImporter) private externalImporter: ExternalImporter;
     @Injector(ModuleValidators) private validators: ModuleValidators;
 
@@ -86,6 +90,7 @@ export class ModuleService {
                 data: controller,
                 key: controller.name
             });
+            this.controllersService.register(controller);
         });
     }
 
@@ -96,6 +101,7 @@ export class ModuleService {
                 data: effect,
                 key: effect.name
             });
+            this.effectsService.register(effect);
         });
     }
 

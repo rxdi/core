@@ -1,5 +1,5 @@
 
-import { of, combineLatest, from, Observable } from 'rxjs';
+import { of, combineLatest, from, Observable, forkJoin } from 'rxjs';
 import { Container, Service, PluginInterface } from '../../container';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { CacheService } from '../cache/cache-layer.service';
@@ -10,6 +10,8 @@ import { PluginService } from '../plugin/plugin.service';
 import { ConfigModel } from '../config/config.model';
 import { take, map, switchMap } from 'rxjs/operators';
 import { CacheLayer, CacheLayerItem } from '../cache';
+import { EffectsService } from '../effect/effect.service';
+import { ControllersService } from '../controllers/controllers.service';
 
 @Service()
 export class BootstrapService {
@@ -23,6 +25,8 @@ export class BootstrapService {
         private cacheService: CacheService,
         private lazyFactoriesService: LazyFactory,
         private configService: ConfigService,
+        private controllersService: ControllersService,
+        private effectsService: EffectsService,
         private pluginService: PluginService
     ) {
         this.globalConfig = this.cacheService.createLayer<ConfigModel>({ name: InternalLayers.globalConfig });
@@ -40,6 +44,8 @@ export class BootstrapService {
                         take(1),
                         map((c) => this.attachLazyLoadedChainables(res, c)),
                         map(() => this.validateSystem()),
+                        switchMap(() => combineLatest(this.asyncChainableControllers())),
+                        switchMap(() => combineLatest(this.asyncChainableEffects())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsBeforeRegister())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsRegister())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsAfterRegister())),
@@ -63,6 +69,20 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins().map(async pluggable => this.registerPlugin(pluggable))
+        ]
+    }
+
+    private asyncChainableEffects() {
+        return [
+            this.chainableObservable,
+            ...this.effectsService.getEffects().map(effect => Container.get(effect))
+        ]
+    }
+
+    private asyncChainableControllers() {
+        return [
+            this.chainableObservable,
+            ...this.controllersService.getControllers().map(controller => Container.get(controller))
         ]
     }
 

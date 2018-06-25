@@ -17,6 +17,8 @@ const rxjs_1 = require("rxjs");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const validators_1 = require("./helpers/validators");
 const constructor_watcher_1 = require("../constructor-watcher/constructor-watcher");
+const controllers_1 = require("../controllers");
+const effect_1 = require("../effect");
 let ModuleService = class ModuleService {
     constructor() {
         this.watcherService = constructor_watcher_1.constructorWatcherService;
@@ -86,6 +88,7 @@ let ModuleService = class ModuleService {
                 data: controller,
                 key: controller.name
             });
+            this.controllersService.register(controller);
         });
     }
     setEffects(effects, original, currentModule) {
@@ -95,6 +98,7 @@ let ModuleService = class ModuleService {
                 data: effect,
                 key: effect.name
             });
+            this.effectsService.register(effect);
         });
     }
     setPlugins(plugins, original, currentModule) {
@@ -147,6 +151,14 @@ __decorate([
     injector_decorator_1.Injector(plugin_service_1.PluginService),
     __metadata("design:type", plugin_service_1.PluginService)
 ], ModuleService.prototype, "pluginService", void 0);
+__decorate([
+    injector_decorator_1.Injector(controllers_1.ControllersService),
+    __metadata("design:type", controllers_1.ControllersService)
+], ModuleService.prototype, "controllersService", void 0);
+__decorate([
+    injector_decorator_1.Injector(effect_1.EffectsService),
+    __metadata("design:type", effect_1.EffectsService)
+], ModuleService.prototype, "effectsService", void 0);
 __decorate([
     injector_decorator_1.Injector(external_importer_1.ExternalImporter),
     __metadata("design:type", external_importer_1.ExternalImporter)
