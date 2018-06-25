@@ -13,3 +13,4 @@ __export(require("./resolver"));
 __export(require("./config"));
 __export(require("./metadata"));
 __export(require("./compression"));
+__export(require("./file"));
