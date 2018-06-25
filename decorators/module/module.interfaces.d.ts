@@ -38,9 +38,9 @@ export interface ServiceArgumentsInternal {
     lazy?: boolean;
 }
 export interface ModuleArguments<T, K> extends Metadata {
-    imports?: Array<Function | ModuleWithServices | T>;
+    imports?: Array<Function | ModuleWithServices>;
     services?: Array<Function | ServiceArgumentsInternal>;
-    controllers?: Array<Function | ModuleWithServices | T>;
+    controllers?: Array<Function | ModuleWithServices>;
     effects?: Array<T>;
     afterPlugins?: Array<T | PluginInterface>;
     beforePlugins?: Array<T | PluginInterface>;
