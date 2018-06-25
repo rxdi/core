@@ -79,6 +79,24 @@ let ModuleService = class ModuleService {
             container_1.Container.set(service.provide, service.useFactory());
         }
     }
+    setControllers(controllers, original, currentModule) {
+        controllers.forEach(controller => {
+            this.validators.validateController(controller, original);
+            currentModule.putItem({
+                data: controller,
+                key: controller.name
+            });
+        });
+    }
+    setEffects(effects, original, currentModule) {
+        effects.forEach(effect => {
+            this.validators.validateEffect(effect, original);
+            currentModule.putItem({
+                data: effect,
+                key: effect.name
+            });
+        });
+    }
     setPlugins(plugins, original, currentModule) {
         plugins.forEach(plugin => {
             this.validators.validatePlugin(plugin, original);

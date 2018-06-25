@@ -15,4 +15,10 @@ export declare class ModuleValidators {
     validatePlugin(m: any, original: {
         metadata: Metadata;
     }): void;
+    validateController(m: any, original: {
+        metadata: Metadata;
+    }): void;
+    validateEffect(m: any, original: {
+        metadata: Metadata;
+    }): void;
 }

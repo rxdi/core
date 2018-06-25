@@ -19,7 +19,7 @@ export interface ModuleWithServices {
     beforePlugins?: Array<Function | PluginInterface>;
     services?: Array<ServiceArguments | Function>;
 }
-export declare type DecoratorType = 'module' | 'service' | 'plugin';
+export declare type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect';
 export interface Metadata {
     moduleHash?: string;
     moduleName?: string;

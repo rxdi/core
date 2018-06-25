@@ -41,6 +41,7 @@ export class ModuleService {
         });
     }
 
+
     setInjectedDependencies(service) {
         service.deps = service.deps || [];
         if (service.deps.length) {
@@ -76,6 +77,26 @@ export class ModuleService {
         } else {
             Container.set(service.provide, service.useFactory());
         }
+    }
+
+    setControllers(controllers: any[], original, currentModule) {
+        controllers.forEach(controller => {
+            this.validators.validateController(controller, original);
+            currentModule.putItem({
+                data: controller,
+                key: controller.name
+            });
+        });
+    }
+
+    setEffects(effects: any[], original, currentModule) {
+        effects.forEach(effect => {
+            this.validators.validateEffect(effect, original);
+            currentModule.putItem({
+                data: effect,
+                key: effect.name
+            });
+        });
     }
 
     setPlugins(plugins, original: { metadata: Metadata }, currentModule) {

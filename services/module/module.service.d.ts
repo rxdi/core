@@ -14,6 +14,8 @@ export declare class ModuleService {
     setUseClass(service: any): void;
     setUseDynamic(service: any): void;
     setUseFactory(service: any): void;
+    setControllers(controllers: any[], original: any, currentModule: any): void;
+    setEffects(effects: any[], original: any, currentModule: any): void;
     setPlugins(plugins: any, original: {
         metadata: Metadata;
     }, currentModule: any): void;

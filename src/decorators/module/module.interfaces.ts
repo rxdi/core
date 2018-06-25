@@ -22,7 +22,7 @@ export interface ModuleWithServices {
     services?: Array<ServiceArguments | Function>;
 }
 
-export type DecoratorType = 'module' | 'service' | 'plugin';
+export type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect';
 
 export interface Metadata {
     moduleHash?: string;

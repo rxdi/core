@@ -20,11 +20,11 @@ export function GenericConstruct(module: any, original, currentModule) {
         }
 
         if (module.controllers) {
-            moduleService.setServices(module.controllers, original, currentModule);
+            moduleService.setControllers(module.controllers, original, currentModule);
         }
 
         if (module.effects) {
-            moduleService.setServices(module.effects, original, currentModule);
+            moduleService.setEffects(module.effects, original, currentModule);
         }
 
         if (module.beforePlugins) {
