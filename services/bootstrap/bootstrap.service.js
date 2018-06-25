@@ -80,11 +80,11 @@ let BootstrapService = class BootstrapService {
         ];
     }
     prepareAsyncChainables(injectable) {
-        this.logger.log(`Bootstrap -> @Service('${injectable}'): loading...`);
+        this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading...`);
         const somethingAsync = rxjs_1.from(this.lazyFactoriesService.getLazyFactory(injectable));
         this.asyncChainables.push(somethingAsync);
         somethingAsync
-            .subscribe(() => this.logger.log(`Bootstrap -> @Service('${injectable}'): loading finished! ${new Date().toLocaleTimeString()}`));
+            .subscribe(() => this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading finished! ${new Date().toLocaleTimeString()}`));
         return injectable;
     }
     validateSystem() {

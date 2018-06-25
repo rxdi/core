@@ -28,7 +28,7 @@ export interface Metadata {
 }
 export interface ServiceArgumentsInternal {
     name?: string;
-    provide: string;
+    provide: Function | string | InjectionToken<any>;
     useValue?: any;
     useFactory?: Function;
     useClass?: any;
@@ -38,7 +38,7 @@ export interface ServiceArgumentsInternal {
     lazy?: boolean;
 }
 export interface ModuleArguments<T, K> extends Metadata {
-    imports?: Array<any>;
+    imports?: Array<Function>;
     services?: Array<Function | ServiceArgumentsInternal>;
     controllers?: Array<T>;
     types?: Array<T>;

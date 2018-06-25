@@ -54,12 +54,11 @@ let ModuleService = class ModuleService {
         }
     }
     setUseClass(service) {
-        const currentClass = new service.useClass(...service.deps);
         if (service.lazy) {
-            this.lazyFactoryService.setLazyFactory(service.provide, rxjs_1.of(currentClass));
+            this.lazyFactoryService.setLazyFactory(service.provide, rxjs_1.of(container_1.Container.get(service.useClass)));
         }
         else {
-            container_1.Container.get(service.useClass);
+            container_1.Container.set(service.provide, container_1.Container.get(service.useClass));
         }
     }
     setUseDynamic(service) {

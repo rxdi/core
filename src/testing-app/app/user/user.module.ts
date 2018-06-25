@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Module } from '../../../decorators/module/module.decorator';
 import { PluginInterface, Plugin } from '../../../container/decorators/Plugin';
 import { Service } from '../../../container';
+import { CREATE_UNIQUE_HASH } from './user.tokens';
 
 @Plugin()
 export class TestHapiPlugin implements PluginInterface {
@@ -30,11 +31,11 @@ export class TestHapiPlugin implements PluginInterface {
 }
 
 @Module({
-    plugins: [TestHapiPlugin],
     services: [
         UserService,
+        {provide: TestHapiPlugin, useClass: TestHapiPlugin},
         {
-            provide: 'createUniqueHash',
+            provide: CREATE_UNIQUE_HASH,
             useDynamic: {
                 fileName: 'createUniqueHash',
                 namespace: '@helpers',

@@ -55,11 +55,10 @@ export class ModuleService {
     }
 
     setUseClass(service) {
-        const currentClass = new service.useClass(...service.deps);
         if (service.lazy) {
-            this.lazyFactoryService.setLazyFactory(service.provide, of(currentClass));
+            this.lazyFactoryService.setLazyFactory(service.provide, of(Container.get(service.useClass)));
         } else {
-            Container.get(service.useClass);
+            Container.set(service.provide, Container.get(service.useClass));
         }
     }
 
