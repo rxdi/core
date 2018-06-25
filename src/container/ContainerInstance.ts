@@ -5,6 +5,7 @@ import { ServiceIdentifier } from './types/ServiceIdentifier';
 import { ServiceNotFoundError } from './error/ServiceNotFoundError';
 import { MissingProvidedServiceTypeError } from './error/MissingProvidedServiceTypeError';
 import { Container } from './Container';
+import { constructorWatcherService } from '../services/constructor-watcher';
 // import { controllerHooks } from '../services/controller-service/controller-hooks';
 // import { effectHooks } from '../services/effect-hook/effect-hooks';
 
@@ -322,15 +323,7 @@ export class ContainerInstance {
             if (value.OnInit) {
                 value.OnInit.bind(value)();
             }
-            // console.log('dadada', value);
-
-            // if (type.prototype._controller) {
-            //     controllerHooks.setHook(type.name, value);
-            // }
-
-            // if (type.prototype._effect) {
-            //     effectHooks.setHook(type.name, value);
-            // }
+            constructorWatcherService.createConstructor(type['name'], { type, value });
         }
 
         if (service && !service.transient && value)

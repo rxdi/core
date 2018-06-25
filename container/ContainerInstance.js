@@ -4,6 +4,7 @@ const Token_1 = require("./Token");
 const ServiceNotFoundError_1 = require("./error/ServiceNotFoundError");
 const MissingProvidedServiceTypeError_1 = require("./error/MissingProvidedServiceTypeError");
 const Container_1 = require("./Container");
+const constructor_watcher_1 = require("../services/constructor-watcher");
 // import { controllerHooks } from '../services/controller-service/controller-hooks';
 // import { effectHooks } from '../services/effect-hook/effect-hooks';
 /**
@@ -194,13 +195,7 @@ class ContainerInstance {
             if (value.OnInit) {
                 value.OnInit.bind(value)();
             }
-            // console.log('dadada', value);
-            // if (type.prototype._controller) {
-            //     controllerHooks.setHook(type.name, value);
-            // }
-            // if (type.prototype._effect) {
-            //     effectHooks.setHook(type.name, value);
-            // }
+            constructor_watcher_1.constructorWatcherService.createConstructor(type['name'], { type, value });
         }
         if (service && !service.transient && value)
             service.value = value;

@@ -16,7 +16,11 @@ const external_importer_1 = require("../external-importer");
 const rxjs_1 = require("rxjs");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const validators_1 = require("./helpers/validators");
+const constructor_watcher_1 = require("../constructor-watcher/constructor-watcher");
 let ModuleService = class ModuleService {
+    constructor() {
+        this.watcherService = constructor_watcher_1.constructorWatcherService;
+    }
     setServices(services, original, currentModule) {
         services.forEach(service => {
             this.validators.validateServices(service, original);

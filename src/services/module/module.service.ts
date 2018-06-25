@@ -6,10 +6,11 @@ import { ExternalImporter } from '../external-importer';
 import { of } from 'rxjs';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { ModuleValidators } from './helpers/validators';
+import { constructorWatcherService, ConstructorWatcherService } from '../constructor-watcher/constructor-watcher';
 
 @Service()
 export class ModuleService {
-
+    public watcherService: ConstructorWatcherService = constructorWatcherService;
     @Injector(LazyFactory) private lazyFactoryService: LazyFactory;
     @Injector(PluginService) private pluginService: PluginService;
     @Injector(ExternalImporter) private externalImporter: ExternalImporter;

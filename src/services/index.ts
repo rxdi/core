@@ -9,3 +9,4 @@ export * from './config';
 export * from './metadata';
 export * from './compression';
 export * from './file';
+export * from './constructor-watcher';

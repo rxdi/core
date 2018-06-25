@@ -2,3 +2,8 @@ config:
   app:
     local:
       TEST_CONFIG: 'dadada'
+
+
+  schema:
+    introspectionEndpoint: http://localhost:9000/graphql
+    introspectionOutputFolder: ./src/app/core/api-introspection

@@ -14,3 +14,4 @@ __export(require("./config"));
 __export(require("./metadata"));
 __export(require("./compression"));
 __export(require("./file"));
+__export(require("./constructor-watcher"));

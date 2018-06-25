@@ -1,5 +1,7 @@
 import { ServiceArgumentsInternal, Metadata } from '../../decorators/module/module.interfaces';
+import { ConstructorWatcherService } from '../constructor-watcher/constructor-watcher';
 export declare class ModuleService {
+    watcherService: ConstructorWatcherService;
     private lazyFactoryService;
     private pluginService;
     private externalImporter;
