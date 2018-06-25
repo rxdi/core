@@ -46,11 +46,9 @@ export interface ServiceArgumentsInternal {
 export interface ModuleArguments<T, K> extends Metadata {
     imports?: Array<Function | ModuleWithServices | T>;
     services?: Array<Function | ServiceArgumentsInternal>;
-    controllers?: Array<T>;
-    types?: Array<T>;
+    controllers?: Array<Function | ModuleWithServices | T>;
     effects?: Array<T>;
     afterPlugins?: Array<T | PluginInterface>,
     beforePlugins?: Array<T | PluginInterface>;
     plugins?: Array<T | PluginInterface>;
-    originalName?: string;
 }
