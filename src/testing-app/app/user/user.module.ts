@@ -33,7 +33,6 @@ export class TestHapiPlugin implements PluginInterface {
 @Module({
     services: [
         UserService,
-        {provide: TestHapiPlugin, useClass: TestHapiPlugin},
         {
             provide: CREATE_UNIQUE_HASH,
             useDynamic: {
