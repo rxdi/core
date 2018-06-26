@@ -10,7 +10,7 @@ function GenericConstruct(module, original, currentModule) {
             return new constructor();
         }
         if (module.imports) {
-            moduleService.setImports(module, original);
+            moduleService.setImports(module.imports, original);
         }
         if (module.services) {
             moduleService.setServices(module.services, original, currentModule);

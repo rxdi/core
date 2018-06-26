@@ -12,7 +12,7 @@ export function GenericConstruct(module: any, original, currentModule) {
         }
 
         if (module.imports) {
-            moduleService.setImports(module, original);
+            moduleService.setImports(module.imports, original);
         }
 
         if (module.services) {

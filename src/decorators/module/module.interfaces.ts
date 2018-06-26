@@ -20,7 +20,7 @@ export interface ModuleWithServices {
     plugins?: Array<Function | PluginInterface>;
     beforePlugins?: Array<Function | PluginInterface>;
     services?: Array<ServiceArguments | Function>;
-    frameworkImports?: Array<Function>;
+    frameworkImports?: Array<Function | ModuleWithServices>;
 }
 
 export type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect';

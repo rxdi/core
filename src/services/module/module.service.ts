@@ -138,8 +138,8 @@ export class ModuleService {
         });
     }
 
-    setImports(module, original: { metadata: Metadata }) {
-        module.imports.forEach((m: any) => {
+    setImports(imports, original: { metadata: Metadata }) {
+        imports.forEach((m: any) => {
             this.validators.validateImports(m, original);
             if (!m) {
                 throw new Error('Missing import module');

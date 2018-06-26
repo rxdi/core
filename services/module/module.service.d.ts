@@ -27,7 +27,7 @@ export declare class ModuleService {
     setBeforePlugins(plugins: any, original: {
         metadata: Metadata;
     }, currentModule: any): void;
-    setImports(module: any, original: {
+    setImports(imports: any, original: {
         metadata: Metadata;
     }): void;
 }

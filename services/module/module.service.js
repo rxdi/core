@@ -131,8 +131,8 @@ let ModuleService = class ModuleService {
             this.pluginService.registerBefore(plugin);
         });
     }
-    setImports(module, original) {
-        module.imports.forEach((m) => {
+    setImports(imports, original) {
+        imports.forEach((m) => {
             this.validators.validateImports(m, original);
             if (!m) {
                 throw new Error('Missing import module');
