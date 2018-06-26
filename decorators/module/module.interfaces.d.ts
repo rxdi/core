@@ -42,7 +42,7 @@ export interface ModuleArguments<T, K> extends Metadata {
     imports?: Array<Function | ModuleWithServices>;
     services?: Array<Function | ServiceArgumentsInternal>;
     controllers?: Array<Function | ModuleWithServices>;
-    effects?: Array<T>;
+    effects?: Array<Function>;
     afterPlugins?: Array<T | PluginInterface>;
     beforePlugins?: Array<T | PluginInterface>;
     plugins?: Array<T | PluginInterface>;
