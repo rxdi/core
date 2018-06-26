@@ -1,1 +1,1 @@
-export * from './controller.decorator';
+export * from './effect.decorator';
