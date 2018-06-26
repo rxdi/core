@@ -8,3 +8,7 @@ exit_handler_1.exitHandlerInit();
 const bootstrapService = container_1.Container.get(bootstrap_service_1.BootstrapService);
 exports.Bootstrap = (app, config) => bootstrapService.start(app, config);
 exports.BootstrapPromisify = (app, config) => bootstrapService.start(app, config).toPromise();
+exports.BootstrapFramework = (app, modules, config) => {
+    modules.map(m => container_1.Container.get(m));
+    return bootstrapService.start(app, config);
+};

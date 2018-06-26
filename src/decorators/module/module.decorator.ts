@@ -55,6 +55,15 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
             const originalForRoot = constructorFunction.forRoot;
             constructorFunction.forRoot = function (args) {
                 const result: ModuleWithServices = originalForRoot(args);
+
+                if (!result) {
+                    throw new Error(`forRoot configuration inside ${constructorFunction.name} is returning undefined or null`);
+                }
+
+                if (result.frameworkImports) {
+                    moduleService.setImports(result.frameworkImports, original);
+                }
+
                 if (!result.services) {
                     console.info(`Consider return ${original.name}; if you dont want to use ModuleWithServices interface to return Pre initialized configuration services`);
                     console.info(`Your Gapi module loaded as regular import please remove ${original.name}.forRoot() and instead import just ${original.name}`);
