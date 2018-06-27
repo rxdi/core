@@ -110,10 +110,10 @@ export class BootstrapService {
         this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading...`);
         const somethingAsync = from(<Promise<any> | Observable<any>>this.lazyFactoriesService.getLazyFactory(injectable));
         this.asyncChainables.push(somethingAsync);
-        somethingAsync
-            .subscribe(
-                () => this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading finished! ${new Date().toLocaleTimeString()}`)
-            );
+        // somethingAsync
+        //     .subscribe(
+        //         () => this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading finished! ${new Date().toLocaleTimeString()}`)
+        //     );
         return injectable;
     }
 
