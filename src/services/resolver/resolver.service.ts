@@ -37,7 +37,8 @@ export class ResolverService {
                 }
                 const found = this.cacheService.searchForItem(i.data);
                 if (found) {
-                    this.bootstrapLogger.log(`Start -> @Module('${moduleName}')${this.bootstrapLogger.logHashes(`(${target.name})`)}: @Service('${found.originalName}')${this.bootstrapLogger.logHashes(`(${found.name})`)}` + ' initialized!');
+                    const moduleType = found.metadata.type.charAt(0).toUpperCase() +  found.metadata.type.slice(1);
+                    this.bootstrapLogger.log(`Start -> @Module('${moduleName}')${this.bootstrapLogger.logHashes(`(${target.name})`)}: @${moduleType}('${found.originalName}')${this.bootstrapLogger.logHashes(`(${found.name})`)}` + ' initialized!');
                     return Container.get(found);
                 } else {
                     throw new Error('not found');
