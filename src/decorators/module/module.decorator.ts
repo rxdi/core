@@ -64,10 +64,7 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
                     moduleService.setImports(result.frameworkImports, original);
                 }
 
-                if (!result.services) {
-                    console.info(`Consider return ${original.name}; if you dont want to use ModuleWithServices interface to return Pre initialized configuration services`);
-                    console.info(`Your Gapi module loaded as regular import please remove ${original.name}.forRoot() and instead import just ${original.name}`);
-                } else {
+                if (result.services) {
                     moduleService.setServices(<any>result.services, original, currentModule);
                 }
 
