@@ -78,7 +78,7 @@ export class BootstrapService {
     private asyncChainableComponents() {
         return [
             this.chainableObservable,
-            ...this.componentsService.getEffects().map(async component => await Container.get(component))
+            ...this.componentsService.getComponents().map(async component => await Container.get(component))
         ]
     }
 

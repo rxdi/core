@@ -4,14 +4,14 @@ import { BehaviorSubject } from 'rxjs';
 @Service()
 export class ComponentsService {
 
-    private effects: BehaviorSubject<Array<Function>> = new BehaviorSubject([]);
+    private components: BehaviorSubject<Array<Function>> = new BehaviorSubject([]);
 
     register(plugin) {
-        this.effects.next([...this.effects.getValue(), plugin]);
+        this.components.next([...this.components.getValue(), plugin]);
     }
 
-    getEffects() {
-        return this.effects.getValue();
+    getComponents() {
+        return this.components.getValue();
     }
 
 }

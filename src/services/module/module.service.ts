@@ -109,7 +109,7 @@ export class ModuleService {
 
     setComponents(components: any[], original, currentModule) {
         components.forEach(component => {
-            this.validators.validateEffect(component, original);
+            this.validators.validateComponent(component, original);
             currentModule.putItem({
                 data: component,
                 key: component.name

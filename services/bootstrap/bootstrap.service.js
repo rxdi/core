@@ -69,7 +69,7 @@ let BootstrapService = class BootstrapService {
     asyncChainableComponents() {
         return [
             this.chainableObservable,
-            ...this.componentsService.getEffects().map((component) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(component); }))
+            ...this.componentsService.getComponents().map((component) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(component); }))
         ];
     }
     asyncChainableEffects() {

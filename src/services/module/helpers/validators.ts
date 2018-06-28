@@ -45,7 +45,6 @@ export class ModuleValidators {
         }
     }
 
-
     validateServices(m, original: { metadata: Metadata }) {
         this.validateEmpty(m, original, 'service');
         if (m.provide) {

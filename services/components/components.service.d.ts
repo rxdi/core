@@ -1,5 +1,5 @@
 export declare class ComponentsService {
-    private effects;
+    private components;
     register(plugin: any): void;
-    getEffects(): Function[];
+    getComponents(): Function[];
 }

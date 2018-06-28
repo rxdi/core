@@ -10,13 +10,13 @@ const Service_1 = require("../../container/decorators/Service");
 const rxjs_1 = require("rxjs");
 let ComponentsService = class ComponentsService {
     constructor() {
-        this.effects = new rxjs_1.BehaviorSubject([]);
+        this.components = new rxjs_1.BehaviorSubject([]);
     }
     register(plugin) {
-        this.effects.next([...this.effects.getValue(), plugin]);
+        this.components.next([...this.components.getValue(), plugin]);
     }
-    getEffects() {
-        return this.effects.getValue();
+    getComponents() {
+        return this.components.getValue();
     }
 };
 ComponentsService = __decorate([
