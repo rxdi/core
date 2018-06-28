@@ -27,6 +27,11 @@ export function GenericConstruct(module: any, original, currentModule) {
             moduleService.setEffects(module.effects, original, currentModule);
         }
 
+
+        if (module.components) {
+            moduleService.setComponents(<any>module.components, original, currentModule);
+        }
+
         if (module.beforePlugins) {
             moduleService.setBeforePlugins(module.beforePlugins, original, currentModule);
         }

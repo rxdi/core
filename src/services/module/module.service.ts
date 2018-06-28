@@ -9,12 +9,14 @@ import { ModuleValidators } from './helpers/validators';
 import { constructorWatcherService, ConstructorWatcherService } from '../constructor-watcher/constructor-watcher';
 import { ControllersService } from '../controllers';
 import { EffectsService } from '../effect';
+import { ComponentsService } from '../components';
 
 @Service()
 export class ModuleService {
     public watcherService: ConstructorWatcherService = constructorWatcherService;
     @Injector(LazyFactory) private lazyFactoryService: LazyFactory;
     @Injector(PluginService) private pluginService: PluginService;
+    @Injector(ComponentsService) private componentsService: ComponentsService;
     @Injector(ControllersService) private controllersService: ControllersService;
     @Injector(EffectsService) private effectsService: EffectsService;
     @Injector(ExternalImporter) private externalImporter: ExternalImporter;
@@ -102,6 +104,17 @@ export class ModuleService {
                 key: effect.name
             });
             this.effectsService.register(effect);
+        });
+    }
+
+    setComponents(components: any[], original, currentModule) {
+        components.forEach(component => {
+            this.validators.validateEffect(component, original);
+            currentModule.putItem({
+                data: component,
+                key: component.name
+            });
+            this.componentsService.register(component);
         });
     }
 

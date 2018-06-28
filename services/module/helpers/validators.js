@@ -76,6 +76,13 @@ let ModuleValidators = class ModuleValidators {
         }
         this.genericWrongPluggableError(m, original, 'effect');
     }
+    validateComponent(m, original) {
+        this.validateEmpty(m, original, 'component');
+        if (m.provide) {
+            return;
+        }
+        this.genericWrongPluggableError(m, original, 'component');
+    }
 };
 ModuleValidators = __decorate([
     container_1.Service()

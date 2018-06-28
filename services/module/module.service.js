@@ -19,6 +19,7 @@ const validators_1 = require("./helpers/validators");
 const constructor_watcher_1 = require("../constructor-watcher/constructor-watcher");
 const controllers_1 = require("../controllers");
 const effect_1 = require("../effect");
+const components_1 = require("../components");
 let ModuleService = class ModuleService {
     constructor() {
         this.watcherService = constructor_watcher_1.constructorWatcherService;
@@ -101,6 +102,16 @@ let ModuleService = class ModuleService {
             this.effectsService.register(effect);
         });
     }
+    setComponents(components, original, currentModule) {
+        components.forEach(component => {
+            this.validators.validateEffect(component, original);
+            currentModule.putItem({
+                data: component,
+                key: component.name
+            });
+            this.componentsService.register(component);
+        });
+    }
     setPlugins(plugins, original, currentModule) {
         plugins.forEach(plugin => {
             this.validators.validatePlugin(plugin, original);
@@ -151,6 +162,10 @@ __decorate([
     injector_decorator_1.Injector(plugin_service_1.PluginService),
     __metadata("design:type", plugin_service_1.PluginService)
 ], ModuleService.prototype, "pluginService", void 0);
+__decorate([
+    injector_decorator_1.Injector(components_1.ComponentsService),
+    __metadata("design:type", components_1.ComponentsService)
+], ModuleService.prototype, "componentsService", void 0);
 __decorate([
     injector_decorator_1.Injector(controllers_1.ControllersService),
     __metadata("design:type", controllers_1.ControllersService)

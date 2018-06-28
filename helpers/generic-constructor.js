@@ -21,6 +21,9 @@ function GenericConstruct(module, original, currentModule) {
         if (module.effects) {
             moduleService.setEffects(module.effects, original, currentModule);
         }
+        if (module.components) {
+            moduleService.setComponents(module.components, original, currentModule);
+        }
         if (module.beforePlugins) {
             moduleService.setBeforePlugins(module.beforePlugins, original, currentModule);
         }

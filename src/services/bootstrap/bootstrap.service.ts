@@ -12,6 +12,7 @@ import { take, map, switchMap } from 'rxjs/operators';
 import { CacheLayer, CacheLayerItem } from '../cache';
 import { EffectsService } from '../effect/effect.service';
 import { ControllersService } from '../controllers/controllers.service';
+import { ComponentsService } from '../components/components.service';
 
 @Service()
 export class BootstrapService {
@@ -27,7 +28,8 @@ export class BootstrapService {
         private configService: ConfigService,
         private controllersService: ControllersService,
         private effectsService: EffectsService,
-        private pluginService: PluginService
+        private pluginService: PluginService,
+        private componentsService: ComponentsService
     ) {
         this.globalConfig = this.cacheService.createLayer<ConfigModel>({ name: InternalLayers.globalConfig });
     }
@@ -49,6 +51,7 @@ export class BootstrapService {
                         switchMap(() => combineLatest(this.asyncChainablePluginsBeforeRegister())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsRegister())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsAfterRegister())),
+                        switchMap(() => combineLatest(this.asyncChainableComponents())),
                         map((plugins) => this.loadApplication(plugins)),
                         map((p) => this.final(p))
                     ))
@@ -69,6 +72,13 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins().map(async pluggable => this.registerPlugin(pluggable))
+        ]
+    }
+
+    private asyncChainableComponents() {
+        return [
+            this.chainableObservable,
+            ...this.componentsService.getEffects().map(async component => await Container.get(component))
         ]
     }
 

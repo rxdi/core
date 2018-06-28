@@ -17,3 +17,4 @@ __export(require("./file"));
 __export(require("./constructor-watcher"));
 __export(require("./effect"));
 __export(require("./controllers"));
+__export(require("./components"));

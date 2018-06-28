@@ -4,6 +4,7 @@ export declare class ModuleService {
     watcherService: ConstructorWatcherService;
     private lazyFactoryService;
     private pluginService;
+    private componentsService;
     private controllersService;
     private effectsService;
     private externalImporter;
@@ -18,6 +19,7 @@ export declare class ModuleService {
     setUseFactory(service: any): void;
     setControllers(controllers: any[], original: any, currentModule: any): void;
     setEffects(effects: any[], original: any, currentModule: any): void;
+    setComponents(components: any[], original: any, currentModule: any): void;
     setPlugins(plugins: any, original: {
         metadata: Metadata;
     }, currentModule: any): void;

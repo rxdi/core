@@ -28,8 +28,9 @@ const plugin_service_1 = require("../plugin/plugin.service");
 const operators_1 = require("rxjs/operators");
 const effect_service_1 = require("../effect/effect.service");
 const controllers_service_1 = require("../controllers/controllers.service");
+const components_service_1 = require("../components/components.service");
 let BootstrapService = class BootstrapService {
-    constructor(logger, cacheService, lazyFactoriesService, configService, controllersService, effectsService, pluginService) {
+    constructor(logger, cacheService, lazyFactoriesService, configService, controllersService, effectsService, pluginService, componentsService) {
         this.logger = logger;
         this.cacheService = cacheService;
         this.lazyFactoriesService = lazyFactoriesService;
@@ -37,6 +38,7 @@ let BootstrapService = class BootstrapService {
         this.controllersService = controllersService;
         this.effectsService = effectsService;
         this.pluginService = pluginService;
+        this.componentsService = componentsService;
         this.chainableObservable = rxjs_1.of(true);
         this.asyncChainables = [this.chainableObservable];
         this.globalConfig = this.cacheService.createLayer({ name: events_1.InternalLayers.globalConfig });
@@ -47,7 +49,7 @@ let BootstrapService = class BootstrapService {
         container_1.Container.get(app);
         return rxjs_1.of(Array.from(this.lazyFactoriesService.lazyFactories.keys()))
             .pipe(operators_1.map((i) => i.map(injectable => this.prepareAsyncChainables(injectable))), operators_1.switchMap((res) => rxjs_1.combineLatest(this.asyncChainables)
-            .pipe(operators_1.take(1), operators_1.map((c) => this.attachLazyLoadedChainables(res, c)), operators_1.map(() => this.validateSystem()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableControllers())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableEffects())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsBeforeRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsAfterRegister())), operators_1.map((plugins) => this.loadApplication(plugins)), operators_1.map((p) => this.final(p)))));
+            .pipe(operators_1.take(1), operators_1.map((c) => this.attachLazyLoadedChainables(res, c)), operators_1.map(() => this.validateSystem()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableControllers())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableEffects())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsBeforeRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsAfterRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableComponents())), operators_1.map((plugins) => this.loadApplication(plugins)), operators_1.map((p) => this.final(p)))));
     }
     final(plugins) {
         // opn('https://theft.youvolio.com');
@@ -62,6 +64,12 @@ let BootstrapService = class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins().map((pluggable) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(pluggable); }))
+        ];
+    }
+    asyncChainableComponents() {
+        return [
+            this.chainableObservable,
+            ...this.componentsService.getEffects().map((component) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(component); }))
         ];
     }
     asyncChainableEffects() {
@@ -131,6 +139,7 @@ BootstrapService = __decorate([
         config_service_1.ConfigService,
         controllers_service_1.ControllersService,
         effect_service_1.EffectsService,
-        plugin_service_1.PluginService])
+        plugin_service_1.PluginService,
+        components_service_1.ComponentsService])
 ], BootstrapService);
 exports.BootstrapService = BootstrapService;

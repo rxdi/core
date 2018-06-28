@@ -12,3 +12,4 @@ export * from './file';
 export * from './constructor-watcher';
 export * from './effect';
 export * from './controllers';
+export * from './components';

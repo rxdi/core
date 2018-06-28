@@ -78,4 +78,12 @@ export class ModuleValidators {
         }
         this.genericWrongPluggableError(m, original, 'effect');
     }
+
+    validateComponent(m, original: { metadata: Metadata }) {
+        this.validateEmpty(m, original, 'component');
+        if (m.provide) {
+            return;
+        }
+        this.genericWrongPluggableError(m, original, 'component');
+    }
 }

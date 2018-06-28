@@ -20,10 +20,11 @@ export interface ModuleWithServices {
     plugins?: Array<Function | PluginInterface>;
     beforePlugins?: Array<Function | PluginInterface>;
     services?: Array<ServiceArguments | Function>;
+    components?: Array<Function>;
     frameworkImports?: Array<Function | ModuleWithServices>;
 }
 
-export type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect';
+export type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect' | 'component';
 
 export interface Metadata {
     moduleHash?: string;
@@ -49,6 +50,7 @@ export interface ModuleArguments<T, K> extends Metadata {
     services?: Array<Function | ServiceArgumentsInternal>;
     controllers?: Array<Function | ModuleWithServices>;
     effects?: Array<Function>;
+    components?: Array<Function>;
     afterPlugins?: Array<T | PluginInterface>,
     beforePlugins?: Array<T | PluginInterface>;
     plugins?: Array<T | PluginInterface>;

@@ -21,4 +21,7 @@ export declare class ModuleValidators {
     validateEffect(m: any, original: {
         metadata: Metadata;
     }): void;
+    validateComponent(m: any, original: {
+        metadata: Metadata;
+    }): void;
 }

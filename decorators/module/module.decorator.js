@@ -52,6 +52,9 @@ function Module(module) {
                 if (result.services) {
                     moduleService.setServices(result.services, original, currentModule);
                 }
+                if (result.components) {
+                    moduleService.setComponents(result.components, original, currentModule);
+                }
                 if (result.beforePlugins) {
                     moduleService.setBeforePlugins(result.beforePlugins, original, currentModule);
                 }

@@ -2,7 +2,7 @@ import { createUniqueHash } from "../../helpers/create-unique-hash";
 import { ServiceMetadata } from "../../container/types/ServiceMetadata";
 import { Container } from "../../container/Container";
 
-export function Effect<T, K extends keyof T>(): Function {
+export function Component<T, K extends keyof T>(): Function {
     return function (target: Function) {
 
         const uniqueHashForClass = createUniqueHash(`${target}`);
@@ -12,10 +12,10 @@ export function Effect<T, K extends keyof T>(): Function {
         target['metadata'] = {
             moduleName: target['originalName'],
             moduleHash: uniqueHashForClass,
-            type: 'effect',
+            type: 'component',
             raw: `
-            ---- @Effect '${target.name}' metadata----
-            @Effect()
+            ---- @Component '${target.name}' metadata----
+            @Component()
             ${target['originalName']}
             `
         };

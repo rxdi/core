@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const create_unique_hash_1 = require("../../helpers/create-unique-hash");
 const Container_1 = require("../../container/Container");
-function Effect() {
+function Component() {
     return function (target) {
         const uniqueHashForClass = create_unique_hash_1.createUniqueHash(`${target}`);
         Object.defineProperty(target, 'originalName', { value: target.name || target.constructor.name, writable: false });
@@ -10,10 +10,10 @@ function Effect() {
         target['metadata'] = {
             moduleName: target['originalName'],
             moduleHash: uniqueHashForClass,
-            type: 'effect',
+            type: 'component',
             raw: `
-            ---- @Effect '${target.name}' metadata----
-            @Effect()
+            ---- @Component '${target.name}' metadata----
+            @Component()
             ${target['originalName']}
             `
         };
@@ -23,4 +23,4 @@ function Effect() {
         Container_1.Container.set(service);
     };
 }
-exports.Effect = Effect;
+exports.Component = Component;
