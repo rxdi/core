@@ -28,6 +28,7 @@ function Module(module) {
         original['metadata'] = {
             moduleName: original['originalName'],
             moduleHash: uniqueHashForClass,
+            options: null,
             type: 'module',
             raw: uniqueModuleTemplate
         };
@@ -54,6 +55,12 @@ function Module(module) {
                 }
                 if (result.components) {
                     moduleService.setComponents(result.components, original, currentModule);
+                }
+                if (result.effects) {
+                    moduleService.setEffects(result.effects, original, currentModule);
+                }
+                if (result.controllers) {
+                    moduleService.setControllers(result.controllers, original, currentModule);
                 }
                 if (result.beforePlugins) {
                     moduleService.setBeforePlugins(result.beforePlugins, original, currentModule);

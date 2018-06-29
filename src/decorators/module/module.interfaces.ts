@@ -16,12 +16,14 @@ export interface ServiceArguments {
 
 export interface ModuleWithServices {
     module?: Function;
-    afterPlugins?: Array<Function | PluginInterface>,
-    plugins?: Array<Function | PluginInterface>;
-    beforePlugins?: Array<Function | PluginInterface>;
-    services?: Array<ServiceArguments | Function>;
-    components?: Array<Function>;
     frameworkImports?: Array<Function | ModuleWithServices>;
+    services?: Array<ServiceArguments | Function>;
+    controllers?: Array<Function | ModuleWithServices>;
+    effects?: Array<Function>;
+    components?: Array<Function>;
+    beforePlugins?: Array<Function | PluginInterface>;
+    plugins?: Array<Function | PluginInterface>;
+    afterPlugins?: Array<Function | PluginInterface>,
 }
 
 export type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect' | 'component';
@@ -51,7 +53,8 @@ export interface ModuleArguments<T, K> extends Metadata {
     controllers?: Array<Function | ModuleWithServices>;
     effects?: Array<Function>;
     components?: Array<Function>;
-    afterPlugins?: Array<T | PluginInterface>,
     beforePlugins?: Array<T | PluginInterface>;
     plugins?: Array<T | PluginInterface>;
+    afterPlugins?: Array<T | PluginInterface>,
+    bootstrap?: Array<Function>;
 }

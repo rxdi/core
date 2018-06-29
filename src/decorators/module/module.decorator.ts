@@ -34,6 +34,7 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
         original['metadata'] = {
             moduleName: original['originalName'],
             moduleHash: uniqueHashForClass,
+            options: null,
             type: 'module',
             raw: uniqueModuleTemplate
         };
@@ -70,6 +71,14 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
 
                 if (result.components) {
                     moduleService.setComponents(<any>result.components, original, currentModule);
+                }
+
+                if (result.effects) {
+                    moduleService.setEffects(<any>result.effects, original, currentModule);
+                }
+
+                if (result.controllers) {
+                    moduleService.setControllers(<any>result.controllers, original, currentModule);
                 }
 
                 if (result.beforePlugins) {

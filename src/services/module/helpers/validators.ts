@@ -53,7 +53,6 @@ export class ModuleValidators {
         this.genericWrongPluggableError(m, original, 'service');
     }
 
-
     validatePlugin(m, original: { metadata: Metadata }) {
         this.validateEmpty(m, original, 'plugin');
         if (m.provide) {

@@ -14,6 +14,7 @@ function Service(optionsOrServiceName) {
         target['metadata'] = {
             useFactory: optionsOrServiceName && optionsOrServiceName['useFactory'] || null,
             provideIn: optionsOrServiceName && optionsOrServiceName['provideIn'] || 'root',
+            options: optionsOrServiceName || null,
             moduleName: target['originalName'],
             moduleHash: uniqueHashForClass,
             type: 'service',

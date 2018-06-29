@@ -9,17 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const rxjs_1 = require("rxjs");
 const container_1 = require("../../container");
 const lazy_factory_service_1 = require("../lazy-factory/lazy-factory.service");
 const plugin_service_1 = require("../plugin/plugin.service");
 const external_importer_1 = require("../external-importer");
-const rxjs_1 = require("rxjs");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const validators_1 = require("./helpers/validators");
 const constructor_watcher_1 = require("../constructor-watcher/constructor-watcher");
-const controllers_1 = require("../controllers");
-const effect_1 = require("../effect");
-const components_1 = require("../components");
+const controllers_service_1 = require("../controllers/controllers.service");
+const effect_service_1 = require("../effect/effect.service");
+const components_service_1 = require("../components/components.service");
+const bootstraps_service_1 = require("../bootstraps/bootstraps.service");
 let ModuleService = class ModuleService {
     constructor() {
         this.watcherService = constructor_watcher_1.constructorWatcherService;
@@ -122,6 +123,16 @@ let ModuleService = class ModuleService {
             this.pluginService.register(plugin);
         });
     }
+    setBootstraps(bootstraps, original, currentModule) {
+        bootstraps.forEach(bootstrap => {
+            this.validators.validateEmpty(bootstrap, original, bootstrap['metadata']['type']);
+            currentModule.putItem({
+                data: bootstrap,
+                key: bootstrap.name
+            });
+            this.bootstraps.register(bootstrap);
+        });
+    }
     setAfterPlugins(plugins, original, currentModule) {
         plugins.forEach(plugin => {
             this.validators.validatePlugin(plugin, original);
@@ -163,17 +174,21 @@ __decorate([
     __metadata("design:type", plugin_service_1.PluginService)
 ], ModuleService.prototype, "pluginService", void 0);
 __decorate([
-    injector_decorator_1.Injector(components_1.ComponentsService),
-    __metadata("design:type", components_1.ComponentsService)
+    injector_decorator_1.Injector(components_service_1.ComponentsService),
+    __metadata("design:type", components_service_1.ComponentsService)
 ], ModuleService.prototype, "componentsService", void 0);
 __decorate([
-    injector_decorator_1.Injector(controllers_1.ControllersService),
-    __metadata("design:type", controllers_1.ControllersService)
+    injector_decorator_1.Injector(controllers_service_1.ControllersService),
+    __metadata("design:type", controllers_service_1.ControllersService)
 ], ModuleService.prototype, "controllersService", void 0);
 __decorate([
-    injector_decorator_1.Injector(effect_1.EffectsService),
-    __metadata("design:type", effect_1.EffectsService)
+    injector_decorator_1.Injector(effect_service_1.EffectsService),
+    __metadata("design:type", effect_service_1.EffectsService)
 ], ModuleService.prototype, "effectsService", void 0);
+__decorate([
+    injector_decorator_1.Injector(bootstraps_service_1.BootstrapsServices),
+    __metadata("design:type", bootstraps_service_1.BootstrapsServices)
+], ModuleService.prototype, "bootstraps", void 0);
 __decorate([
     injector_decorator_1.Injector(external_importer_1.ExternalImporter),
     __metadata("design:type", external_importer_1.ExternalImporter)

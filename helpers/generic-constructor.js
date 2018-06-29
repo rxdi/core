@@ -33,6 +33,9 @@ function GenericConstruct(module, original, currentModule) {
         if (module.afterPlugins) {
             moduleService.setAfterPlugins(module.afterPlugins, original, currentModule);
         }
+        if (module.bootstraps) {
+            moduleService.setBootstraps(module.bootstraps, original, currentModule);
+        }
         bootstrapLogger.log(`Bootstrap -> @Module('${constructor.originalName}')${bootstrapLogger.logHashes(`(${constructor.name})`)}: finished!`);
         return new constructor();
     };

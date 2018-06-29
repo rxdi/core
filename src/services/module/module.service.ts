@@ -1,24 +1,28 @@
+import { of } from 'rxjs';
 import { Container, Service } from '../../container';
 import { LazyFactory } from '../lazy-factory/lazy-factory.service';
 import { PluginService } from '../plugin/plugin.service';
 import { ServiceArgumentsInternal, Metadata } from '../../decorators/module/module.interfaces';
 import { ExternalImporter } from '../external-importer';
-import { of } from 'rxjs';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { ModuleValidators } from './helpers/validators';
 import { constructorWatcherService, ConstructorWatcherService } from '../constructor-watcher/constructor-watcher';
-import { ControllersService } from '../controllers';
-import { EffectsService } from '../effect';
-import { ComponentsService } from '../components';
+import { ControllersService } from '../controllers/controllers.service';
+import { EffectsService } from '../effect/effect.service';
+import { ComponentsService } from '../components/components.service';
+import { BootstrapsServices } from '../bootstraps/bootstraps.service';
 
 @Service()
 export class ModuleService {
+
     public watcherService: ConstructorWatcherService = constructorWatcherService;
+
     @Injector(LazyFactory) private lazyFactoryService: LazyFactory;
     @Injector(PluginService) private pluginService: PluginService;
     @Injector(ComponentsService) private componentsService: ComponentsService;
     @Injector(ControllersService) private controllersService: ControllersService;
     @Injector(EffectsService) private effectsService: EffectsService;
+    @Injector(BootstrapsServices) private bootstraps: BootstrapsServices;
     @Injector(ExternalImporter) private externalImporter: ExternalImporter;
     @Injector(ModuleValidators) private validators: ModuleValidators;
 
@@ -126,6 +130,17 @@ export class ModuleService {
                 key: plugin.name
             });
             this.pluginService.register(plugin);
+        });
+    }
+
+    setBootstraps(bootstraps, original: { metadata: Metadata }, currentModule) {
+        bootstraps.forEach(bootstrap => {
+            this.validators.validateEmpty(bootstrap, original, bootstrap['metadata']['type']);
+            currentModule.putItem({
+                data: bootstrap,
+                key: bootstrap.name
+            });
+            this.bootstraps.register(bootstrap);
         });
     }
 

@@ -18,3 +18,4 @@ __export(require("./constructor-watcher"));
 __export(require("./effect"));
 __export(require("./controllers"));
 __export(require("./components"));
+__export(require("./bootstraps"));

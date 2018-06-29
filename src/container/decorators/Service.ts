@@ -43,6 +43,7 @@ export function Service<T, K extends keyof T>(optionsOrServiceName?: ServiceOpti
         target['metadata'] = {
             useFactory: optionsOrServiceName && optionsOrServiceName['useFactory'] || null,
             provideIn: optionsOrServiceName && optionsOrServiceName['provideIn'] || 'root',
+            options: optionsOrServiceName || null,
             moduleName: target['originalName'],
             moduleHash: uniqueHashForClass,
             type: 'service',

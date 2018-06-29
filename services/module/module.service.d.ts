@@ -7,6 +7,7 @@ export declare class ModuleService {
     private componentsService;
     private controllersService;
     private effectsService;
+    private bootstraps;
     private externalImporter;
     private validators;
     setServices(services: ServiceArgumentsInternal[], original: {
@@ -21,6 +22,9 @@ export declare class ModuleService {
     setEffects(effects: any[], original: any, currentModule: any): void;
     setComponents(components: any[], original: any, currentModule: any): void;
     setPlugins(plugins: any, original: {
+        metadata: Metadata;
+    }, currentModule: any): void;
+    setBootstraps(bootstraps: any, original: {
         metadata: Metadata;
     }, currentModule: any): void;
     setAfterPlugins(plugins: any, original: {

@@ -23,6 +23,7 @@ export function Plugin<T, K extends keyof T>(optionsOrServiceName?: ServiceOptio
         target['metadata'] = <Metadata>{
             useFactory: optionsOrServiceName && optionsOrServiceName['useFactory'] || null,
             provideIn: optionsOrServiceName && optionsOrServiceName['provideIn'] || 'root',
+            options: optionsOrServiceName || null,
             moduleName: target['originalName'],
             moduleHash: target['name'],
             raw: `${target}`,

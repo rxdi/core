@@ -10,6 +10,10 @@ export interface ServiceOptions<T, K extends keyof T> {
      */
     global?: boolean;
     /**
+     * Represents wheather or not this particular container should be resolved on start
+     */
+    init?: boolean;
+    /**
      * Indicates if instance of this class must be created on each its request.
      * Global option is ignored when this option is used.
      */

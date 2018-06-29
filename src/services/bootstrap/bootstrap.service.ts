@@ -13,6 +13,7 @@ import { CacheLayer, CacheLayerItem } from '../cache';
 import { EffectsService } from '../effect/effect.service';
 import { ControllersService } from '../controllers/controllers.service';
 import { ComponentsService } from '../components/components.service';
+import { BootstrapsServices } from '../bootstraps';
 
 @Service()
 export class BootstrapService {
@@ -29,7 +30,8 @@ export class BootstrapService {
         private controllersService: ControllersService,
         private effectsService: EffectsService,
         private pluginService: PluginService,
-        private componentsService: ComponentsService
+        private componentsService: ComponentsService,
+        private bootstrapsService: BootstrapsServices
     ) {
         this.globalConfig = this.cacheService.createLayer<ConfigModel>({ name: InternalLayers.globalConfig });
     }
@@ -52,6 +54,7 @@ export class BootstrapService {
                         switchMap(() => combineLatest(this.asyncChainablePluginsRegister())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsAfterRegister())),
                         switchMap(() => combineLatest(this.asyncChainableComponents())),
+                        switchMap(() => combineLatest(this.asyncChainableBootstraps())),
                         map((plugins) => this.loadApplication(plugins)),
                         map((p) => this.final(p))
                     ))
@@ -71,28 +74,44 @@ export class BootstrapService {
     private asyncChainablePluginsRegister() {
         return [
             this.chainableObservable,
-            ...this.pluginService.getPlugins().map(async pluggable => this.registerPlugin(pluggable))
+            ...this.pluginService.getPlugins()
+            .filter(this.filterInit())
+            .map(async pluggable => this.registerPlugin(pluggable))
         ]
     }
 
     private asyncChainableComponents() {
         return [
             this.chainableObservable,
-            ...this.componentsService.getComponents().map(async component => await Container.get(component))
+            ...this.componentsService.getComponents()
+            .filter(this.filterInit())
+            .map(async c => await Container.get(c))
+        ]
+    }
+
+    private asyncChainableBootstraps() {
+        return [
+            this.chainableObservable,
+            ...this.bootstrapsService.getBootstraps()
+            .map(async c => await Container.get(c))
         ]
     }
 
     private asyncChainableEffects() {
         return [
             this.chainableObservable,
-            ...this.effectsService.getEffects().map(async effect => await Container.get(effect))
+            ...this.effectsService.getEffects()
+            .filter(this.filterInit())
+            .map(async effect => await Container.get(effect))
         ]
     }
 
     private asyncChainableControllers() {
         return [
             this.chainableObservable,
-            ...this.controllersService.getControllers().map(async controller => await Container.get(controller))
+            ...this.controllersService.getControllers()
+            .filter(this.filterInit())
+            .map(async controller => await Container.get(controller))
         ]
     }
 
@@ -105,15 +124,23 @@ export class BootstrapService {
     private asyncChainablePluginsAfterRegister() {
         return [
             this.chainableObservable,
-            ...this.pluginService.getAfterPlugins().map(async pluggable => await this.registerPlugin(pluggable))
+            ...this.pluginService.getAfterPlugins()
+            .filter(this.filterInit())
+            .map(async pluggable => await this.registerPlugin(pluggable))
         ]
     }
 
     private asyncChainablePluginsBeforeRegister() {
         return [
             this.chainableObservable,
-            ...this.pluginService.getBeforePlugins().map(async pluggable => this.registerPlugin(pluggable))
+            ...this.pluginService.getBeforePlugins()
+            .filter(this.filterInit())
+            .map(async pluggable => this.registerPlugin(pluggable))
         ]
+    }
+
+    filterInit() {
+        return (c) => c['metadata']['options'] && c['metadata']['options']['init'];
     }
 
     private prepareAsyncChainables(injectable: any) {

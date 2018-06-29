@@ -11,6 +11,7 @@ export function GenericConstruct(module: any, original, currentModule) {
             return new constructor();
         }
 
+
         if (module.imports) {
             moduleService.setImports(module.imports, original);
         }
@@ -27,7 +28,6 @@ export function GenericConstruct(module: any, original, currentModule) {
             moduleService.setEffects(module.effects, original, currentModule);
         }
 
-
         if (module.components) {
             moduleService.setComponents(<any>module.components, original, currentModule);
         }
@@ -42,6 +42,10 @@ export function GenericConstruct(module: any, original, currentModule) {
 
         if (module.afterPlugins) {
             moduleService.setAfterPlugins(module.afterPlugins, original, currentModule);
+        }
+
+        if (module.bootstraps) {
+            moduleService.setBootstraps(module.bootstraps, original, currentModule);
         }
 
         bootstrapLogger.log(`Bootstrap -> @Module('${constructor.originalName}')${bootstrapLogger.logHashes(`(${constructor.name})`)}: finished!`);

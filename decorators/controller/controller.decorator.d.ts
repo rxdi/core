@@ -1,1 +1,3 @@
-export declare function Controller<T, K extends keyof T>(): Function;
+export declare function Controller<T, K extends keyof T>(options?: {
+    init?: boolean;
+}): Function;

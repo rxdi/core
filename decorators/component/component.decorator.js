@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const create_unique_hash_1 = require("../../helpers/create-unique-hash");
 const Container_1 = require("../../container/Container");
-function Component() {
+function Component(options) {
     return function (target) {
         const uniqueHashForClass = create_unique_hash_1.createUniqueHash(`${target}`);
         Object.defineProperty(target, 'originalName', { value: target.name || target.constructor.name, writable: false });
@@ -10,6 +10,7 @@ function Component() {
         target['metadata'] = {
             moduleName: target['originalName'],
             moduleHash: uniqueHashForClass,
+            options: options || null,
             type: 'component',
             raw: `
             ---- @Component '${target.name}' metadata----
