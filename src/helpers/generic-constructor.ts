@@ -44,8 +44,8 @@ export function GenericConstruct(module: any, original, currentModule) {
             moduleService.setAfterPlugins(module.afterPlugins, original, currentModule);
         }
 
-        if (module.bootstraps) {
-            moduleService.setBootstraps(module.bootstraps, original, currentModule);
+        if (module.bootstrap) {
+            moduleService.setBootstraps(module.bootstrap, original, currentModule);
         }
 
         bootstrapLogger.log(`Bootstrap -> @Module('${constructor.originalName}')${bootstrapLogger.logHashes(`(${constructor.name})`)}: finished!`);
