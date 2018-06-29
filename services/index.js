@@ -19,3 +19,4 @@ __export(require("./effect"));
 __export(require("./controllers"));
 __export(require("./components"));
 __export(require("./bootstraps"));
+__export(require("./services"));

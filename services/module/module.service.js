@@ -21,6 +21,7 @@ const controllers_service_1 = require("../controllers/controllers.service");
 const effect_service_1 = require("../effect/effect.service");
 const components_service_1 = require("../components/components.service");
 const bootstraps_service_1 = require("../bootstraps/bootstraps.service");
+const services_service_1 = require("../services/services.service");
 let ModuleService = class ModuleService {
     constructor() {
         this.watcherService = constructor_watcher_1.constructorWatcherService;
@@ -46,6 +47,7 @@ let ModuleService = class ModuleService {
             }
             else {
                 currentModule.putItem({ data: service, key: service.name });
+                this.servicesService.register(service);
             }
         });
     }
@@ -197,6 +199,10 @@ __decorate([
     injector_decorator_1.Injector(validators_1.ModuleValidators),
     __metadata("design:type", validators_1.ModuleValidators)
 ], ModuleService.prototype, "validators", void 0);
+__decorate([
+    injector_decorator_1.Injector(services_service_1.ServicesService),
+    __metadata("design:type", services_service_1.ServicesService)
+], ModuleService.prototype, "servicesService", void 0);
 ModuleService = __decorate([
     container_1.Service()
 ], ModuleService);

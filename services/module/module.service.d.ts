@@ -10,6 +10,7 @@ export declare class ModuleService {
     private bootstraps;
     private externalImporter;
     private validators;
+    private servicesService;
     setServices(services: ServiceArgumentsInternal[], original: {
         metadata: Metadata;
     }, currentModule: any): void;

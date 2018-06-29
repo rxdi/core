@@ -13,7 +13,8 @@ import { CacheLayer, CacheLayerItem } from '../cache';
 import { EffectsService } from '../effect/effect.service';
 import { ControllersService } from '../controllers/controllers.service';
 import { ComponentsService } from '../components/components.service';
-import { BootstrapsServices } from '../bootstraps';
+import { BootstrapsServices } from '../bootstraps/bootstraps.service';
+import { ServicesService } from '../services/services.service';
 
 @Service()
 export class BootstrapService {
@@ -31,7 +32,8 @@ export class BootstrapService {
         private effectsService: EffectsService,
         private pluginService: PluginService,
         private componentsService: ComponentsService,
-        private bootstrapsService: BootstrapsServices
+        private bootstrapsService: BootstrapsServices,
+        private servicesService: ServicesService
     ) {
         this.globalConfig = this.cacheService.createLayer<ConfigModel>({ name: InternalLayers.globalConfig });
     }
@@ -48,6 +50,7 @@ export class BootstrapService {
                         take(1),
                         map((c) => this.attachLazyLoadedChainables(res, c)),
                         map(() => this.validateSystem()),
+                        switchMap(() => combineLatest(this.asyncChainableServices())),
                         switchMap(() => combineLatest(this.asyncChainableControllers())),
                         switchMap(() => combineLatest(this.asyncChainableEffects())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsBeforeRegister())),
@@ -76,7 +79,7 @@ export class BootstrapService {
             this.chainableObservable,
             ...this.pluginService.getPlugins()
             .filter(this.filterInit())
-            .map(async pluggable => this.registerPlugin(pluggable))
+            .map(async c => this.registerPlugin(c))
         ]
     }
 
@@ -102,7 +105,16 @@ export class BootstrapService {
             this.chainableObservable,
             ...this.effectsService.getEffects()
             .filter(this.filterInit())
-            .map(async effect => await Container.get(effect))
+            .map(async c => await Container.get(c))
+        ]
+    }
+
+    private asyncChainableServices() {
+        return [
+            this.chainableObservable,
+            ...this.servicesService.getServices()
+            .filter(this.filterInit())
+            .map(async c => await Container.get(c))
         ]
     }
 
@@ -111,7 +123,7 @@ export class BootstrapService {
             this.chainableObservable,
             ...this.controllersService.getControllers()
             .filter(this.filterInit())
-            .map(async controller => await Container.get(controller))
+            .map(async c => await Container.get(c))
         ]
     }
 
@@ -126,7 +138,7 @@ export class BootstrapService {
             this.chainableObservable,
             ...this.pluginService.getAfterPlugins()
             .filter(this.filterInit())
-            .map(async pluggable => await this.registerPlugin(pluggable))
+            .map(async c => await this.registerPlugin(c))
         ]
     }
 
@@ -135,7 +147,7 @@ export class BootstrapService {
             this.chainableObservable,
             ...this.pluginService.getBeforePlugins()
             .filter(this.filterInit())
-            .map(async pluggable => this.registerPlugin(pluggable))
+            .map(async c => this.registerPlugin(c))
         ]
     }
 

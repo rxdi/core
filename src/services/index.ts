@@ -14,3 +14,4 @@ export * from './effect';
 export * from './controllers';
 export * from './components';
 export * from './bootstraps';
+export * from './services'

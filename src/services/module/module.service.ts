@@ -11,6 +11,7 @@ import { ControllersService } from '../controllers/controllers.service';
 import { EffectsService } from '../effect/effect.service';
 import { ComponentsService } from '../components/components.service';
 import { BootstrapsServices } from '../bootstraps/bootstraps.service';
+import { ServicesService } from '../services/services.service';
 
 @Service()
 export class ModuleService {
@@ -25,6 +26,7 @@ export class ModuleService {
     @Injector(BootstrapsServices) private bootstraps: BootstrapsServices;
     @Injector(ExternalImporter) private externalImporter: ExternalImporter;
     @Injector(ModuleValidators) private validators: ModuleValidators;
+    @Injector(ServicesService) private servicesService: ServicesService;
 
     setServices(services: ServiceArgumentsInternal[], original: { metadata: Metadata }, currentModule) {
         services.forEach(service => {
@@ -46,6 +48,7 @@ export class ModuleService {
                 this.setUseValue(service);
             } else {
                 currentModule.putItem({ data: service, key: service.name });
+                this.servicesService.register(service);
             }
 
         });
