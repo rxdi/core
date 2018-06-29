@@ -2,7 +2,7 @@ import { Bootstrap } from "../helpers/bootstrap";
 import { AppModule } from "./app/app.module";
 
 Bootstrap(AppModule, {
-    init: false,
+    init: true,
     experimental: {
         crypto: {
             algorithm: 'aes256',

@@ -7,6 +7,9 @@ class ConstructorWatcherService {
     getConstructor(name) {
         return this._constructors.get(name);
     }
+    getByClass(currentClass) {
+        return this._constructors.get(currentClass.name)['value'];
+    }
     createConstructor(name, value) {
         if (this._constructors.has(name)) {
             return this.getConstructor(name);

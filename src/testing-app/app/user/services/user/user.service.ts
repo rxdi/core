@@ -7,8 +7,11 @@ import { FileService } from "../../../../../services/file";
 import { CREATE_UNIQUE_HASH } from "../../user.tokens";
 import { Controller } from "../../../../../decorators/controller/controller.decorator";
 
+export class Gosho { id = 1};
+export class Pesho extends Gosho {}
+
 @Controller()
-export class UserService {
+export class UserService extends Pesho {
     constructor(
         @Inject(CREATE_UNIQUE_HASH) private ipfsDownloadedFactory: { testKey: () => string },
         @Inject('testFactoryAsync') private testFactoryAsync: { testKey: () => string },
@@ -17,12 +20,13 @@ export class UserService {
         private fileService: FileService
 
     ) {
+        super();
         // this.fileService.fileWalker('./src')
         //     .subscribe(files => {
         //         console.log(files.filter(r => !!r.includes('.ts') && !r.includes('testing-app')));
         //     });
 
-        console.log('UserService', this.ipfsDownloadedFactory.testKey(), this.testFactoryAsync);
+        console.log('UserService', this);
         // this.chainableFactory
         //     .pipe(
         //         map((res) => res)
