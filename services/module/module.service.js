@@ -72,7 +72,7 @@ let ModuleService = class ModuleService {
         }
     }
     setUseDynamic(service) {
-        const factory = this.externalImporter.importModule(service.useDynamic);
+        const factory = this.externalImporter.importModule(service.useDynamic, service.provide);
         this.lazyFactoryService.setLazyFactory(service.provide, factory);
     }
     setUseFactory(service) {

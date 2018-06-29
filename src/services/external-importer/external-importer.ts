@@ -27,14 +27,11 @@ export class ExternalImporter {
         if (!config) {
             throw new Error('Bootstrap: missing config');
         }
-        if (!config.fileName) {
-            throw new Error('Bootstrap: missing fileName ');
-        }
     }
 
     encryptFile(fileFullPath: string) {
         if (this.configService.config.experimental.crypto) {
-            return this.compressionService.readGzipFile(fileFullPath,'dada');
+            return this.compressionService.readGzipFile(fileFullPath, 'dada');
         } else {
             return of(null);
         }
@@ -48,8 +45,26 @@ export class ExternalImporter {
         }
     }
 
-    importModule(config: ExternalImporterConfig): Observable<Function> {
+    isWeb() {
+        let value = false;
+        try {
+            if (window) {
+                value = true;
+            }
+        } catch (e) { }
+        return value;
+    }
+
+    async importModule(config: ExternalImporterConfig, token: string): Promise<any> {
         this.validateConfig(config);
+        if (this.isWeb()) {
+            SystemJS.config(Object.assign({
+                map: {
+                    [token]: config.link
+                }
+            }, config.SystemJsConfig));
+            return await SystemJS.import(config.link)
+        }
         return Observable.create(async observer => {
 
             const moduleName = config.fileName;

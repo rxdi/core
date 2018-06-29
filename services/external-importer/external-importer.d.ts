@@ -14,5 +14,6 @@ export declare class ExternalImporter {
     validateConfig(config: ExternalImporterConfig): void;
     encryptFile(fileFullPath: string): any;
     decryptFile(fileFullPath: string): any;
-    importModule(config: ExternalImporterConfig): Observable<Function>;
+    isWeb(): boolean;
+    importModule(config: ExternalImporterConfig, token: string): Promise<any>;
 }
