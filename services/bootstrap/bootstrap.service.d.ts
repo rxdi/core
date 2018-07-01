@@ -25,9 +25,10 @@ export declare class BootstrapService {
     globalConfig: CacheLayer<CacheLayerItem<ConfigModel>>;
     chainableObservable: Observable<boolean>;
     asyncChainables: Observable<any>[];
+    filterInit: (c: any) => any;
     constructor(logger: BootstrapLogger, cacheService: CacheService, lazyFactoriesService: LazyFactory, configService: ConfigService, controllersService: ControllersService, effectsService: EffectsService, pluginService: PluginService, componentsService: ComponentsService, bootstrapsService: BootstrapsServices, servicesService: ServicesService);
     start(app: any, config?: ConfigModel): Observable<boolean>;
-    private final(plugins);
+    private final();
     private asyncChainablePluginsRegister();
     private asyncChainableComponents();
     private asyncChainableBootstraps();
@@ -37,9 +38,8 @@ export declare class BootstrapService {
     private registerPlugin(pluggable);
     private asyncChainablePluginsAfterRegister();
     private asyncChainablePluginsBeforeRegister();
-    filterInit(): (c: any) => any;
     private prepareAsyncChainables(injectable);
     private validateSystem();
     private attachLazyLoadedChainables(res, chainables);
-    loadApplication(plugins: any): any;
+    loadApplication(): boolean;
 }

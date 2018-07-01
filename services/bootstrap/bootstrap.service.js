@@ -45,17 +45,19 @@ let BootstrapService = class BootstrapService {
         this.servicesService = servicesService;
         this.chainableObservable = rxjs_1.of(true);
         this.asyncChainables = [this.chainableObservable];
+        this.filterInit = (c) => c['metadata']['options'] && c['metadata']['options']['init'];
         this.globalConfig = this.cacheService.createLayer({ name: events_1.InternalLayers.globalConfig });
     }
     start(app, config) {
         this.configService.setConfig(config);
         this.globalConfig.putItem({ key: events_1.InternalEvents.init, data: config });
+        this.filterInit = (c) => config.init || c['metadata']['options'] && c['metadata']['options']['init'];
         container_1.Container.get(app);
         return rxjs_1.of(Array.from(this.lazyFactoriesService.lazyFactories.keys()))
             .pipe(operators_1.map((i) => i.map(injectable => this.prepareAsyncChainables(injectable))), operators_1.switchMap((res) => rxjs_1.combineLatest(this.asyncChainables)
-            .pipe(operators_1.take(1), operators_1.map((c) => this.attachLazyLoadedChainables(res, c)), operators_1.map(() => this.validateSystem()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableServices())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableControllers())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableEffects())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsBeforeRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsAfterRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableComponents())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableBootstraps())), operators_1.map((plugins) => this.loadApplication(plugins)), operators_1.map((p) => this.final(p)))));
+            .pipe(operators_1.take(1), operators_1.map((c) => this.attachLazyLoadedChainables(res, c)), operators_1.map(() => this.validateSystem()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableServices())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableControllers())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableEffects())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsBeforeRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsAfterRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableComponents())), operators_1.map(() => this.loadApplication()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableBootstraps())), operators_1.map(() => this.final()))));
     }
-    final(plugins) {
+    final() {
         // opn('https://theft.youvolio.com');
         // const globalConfig = cache.createLayer<{ init: boolean }>({ name: InternalLayers.globalConfig });
         // cache.getLayer('AppModule').putItem({key:InternalEvents.load, data: true});
@@ -68,7 +70,7 @@ let BootstrapService = class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins()
-                .filter(this.filterInit())
+                .filter(this.filterInit)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
         ];
     }
@@ -76,7 +78,7 @@ let BootstrapService = class BootstrapService {
         return [
             this.chainableObservable,
             ...this.componentsService.getComponents()
-                .filter(this.filterInit())
+                .filter(this.filterInit)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
@@ -91,7 +93,7 @@ let BootstrapService = class BootstrapService {
         return [
             this.chainableObservable,
             ...this.effectsService.getEffects()
-                .filter(this.filterInit())
+                .filter(this.filterInit)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
@@ -99,7 +101,7 @@ let BootstrapService = class BootstrapService {
         return [
             this.chainableObservable,
             ...this.servicesService.getServices()
-                .filter(this.filterInit())
+                .filter(this.filterInit)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
@@ -107,7 +109,7 @@ let BootstrapService = class BootstrapService {
         return [
             this.chainableObservable,
             ...this.controllersService.getControllers()
-                .filter(this.filterInit())
+                .filter(this.filterInit)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
@@ -122,7 +124,7 @@ let BootstrapService = class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getAfterPlugins()
-                .filter(this.filterInit())
+                .filter(this.filterInit)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield this.registerPlugin(c); }))
         ];
     }
@@ -130,12 +132,9 @@ let BootstrapService = class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getBeforePlugins()
-                .filter(this.filterInit())
+                .filter(this.filterInit)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
         ];
-    }
-    filterInit() {
-        return (c) => c['metadata']['options'] && c['metadata']['options']['init'];
     }
     prepareAsyncChainables(injectable) {
         this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading...`);
@@ -157,12 +156,12 @@ let BootstrapService = class BootstrapService {
         res.map(name => container_1.Container.set(name, chainables[count++]));
         return true;
     }
-    loadApplication(plugins) {
+    loadApplication() {
         this.logger.log('Bootstrap -> press start!');
         Array.from(this.cacheService.getLayer(events_1.InternalLayers.modules).map.keys())
             .forEach(m => this.cacheService.getLayer(m)
             .putItem({ key: events_1.InternalEvents.load, data: this.configService.config.init }));
-        return plugins;
+        return true;
     }
 };
 BootstrapService = __decorate([

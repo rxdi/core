@@ -22,7 +22,7 @@ export class BootstrapService {
     globalConfig: CacheLayer<CacheLayerItem<ConfigModel>>;
     chainableObservable = of(true);
     asyncChainables: Observable<any>[] = [this.chainableObservable];
-
+    filterInit = (c) => c['metadata']['options'] && c['metadata']['options']['init'];
     constructor(
         private logger: BootstrapLogger,
         private cacheService: CacheService,
@@ -41,6 +41,7 @@ export class BootstrapService {
     public start(app, config?: ConfigModel): Observable<boolean> {
         this.configService.setConfig(config);
         this.globalConfig.putItem({ key: InternalEvents.init, data: config });
+        this.filterInit = (c) => config.init || c['metadata']['options'] && c['metadata']['options']['init'];
         Container.get(app);
         return of<string[]>(Array.from(this.lazyFactoriesService.lazyFactories.keys()))
             .pipe(
@@ -57,14 +58,14 @@ export class BootstrapService {
                         switchMap(() => combineLatest(this.asyncChainablePluginsRegister())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsAfterRegister())),
                         switchMap(() => combineLatest(this.asyncChainableComponents())),
+                        map(() => this.loadApplication()),
                         switchMap(() => combineLatest(this.asyncChainableBootstraps())),
-                        map((plugins) => this.loadApplication(plugins)),
-                        map((p) => this.final(p))
+                        map(() => this.final())
                     ))
             );
     }
 
-    private final(plugins) {
+    private final() {
         // opn('https://theft.youvolio.com');
         // const globalConfig = cache.createLayer<{ init: boolean }>({ name: InternalLayers.globalConfig });
         // cache.getLayer('AppModule').putItem({key:InternalEvents.load, data: true});
@@ -78,7 +79,7 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins()
-            .filter(this.filterInit())
+            .filter(this.filterInit)
             .map(async c => this.registerPlugin(c))
         ]
     }
@@ -87,7 +88,7 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.componentsService.getComponents()
-            .filter(this.filterInit())
+            .filter(this.filterInit)
             .map(async c => await Container.get(c))
         ]
     }
@@ -104,7 +105,7 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.effectsService.getEffects()
-            .filter(this.filterInit())
+            .filter(this.filterInit)
             .map(async c => await Container.get(c))
         ]
     }
@@ -113,7 +114,7 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.servicesService.getServices()
-            .filter(this.filterInit())
+            .filter(this.filterInit)
             .map(async c => await Container.get(c))
         ]
     }
@@ -122,7 +123,7 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.controllersService.getControllers()
-            .filter(this.filterInit())
+            .filter(this.filterInit)
             .map(async c => await Container.get(c))
         ]
     }
@@ -137,7 +138,7 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getAfterPlugins()
-            .filter(this.filterInit())
+            .filter(this.filterInit)
             .map(async c => await this.registerPlugin(c))
         ]
     }
@@ -146,13 +147,9 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getBeforePlugins()
-            .filter(this.filterInit())
+            .filter(this.filterInit)
             .map(async c => this.registerPlugin(c))
         ]
-    }
-
-    filterInit() {
-        return (c) => c['metadata']['options'] && c['metadata']['options']['init'];
     }
 
     private prepareAsyncChainables(injectable: any) {
@@ -178,12 +175,12 @@ export class BootstrapService {
         return true;
     }
 
-    loadApplication(plugins) {
+    loadApplication() {
         this.logger.log('Bootstrap -> press start!');
         Array.from(this.cacheService.getLayer<Function>(InternalLayers.modules).map.keys())
             .forEach(m => this.cacheService.getLayer(m)
                 .putItem({ key: InternalEvents.load, data: this.configService.config.init }));
-        return plugins;
+        return true;
     }
 
 }
