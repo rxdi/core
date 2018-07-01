@@ -76,8 +76,8 @@ export class BootstrapService {
 
     private asyncChainablePluginsRegister() {
         const filter = (c) => this.configService.config.initOptions.plugins
-            || this.configService.config.init
-            || c['metadata']['options'] && c['metadata']['options']['init'];
+            || c['metadata']['options'] && c['metadata']['options']['init']
+            || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins()
@@ -88,8 +88,8 @@ export class BootstrapService {
 
     private asyncChainableComponents() {
         const filter = (c) => this.configService.config.initOptions.components
-        || this.configService.config.init
-        || c['metadata']['options'] && c['metadata']['options']['init'];
+        || c['metadata']['options'] && c['metadata']['options']['init']
+        || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.componentsService.getComponents()
@@ -108,8 +108,8 @@ export class BootstrapService {
 
     private asyncChainableEffects() {
         const filter = (c) => this.configService.config.initOptions.effects
-        || this.configService.config.init
-        || c['metadata']['options'] && c['metadata']['options']['init'];
+        || c['metadata']['options'] && c['metadata']['options']['init']
+        || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.effectsService.getEffects()
@@ -120,8 +120,8 @@ export class BootstrapService {
 
     private asyncChainableServices() {
         const filter = (c) => this.configService.config.initOptions.services
-        || this.configService.config.init
-        || c['metadata']['options'] && c['metadata']['options']['init'];
+        || c['metadata']['options'] && c['metadata']['options']['init']
+        || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.servicesService.getServices()
@@ -132,8 +132,8 @@ export class BootstrapService {
 
     private asyncChainableControllers() {
         const filter = (c) => this.configService.config.initOptions.controllers
-        || this.configService.config.init
-        || c['metadata']['options'] && c['metadata']['options']['init'];
+        || c['metadata']['options'] && c['metadata']['options']['init']
+        || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.controllersService.getControllers()
@@ -150,8 +150,8 @@ export class BootstrapService {
 
     private asyncChainablePluginsAfterRegister() {
         const filter = (c) => this.configService.config.initOptions.pluginsAfter
-        || this.configService.config.init
-        || c['metadata']['options'] && c['metadata']['options']['init'];
+        || c['metadata']['options'] && c['metadata']['options']['init']
+        || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.pluginService.getAfterPlugins()
@@ -162,8 +162,8 @@ export class BootstrapService {
 
     private asyncChainablePluginsBeforeRegister() {
         const filter = (c) => this.configService.config.initOptions.pluginsBefore
-        || this.configService.config.init
-        || c['metadata']['options'] && c['metadata']['options']['init'];
+        || c['metadata']['options'] && c['metadata']['options']['init']
+        || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.pluginService.getBeforePlugins()
