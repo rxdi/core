@@ -22,7 +22,7 @@ export class BootstrapService {
     globalConfig: CacheLayer<CacheLayerItem<ConfigModel>>;
     chainableObservable = of(true);
     asyncChainables: Observable<any>[] = [this.chainableObservable];
-    filterInit = (c) => c['metadata']['options'] && c['metadata']['options']['init'];
+    config: ConfigModel;
     constructor(
         private logger: BootstrapLogger,
         private cacheService: CacheService,
@@ -41,7 +41,6 @@ export class BootstrapService {
     public start(app, config?: ConfigModel): Observable<boolean> {
         this.configService.setConfig(config);
         this.globalConfig.putItem({ key: InternalEvents.init, data: config });
-        this.filterInit = (c) => config.init || c['metadata']['options'] && c['metadata']['options']['init'];
         Container.get(app);
         return of<string[]>(Array.from(this.lazyFactoriesService.lazyFactories.keys()))
             .pipe(
@@ -76,20 +75,26 @@ export class BootstrapService {
     }
 
     private asyncChainablePluginsRegister() {
+        const filter = (c) => this.configService.config.initOptions.plugins
+            || this.configService.config.init
+            || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins()
-            .filter(this.filterInit)
-            .map(async c => this.registerPlugin(c))
+                .filter(filter)
+                .map(async c => this.registerPlugin(c))
         ]
     }
 
     private asyncChainableComponents() {
+        const filter = (c) => this.configService.config.initOptions.components
+        || this.configService.config.init
+        || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.componentsService.getComponents()
-            .filter(this.filterInit)
-            .map(async c => await Container.get(c))
+                .filter(filter)
+                .map(async c => await Container.get(c))
         ]
     }
 
@@ -97,34 +102,43 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.bootstrapsService.getBootstraps()
-            .map(async c => await Container.get(c))
+                .map(async c => await Container.get(c))
         ]
     }
 
     private asyncChainableEffects() {
+        const filter = (c) => this.configService.config.initOptions.effects
+        || this.configService.config.init
+        || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.effectsService.getEffects()
-            .filter(this.filterInit)
-            .map(async c => await Container.get(c))
+                .filter(filter)
+                .map(async c => await Container.get(c))
         ]
     }
 
     private asyncChainableServices() {
+        const filter = (c) => this.configService.config.initOptions.services
+        || this.configService.config.init
+        || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.servicesService.getServices()
-            .filter(this.filterInit)
-            .map(async c => await Container.get(c))
+                .filter(filter)
+                .map(async c => await Container.get(c))
         ]
     }
 
     private asyncChainableControllers() {
+        const filter = (c) => this.configService.config.initOptions.controllers
+        || this.configService.config.init
+        || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.controllersService.getControllers()
-            .filter(this.filterInit)
-            .map(async c => await Container.get(c))
+                .filter(filter)
+                .map(async c => await Container.get(c))
         ]
     }
 
@@ -135,20 +149,26 @@ export class BootstrapService {
     }
 
     private asyncChainablePluginsAfterRegister() {
+        const filter = (c) => this.configService.config.initOptions.pluginsAfter
+        || this.configService.config.init
+        || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.pluginService.getAfterPlugins()
-            .filter(this.filterInit)
-            .map(async c => await this.registerPlugin(c))
+                .filter(filter)
+                .map(async c => await this.registerPlugin(c))
         ]
     }
 
     private asyncChainablePluginsBeforeRegister() {
+        const filter = (c) => this.configService.config.initOptions.pluginsBefore
+        || this.configService.config.init
+        || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.pluginService.getBeforePlugins()
-            .filter(this.filterInit)
-            .map(async c => this.registerPlugin(c))
+                .filter(filter)
+                .map(async c => this.registerPlugin(c))
         ]
     }
 

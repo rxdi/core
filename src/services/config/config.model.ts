@@ -16,8 +16,19 @@ export class ExperimentalFeatures {
     crypto?: PrivateCryptoModel;
 }
 
+export class InitOptionsConfig {
+    services?: boolean;
+    controllers?: boolean;
+    effects?: boolean;
+    pluginsBefore?: boolean;
+    plugins?: boolean;
+    components?: boolean;
+    pluginsAfter?;
+}
+
 export class ConfigModel {
     init?: boolean = true;
+    initOptions?: InitOptionsConfig = new InitOptionsConfig();
     experimental?: ExperimentalFeatures = new ExperimentalFeatures();
     logger?: LoggerConfig = new LoggerConfig();
 }

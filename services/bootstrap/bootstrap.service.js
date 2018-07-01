@@ -45,13 +45,11 @@ let BootstrapService = class BootstrapService {
         this.servicesService = servicesService;
         this.chainableObservable = rxjs_1.of(true);
         this.asyncChainables = [this.chainableObservable];
-        this.filterInit = (c) => c['metadata']['options'] && c['metadata']['options']['init'];
         this.globalConfig = this.cacheService.createLayer({ name: events_1.InternalLayers.globalConfig });
     }
     start(app, config) {
         this.configService.setConfig(config);
         this.globalConfig.putItem({ key: events_1.InternalEvents.init, data: config });
-        this.filterInit = (c) => config.init || c['metadata']['options'] && c['metadata']['options']['init'];
         container_1.Container.get(app);
         return rxjs_1.of(Array.from(this.lazyFactoriesService.lazyFactories.keys()))
             .pipe(operators_1.map((i) => i.map(injectable => this.prepareAsyncChainables(injectable))), operators_1.switchMap((res) => rxjs_1.combineLatest(this.asyncChainables)
@@ -67,18 +65,24 @@ let BootstrapService = class BootstrapService {
         return true;
     }
     asyncChainablePluginsRegister() {
+        const filter = (c) => this.configService.config.initOptions.plugins
+            || this.configService.config.init
+            || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins()
-                .filter(this.filterInit)
+                .filter(filter)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
         ];
     }
     asyncChainableComponents() {
+        const filter = (c) => this.configService.config.initOptions.components
+            || this.configService.config.init
+            || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.componentsService.getComponents()
-                .filter(this.filterInit)
+                .filter(filter)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
@@ -90,26 +94,35 @@ let BootstrapService = class BootstrapService {
         ];
     }
     asyncChainableEffects() {
+        const filter = (c) => this.configService.config.initOptions.effects
+            || this.configService.config.init
+            || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.effectsService.getEffects()
-                .filter(this.filterInit)
+                .filter(filter)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
     asyncChainableServices() {
+        const filter = (c) => this.configService.config.initOptions.services
+            || this.configService.config.init
+            || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.servicesService.getServices()
-                .filter(this.filterInit)
+                .filter(filter)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
     asyncChainableControllers() {
+        const filter = (c) => this.configService.config.initOptions.controllers
+            || this.configService.config.init
+            || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.controllersService.getControllers()
-                .filter(this.filterInit)
+                .filter(filter)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
@@ -121,18 +134,24 @@ let BootstrapService = class BootstrapService {
         });
     }
     asyncChainablePluginsAfterRegister() {
+        const filter = (c) => this.configService.config.initOptions.pluginsAfter
+            || this.configService.config.init
+            || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.pluginService.getAfterPlugins()
-                .filter(this.filterInit)
+                .filter(filter)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield this.registerPlugin(c); }))
         ];
     }
     asyncChainablePluginsBeforeRegister() {
+        const filter = (c) => this.configService.config.initOptions.pluginsBefore
+            || this.configService.config.init
+            || c['metadata']['options'] && c['metadata']['options']['init'];
         return [
             this.chainableObservable,
             ...this.pluginService.getBeforePlugins()
-                .filter(this.filterInit)
+                .filter(filter)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
         ];
     }

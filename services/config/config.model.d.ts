@@ -13,8 +13,18 @@ export declare class PrivateCryptoModel {
 export declare class ExperimentalFeatures {
     crypto?: PrivateCryptoModel;
 }
+export declare class InitOptionsConfig {
+    services?: boolean;
+    controllers?: boolean;
+    effects?: boolean;
+    pluginsBefore?: boolean;
+    plugins?: boolean;
+    components?: boolean;
+    pluginsAfter?: any;
+}
 export declare class ConfigModel {
     init?: boolean;
+    initOptions?: InitOptionsConfig;
     experimental?: ExperimentalFeatures;
     logger?: LoggerConfig;
 }

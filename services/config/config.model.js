@@ -16,9 +16,13 @@ exports.PrivateCryptoModel = PrivateCryptoModel;
 class ExperimentalFeatures {
 }
 exports.ExperimentalFeatures = ExperimentalFeatures;
+class InitOptionsConfig {
+}
+exports.InitOptionsConfig = InitOptionsConfig;
 class ConfigModel {
     constructor() {
         this.init = true;
+        this.initOptions = new InitOptionsConfig();
         this.experimental = new ExperimentalFeatures();
         this.logger = new LoggerConfig();
     }
