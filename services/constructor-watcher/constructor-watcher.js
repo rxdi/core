@@ -17,6 +17,12 @@ class ConstructorWatcherService {
         this._constructors.set(name, value);
         return this.getConstructor(name);
     }
+    triggerOnInit(currentClass) {
+        const currentConstructor = this._constructors.get(currentClass.name);
+        if (currentConstructor['value'] && currentConstructor['value'].OnInit) {
+            currentConstructor['value'].OnInit.bind(currentConstructor['value'])();
+        }
+    }
 }
 exports.ConstructorWatcherService = ConstructorWatcherService;
 exports.constructorWatcherService = new ConstructorWatcherService();

@@ -21,6 +21,13 @@ export class ConstructorWatcherService {
 
     }
 
+    triggerOnInit(currentClass: Function) {
+        const currentConstructor = this._constructors.get(currentClass.name);
+        if (currentConstructor['value'] && currentConstructor['value'].OnInit) {
+            currentConstructor['value'].OnInit.bind(currentConstructor['value'])();
+        }
+    }
+
     
 }
 
