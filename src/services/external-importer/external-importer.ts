@@ -55,7 +55,7 @@ export class ExternalImporter {
         return value;
     }
 
-    async importModule(config: ExternalImporterConfig, token: string): Promise<any> {
+    importModule(config: ExternalImporterConfig, token: string): Promise<any> {
         this.validateConfig(config);
         if (this.isWeb()) {
             SystemJS.config(Object.assign({
@@ -63,7 +63,7 @@ export class ExternalImporter {
                     [token]: config.link
                 }
             }, config.SystemJsConfig));
-            return await SystemJS.import(config.link)
+            return SystemJS.import(config.link)
         }
         return Observable.create(async observer => {
 

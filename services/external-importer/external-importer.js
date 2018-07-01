@@ -63,46 +63,44 @@ let ExternalImporter = class ExternalImporter {
         return value;
     }
     importModule(config, token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.validateConfig(config);
-            if (this.isWeb()) {
-                SystemJS.config(Object.assign({
-                    map: {
-                        [token]: config.link
-                    }
-                }, config.SystemJsConfig));
-                return yield SystemJS.import(config.link);
+        this.validateConfig(config);
+        if (this.isWeb()) {
+            SystemJS.config(Object.assign({
+                map: {
+                    [token]: config.link
+                }
+            }, config.SystemJsConfig));
+            return SystemJS.import(config.link);
+        }
+        return rxjs_1.Observable.create((observer) => __awaiter(this, void 0, void 0, function* () {
+            const moduleName = config.fileName;
+            const moduleNamespace = config.namespace;
+            const moduleLink = config.link;
+            const moduleExtension = config.extension;
+            const moduleSystemJsConfig = config.SystemJsConfig || {};
+            const modulesFolder = config.outputFolder || `/external_modules/`;
+            const fileFullPath = `${process.cwd()}${modulesFolder}/${moduleNamespace}/${moduleName}.${moduleExtension}`;
+            const folder = `${process.cwd()}${modulesFolder}${moduleNamespace}`;
+            const fileName = `${moduleName}.${moduleExtension}`;
+            Object.assign(moduleSystemJsConfig, { paths: Object.assign({ [moduleName]: fileFullPath }, moduleSystemJsConfig.paths) });
+            SystemJS.config(moduleSystemJsConfig);
+            if (this.fileService.isPresent(fileFullPath)) {
+                this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): present inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
+                this.importExternalModule(moduleName)
+                    .pipe(operators_1.take(1))
+                    .subscribe(m => observer.next(m), err => observer.error(err));
             }
-            return rxjs_1.Observable.create((observer) => __awaiter(this, void 0, void 0, function* () {
-                const moduleName = config.fileName;
-                const moduleNamespace = config.namespace;
-                const moduleLink = config.link;
-                const moduleExtension = config.extension;
-                const moduleSystemJsConfig = config.SystemJsConfig || {};
-                const modulesFolder = config.outputFolder || `/external_modules/`;
-                const fileFullPath = `${process.cwd()}${modulesFolder}/${moduleNamespace}/${moduleName}.${moduleExtension}`;
-                const folder = `${process.cwd()}${modulesFolder}${moduleNamespace}`;
-                const fileName = `${moduleName}.${moduleExtension}`;
-                Object.assign(moduleSystemJsConfig, { paths: Object.assign({ [moduleName]: fileFullPath }, moduleSystemJsConfig.paths) });
-                SystemJS.config(moduleSystemJsConfig);
-                if (this.fileService.isPresent(fileFullPath)) {
-                    this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): present inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
-                    this.importExternalModule(moduleName)
-                        .pipe(operators_1.take(1))
-                        .subscribe(m => observer.next(m), err => observer.error(err));
-                }
-                else {
-                    this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): will be downloaded inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
-                    this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): ${moduleLink} downloading...`);
-                    this.requestService.get(moduleLink)
-                        .pipe(operators_1.take(1), operators_1.map((res) => {
-                        this.logger.logImporter(`Done!`);
-                        return res;
-                    }), operators_1.switchMap((res) => this.fileService.writeFileSync(folder, fileName, moduleNamespace, res)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
-                        .subscribe((m) => observer.next(m), err => observer.error(err));
-                }
-            }));
-        });
+            else {
+                this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): will be downloaded inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
+                this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): ${moduleLink} downloading...`);
+                this.requestService.get(moduleLink)
+                    .pipe(operators_1.take(1), operators_1.map((res) => {
+                    this.logger.logImporter(`Done!`);
+                    return res;
+                }), operators_1.switchMap((res) => this.fileService.writeFileSync(folder, fileName, moduleNamespace, res)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
+                    .subscribe((m) => observer.next(m), err => observer.error(err));
+            }
+        }));
     }
 };
 __decorate([
