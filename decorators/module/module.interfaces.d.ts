@@ -38,7 +38,7 @@ export interface ServiceArgumentsInternal {
     useClass?: any;
     metadata?: Metadata;
     useDynamic?: ExternalImporterConfig;
-    deps?: Array<Function>;
+    deps?: Array<Function | string | InjectionToken<any>>;
     lazy?: boolean;
 }
 export interface ModuleArguments<T, K> extends Metadata {
