@@ -20,3 +20,4 @@ __export(require("./controllers"));
 __export(require("./components"));
 __export(require("./bootstraps"));
 __export(require("./services"));
+__export(require("./plugin-manager/plugin-manager"));

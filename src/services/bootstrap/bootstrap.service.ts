@@ -15,6 +15,7 @@ import { ControllersService } from '../controllers/controllers.service';
 import { ComponentsService } from '../components/components.service';
 import { BootstrapsServices } from '../bootstraps/bootstraps.service';
 import { ServicesService } from '../services/services.service';
+import { PluginManager } from '../plugin-manager/plugin-manager';
 
 @Service()
 export class BootstrapService {
@@ -34,12 +35,13 @@ export class BootstrapService {
         private pluginService: PluginService,
         private componentsService: ComponentsService,
         private bootstrapsService: BootstrapsServices,
-        private servicesService: ServicesService
+        private servicesService: ServicesService,
+        private pluginManager: PluginManager
     ) {
         this.globalConfig = this.cacheService.createLayer<ConfigModel>({ name: InternalLayers.globalConfig });
     }
 
-    public start(app, config?: ConfigModel): Observable<boolean> {
+    public start(app, config?: ConfigModel): Observable<PluginManager> {
         this.configService.setConfig(config);
         this.globalConfig.putItem({ key: InternalEvents.init, data: config });
         Container.get(app);
@@ -65,14 +67,14 @@ export class BootstrapService {
             );
     }
 
-    private final() {
+    private final(): PluginManager {
         // opn('https://theft.youvolio.com');
         // const globalConfig = cache.createLayer<{ init: boolean }>({ name: InternalLayers.globalConfig });
         // cache.getLayer('AppModule').putItem({key:InternalEvents.load, data: true});
         // cache.getLayer('UserModule').putItem({ key: InternalEvents.load, data: true });
         // console.log('bla bla', plugins);!
         // Bootstrapping finished!
-        return true;
+        return this.pluginManager;
     }
 
     private asyncChainablePluginsRegister() {

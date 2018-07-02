@@ -11,6 +11,7 @@ import { ControllersService } from '../controllers/controllers.service';
 import { ComponentsService } from '../components/components.service';
 import { BootstrapsServices } from '../bootstraps/bootstraps.service';
 import { ServicesService } from '../services/services.service';
+import { PluginManager } from '../plugin-manager/plugin-manager';
 export declare class BootstrapService {
     private logger;
     private cacheService;
@@ -22,12 +23,13 @@ export declare class BootstrapService {
     private componentsService;
     private bootstrapsService;
     private servicesService;
+    private pluginManager;
     globalConfig: CacheLayer<CacheLayerItem<ConfigModel>>;
     chainableObservable: Observable<boolean>;
     asyncChainables: Observable<any>[];
     config: ConfigModel;
-    constructor(logger: BootstrapLogger, cacheService: CacheService, lazyFactoriesService: LazyFactory, configService: ConfigService, controllersService: ControllersService, effectsService: EffectsService, pluginService: PluginService, componentsService: ComponentsService, bootstrapsService: BootstrapsServices, servicesService: ServicesService);
-    start(app: any, config?: ConfigModel): Observable<boolean>;
+    constructor(logger: BootstrapLogger, cacheService: CacheService, lazyFactoriesService: LazyFactory, configService: ConfigService, controllersService: ControllersService, effectsService: EffectsService, pluginService: PluginService, componentsService: ComponentsService, bootstrapsService: BootstrapsServices, servicesService: ServicesService, pluginManager: PluginManager);
+    start(app: any, config?: ConfigModel): Observable<PluginManager>;
     private final();
     private asyncChainablePluginsRegister();
     private asyncChainableComponents();

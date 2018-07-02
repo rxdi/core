@@ -6,7 +6,7 @@ export declare class PluginService {
     register(plugin: any): void;
     registerBefore(plugin: any): void;
     registerAfter(plugin: any): void;
-    getPlugins(): PluginInterface[];
+    getPlugins(): Array<Function | PluginInterface>;
     getAfterPlugins(): (Function | PluginInterface)[];
     getBeforePlugins(): (Function | PluginInterface)[];
 }

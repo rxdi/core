@@ -31,8 +31,9 @@ const controllers_service_1 = require("../controllers/controllers.service");
 const components_service_1 = require("../components/components.service");
 const bootstraps_service_1 = require("../bootstraps/bootstraps.service");
 const services_service_1 = require("../services/services.service");
+const plugin_manager_1 = require("../plugin-manager/plugin-manager");
 let BootstrapService = class BootstrapService {
-    constructor(logger, cacheService, lazyFactoriesService, configService, controllersService, effectsService, pluginService, componentsService, bootstrapsService, servicesService) {
+    constructor(logger, cacheService, lazyFactoriesService, configService, controllersService, effectsService, pluginService, componentsService, bootstrapsService, servicesService, pluginManager) {
         this.logger = logger;
         this.cacheService = cacheService;
         this.lazyFactoriesService = lazyFactoriesService;
@@ -43,6 +44,7 @@ let BootstrapService = class BootstrapService {
         this.componentsService = componentsService;
         this.bootstrapsService = bootstrapsService;
         this.servicesService = servicesService;
+        this.pluginManager = pluginManager;
         this.chainableObservable = rxjs_1.of(true);
         this.asyncChainables = [this.chainableObservable];
         this.globalConfig = this.cacheService.createLayer({ name: events_1.InternalLayers.globalConfig });
@@ -62,7 +64,7 @@ let BootstrapService = class BootstrapService {
         // cache.getLayer('UserModule').putItem({ key: InternalEvents.load, data: true });
         // console.log('bla bla', plugins);!
         // Bootstrapping finished!
-        return true;
+        return this.pluginManager;
     }
     asyncChainablePluginsRegister() {
         const filter = (c) => this.configService.config.initOptions.plugins
@@ -194,6 +196,7 @@ BootstrapService = __decorate([
         plugin_service_1.PluginService,
         components_service_1.ComponentsService,
         bootstraps_service_1.BootstrapsServices,
-        services_service_1.ServicesService])
+        services_service_1.ServicesService,
+        plugin_manager_1.PluginManager])
 ], BootstrapService);
 exports.BootstrapService = BootstrapService;

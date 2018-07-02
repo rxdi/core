@@ -21,7 +21,7 @@ export class PluginService {
         this.afterPlugins.next([...this.plugins.getValue(), plugin]);
     }
 
-    getPlugins() {
+    getPlugins(): Array<Function | PluginInterface> {
         return this.plugins.getValue();
     }
 
@@ -32,10 +32,5 @@ export class PluginService {
     getBeforePlugins() {
         return this.beforePlugins.getValue();
     }
-
-
-
-
-
 
 }
