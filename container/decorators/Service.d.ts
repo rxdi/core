@@ -1,6 +1,6 @@
 import { ServiceOptions } from '../types/ServiceOptions';
 import { Token } from '../Token';
-export interface Type<T> extends Function {
+export interface TypeProvide<T> extends Function {
     new (...args: any[]): T;
 }
 /**
@@ -8,7 +8,7 @@ export interface Type<T> extends Function {
  */
 export declare function Service(): Function;
 export declare function Service(config: {
-    providedIn?: Type<any> | 'root' | null;
+    providedIn?: TypeProvide<any> | 'root' | null;
     useFactory?: () => any;
 }): Function;
 /**

@@ -4,7 +4,7 @@ import { ServiceOptions } from '../types/ServiceOptions';
 import { Token } from '../Token';
 import { createUniqueHash } from '../../helpers/create-unique-hash';
 
-interface Type<T> extends Function {
+export interface TypeProvide<T> extends Function {
     new(...args: any[]): T;
 }
 /**
@@ -12,7 +12,7 @@ interface Type<T> extends Function {
  */
 export function Service(): Function;
 
-export function Service(config: { providedIn?: Type<any> | 'root' | null, useFactory?: () => any }): Function;
+export function Service(config: { providedIn?: TypeProvide<any> | 'root' | null, useFactory?: () => any }): Function;
 
 /**
  * Marks class as a service that can be injected using Container.
@@ -33,7 +33,7 @@ export function Service<T, K extends keyof T>(options?: ServiceOptions<T, K>): F
 /**
  * Marks class as a service that can be injected using container.
  */
-export function Service<T, K extends keyof T>(optionsOrServiceName?: ServiceOptions<T, K> | Token<any> | string | { useFactory?: () => any; providedIn?: Type<any> | 'root' | null }): Function {
+export function Service<T, K extends keyof T>(optionsOrServiceName?: ServiceOptions<T, K> | Token<any> | string | { useFactory?: () => any; providedIn?: TypeProvide<any> | 'root' | null }): Function {
     return function (target: Function) {
 
         const uniqueHashForClass = createUniqueHash(`${target}`);
