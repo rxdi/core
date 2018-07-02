@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class LoggerConfig {
     constructor() {
-        this.logging = true;
+        this.logging = process.env.LOGGING === 'true' ? true : false;
         this.hashes = true;
         this.date = true;
         this.exitHandler = true;

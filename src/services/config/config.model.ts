@@ -1,5 +1,5 @@
 export class LoggerConfig {
-    logging?: boolean = true;
+    logging?: boolean = process.env.LOGGING === 'true' ? true : false;
     hashes?: boolean = true;
     date?: boolean = true;
     exitHandler?: boolean = true;
