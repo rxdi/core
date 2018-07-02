@@ -126,13 +126,6 @@ let BootstrapService = class BootstrapService {
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
-    registerPlugin(pluggable) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const plugin = container_1.Container.get(pluggable);
-            yield plugin.register();
-            return plugin;
-        });
-    }
     asyncChainablePluginsAfterRegister() {
         const filter = (c) => this.configService.config.initOptions.pluginsAfter
             || c['metadata']['options'] && c['metadata']['options']['init']
@@ -154,6 +147,13 @@ let BootstrapService = class BootstrapService {
                 .filter(filter)
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
         ];
+    }
+    registerPlugin(pluggable) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const plugin = container_1.Container.get(pluggable);
+            yield plugin.register();
+            return plugin;
+        });
     }
     prepareAsyncChainables(injectable) {
         this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading...`);

@@ -12,6 +12,7 @@ const bootstrapService = Container.get(BootstrapService);
 export const Bootstrap = (app, config?: ConfigModel): Observable<boolean> => bootstrapService.start(app, config);
 export const BootstrapPromisify = (app, config?: ConfigModel): Promise<boolean> => bootstrapService.start(app, config).toPromise();
 export const BootstrapFramework = (app, modules: any[], config?: ConfigModel) : Observable<boolean> => {
+    bootstrapService.configService.setConfig(config);
     modules.map(m => Container.get(m));
     return bootstrapService.start(app, config);
 }

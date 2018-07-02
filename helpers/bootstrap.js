@@ -9,6 +9,7 @@ const bootstrapService = container_1.Container.get(bootstrap_service_1.Bootstrap
 exports.Bootstrap = (app, config) => bootstrapService.start(app, config);
 exports.BootstrapPromisify = (app, config) => bootstrapService.start(app, config).toPromise();
 exports.BootstrapFramework = (app, modules, config) => {
+    bootstrapService.configService.setConfig(config);
     modules.map(m => container_1.Container.get(m));
     return bootstrapService.start(app, config);
 };

@@ -15,7 +15,7 @@ export declare class BootstrapService {
     private logger;
     private cacheService;
     private lazyFactoriesService;
-    private configService;
+    configService: ConfigService;
     private controllersService;
     private effectsService;
     private pluginService;
@@ -35,9 +35,9 @@ export declare class BootstrapService {
     private asyncChainableEffects();
     private asyncChainableServices();
     private asyncChainableControllers();
-    private registerPlugin(pluggable);
     private asyncChainablePluginsAfterRegister();
     private asyncChainablePluginsBeforeRegister();
+    private registerPlugin(pluggable);
     private prepareAsyncChainables(injectable);
     private validateSystem();
     private attachLazyLoadedChainables(res, chainables);
