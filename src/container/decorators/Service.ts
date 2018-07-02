@@ -4,7 +4,7 @@ import { ServiceOptions } from '../types/ServiceOptions';
 import { Token } from '../Token';
 import { createUniqueHash } from '../../helpers/create-unique-hash';
 
-export interface Type<T> extends Function {
+interface Type<T> extends Function {
     new(...args: any[]): T;
 }
 /**
