@@ -37,6 +37,9 @@ let ResolverService = class ResolverService {
                 }
                 const found = this.cacheService.searchForItem(i.data);
                 if (found) {
+                    if (found.provide) {
+                        return found;
+                    }
                     const moduleType = found.metadata.type.charAt(0).toUpperCase() + found.metadata.type.slice(1);
                     this.bootstrapLogger.log(`Start -> @Module('${moduleName}')${this.bootstrapLogger.logHashes(`(${target.name})`)}: @${moduleType}('${found.originalName}')${this.bootstrapLogger.logHashes(`(${found.name})`)}` + ' initialized!');
                     return container_1.Container.get(found);
