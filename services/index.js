@@ -21,3 +21,4 @@ __export(require("./components"));
 __export(require("./bootstraps"));
 __export(require("./services"));
 __export(require("./plugin-manager/plugin-manager"));
+__export(require("./after-starter/after-starter.service"));

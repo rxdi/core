@@ -16,6 +16,7 @@ import { ComponentsService } from '../components/components.service';
 import { BootstrapsServices } from '../bootstraps/bootstraps.service';
 import { ServicesService } from '../services/services.service';
 import { PluginManager } from '../plugin-manager/plugin-manager';
+import { AfterStarterService } from '../after-starter/after-starter.service';
 
 @Service()
 export class BootstrapService {
@@ -36,7 +37,8 @@ export class BootstrapService {
         private componentsService: ComponentsService,
         private bootstrapsService: BootstrapsServices,
         private servicesService: ServicesService,
-        private pluginManager: PluginManager
+        private pluginManager: PluginManager,
+        private afterStarterService: AfterStarterService
     ) {
         this.globalConfig = this.cacheService.createLayer<ConfigModel>({ name: InternalLayers.globalConfig });
     }
@@ -74,6 +76,7 @@ export class BootstrapService {
         // cache.getLayer('UserModule').putItem({ key: InternalEvents.load, data: true });
         // console.log('bla bla', plugins);!
         // Bootstrapping finished!
+        this.afterStarterService.appStarted.next(true);
         return this.pluginManager;
     }
 
