@@ -1,4 +1,23 @@
-# Powerfull dependency injection with typescript and rxjs 6
+## Powerful Dependency Injection inside Browser and Node using Typescript and RXJS 6
+***
+> The idea behind [@rxdi](https://github.com/rxdi) is to create independent, dependency injection that can be used everywhere,
+> Node and Browser with purpose also to share the same code without chainging nothing!
+> First steps where with platform called [@gapi](https://github.com/Stradivario/gapi) you can check repository [@gapi/core](https://github.com/Stradivario/gapi-core).
+> Then because of the needs of the platform i decided to develop this Reactive Dependency Injection container helping me build progressive applications.
+> Hope you like my journey!
+> Any help and suggestions are appreciated!
+Main repository [@rxdi/core](https://github.com/rxdi/core) 
+***
+
+#### Example starter projects:
+[Client Side](https://github.com/rxdi/starter-client-side)
+
+[Client Side Advanced](https://github.com/rxdi/starter-client-side-advanced)
+
+[Server Side](https://github.com/rxdi/starter-server-side)
+
+More examples for [@rxdi](https://www.npmjs.com/~rxdi) infrastructure you can check inside [@gapi](https://www.npmjs.com/~gapi) namespace.
+
 ## Installation and basic examples:
 ##### To install this library, run:
 
@@ -14,7 +33,16 @@ import { Bootstrap } from '@rxdi/core';
 import { AppModule } from './app/app.module';
 
 Bootstrap(AppModule, {
-    init: true,
+    init: false, // if init is false you can set specifically which parts of the system should initialize their constructors
+    initOptions: {
+        services: true,
+        components: true,
+        effects: true,
+        controllers: true,
+        plugins: true,
+        pluginsAfter: true,
+        pluginsBefore: true
+    },
     logger: {
         logging: true,
         date: true,
@@ -24,8 +52,8 @@ Bootstrap(AppModule, {
     }
 })
 .subscribe(
-    () => console.log('Started!'),
-    (e) => console.error(e)
+    () => console.log('App Started!'),
+    (err) => console.error(err)
 );
 ```
 
@@ -147,10 +175,6 @@ AppStopped
 
 
 
-
-
-
-
 ### ForRoot configuration for modules
 
 ```typescript
@@ -169,7 +193,7 @@ export const MY_MODULE_CONFIG = new InjectionToken<MODULE_DI_CONFIG>('my-module-
   imports: []
 })
 export class YourModule {
-  public static forRoot(): ModuleWithServices {
+  public static forRoot(config?: any): ModuleWithServices {
     return {
       module: YourModule,
       services: [
@@ -180,8 +204,21 @@ export class YourModule {
             useFactory: () => {
                 return {text: 'Hello world'};
             }
+          },
+          {
+            provide: 'ipfsDownloadableFactory',
+            useDynamic: {
+                fileName: 'createUniqueHash',
+                namespace: '@helpers',
+                extension: 'js',
+                typings: '',
+                outputFolder: '/node_modules/',
+                link: 'https://ipfs.infura.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug'
+            }
           }
-      ]
+      ],
+      components: [],
+      frameworkImports: []
     }
   }
 }
