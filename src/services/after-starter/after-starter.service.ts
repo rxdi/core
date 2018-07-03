@@ -1,4 +1,4 @@
-import { Service } from "container";
+import { Service } from "../../container";
 import { Subject } from "rxjs";
 
 @Service()
