@@ -1,0 +1,658 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@rxdi/core</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@rxdi/core</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> @rxdi/core</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h2 id="powerful-dependency-injection-inside-browser-and-node-using-typescript-and-rxjs-6">Powerful Dependency Injection inside Browser and Node using Typescript and RXJS 6</h2>
+				<hr>
+				<blockquote>
+					<p>The idea behind <a href="https://github.com/rxdi">@rxdi</a> is to create independent, dependency injection that can be used everywhere,
+						Node and Browser with purpose also to share the same code without chainging nothing!
+						First steps where with platform called <a href="https://github.com/Stradivario/gapi">@gapi</a> you can check repository <a href="https://github.com/Stradivario/gapi-core">@gapi/core</a>.
+						Then because of the needs of the platform i decided to develop this Reactive Dependency Injection container helping me build progressive applications.
+						Hope you like my journey!
+						Any help and suggestions are appreciated!
+					Main repository <a href="https://github.com/rxdi/core">@rxdi/core</a> </p>
+				</blockquote>
+				<hr>
+				<h4 id="example-starter-projects-">Example starter projects:</h4>
+				<p><a href="https://github.com/rxdi/starter-client-side">Client Side</a></p>
+				<p><a href="https://github.com/rxdi/starter-client-side-advanced">Client Side Advanced</a></p>
+				<p><a href="https://github.com/rxdi/starter-server-side">Server Side</a></p>
+				<p>More examples for <a href="https://www.npmjs.com/~rxdi">@rxdi</a> infrastructure you can check inside <a href="https://www.npmjs.com/~gapi">@gapi</a> namespace.</p>
+				<h2 id="installation-and-basic-examples-">Installation and basic examples:</h2>
+				<h5 id="to-install-this-library-run-">To install this library, run:</h5>
+				<pre><code class="lang-bash">npm install @rxdi/core
+</code></pre>
+				<h2 id="simplest-app">Simplest app</h2>
+				<p>main.ts</p>
+				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { Bootstrap } <span class="hljs-keyword">from</span> <span class="hljs-string">'@rxdi/core'</span>;
+<span class="hljs-keyword">import</span> { AppModule } <span class="hljs-keyword">from</span> <span class="hljs-string">'./app/app.module'</span>;
+
+Bootstrap(AppModule, {
+    init: <span class="hljs-literal">false</span>, <span class="hljs-comment">// if init is false you can set specifically which parts of the system should initialize their constructors</span>
+    initOptions: {
+        services: <span class="hljs-literal">true</span>,
+        components: <span class="hljs-literal">true</span>,
+        effects: <span class="hljs-literal">true</span>,
+        controllers: <span class="hljs-literal">true</span>,
+        plugins: <span class="hljs-literal">true</span>,
+        pluginsAfter: <span class="hljs-literal">true</span>,
+        pluginsBefore: <span class="hljs-literal">true</span>
+    },
+    logger: {
+        logging: <span class="hljs-literal">true</span>,
+        date: <span class="hljs-literal">true</span>,
+        hashes: <span class="hljs-literal">true</span>,
+        exitHandler: <span class="hljs-literal">true</span>,
+        fileService: <span class="hljs-literal">true</span>
+    }
+})
+.subscribe(
+    <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'App Started!'</span>),
+    <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> <span class="hljs-built_in">console</span>.error(err)
+);
+</code></pre>
+				<p>app.module.ts</p>
+				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { Module } <span class="hljs-keyword">from</span> <span class="hljs-string">"@rxdi/core"</span>;
+<span class="hljs-keyword">import</span> { UserModule } <span class="hljs-keyword">from</span> <span class="hljs-string">'./user/user.module'</span>;
+
+<span class="hljs-meta">@Module</span>({
+    imports: [UserModule]
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> AppModule {}
+</code></pre>
+				<p>user.module.ts</p>
+				<pre><code class="lang-typescript">
+
+<span class="hljs-keyword">import</span> { Module } <span class="hljs-keyword">from</span> <span class="hljs-string">'@rxdi/core'</span>;
+<span class="hljs-keyword">import</span> { UserService } <span class="hljs-keyword">from</span> <span class="hljs-string">'./services'</span>;
+<span class="hljs-keyword">import</span> { Observable } <span class="hljs-keyword">from</span> <span class="hljs-string">'rxjs'</span>;
+
+<span class="hljs-meta">@Module</span>({
+    services: [
+        UserService,
+        {
+            provide: <span class="hljs-string">'createUniqueHash'</span>,
+            useDynamic: {
+                fileName: <span class="hljs-string">'createUniqueHash'</span>,
+                <span class="hljs-keyword">namespace</span>: <span class="hljs-string">'@helpers'</span>,
+                extension: <span class="hljs-string">'js'</span>,
+                typings: <span class="hljs-string">''</span>,
+                outputFolder: <span class="hljs-string">'/node_modules/'</span>,
+                link: <span class="hljs-string">'https://ipfs.infura.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug'</span>
+            }
+        },
+        {
+            provide: <span class="hljs-string">'testFactoryAsync'</span>,
+            lazy: <span class="hljs-literal">true</span>,
+            useFactory: <span class="hljs-keyword">async</span> () =&gt; {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> {
+                    setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> resolve(<span class="hljs-string">'dad2a'</span>), <span class="hljs-number">0</span>);
+                })
+            }
+        },
+        {
+            provide: <span class="hljs-string">'testFactorySync'</span>,
+            useFactory: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+                <span class="hljs-keyword">return</span> <span class="hljs-string">'dada'</span>;
+            }
+        },
+        {
+            provide: <span class="hljs-string">'testValue2'</span>,
+            useValue: <span class="hljs-string">'dadada'</span>
+        },
+        {
+            provide: <span class="hljs-string">'testChainableFactoryFunction'</span>,
+            <span class="hljs-comment">// lazy: true, if you don't provide lazy parameter your factory will remain Observable so you can chain it inside constructor</span>
+            useFactory: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">new</span> Observable(<span class="hljs-function"><span class="hljs-params">o</span> =&gt;</span> o.next(<span class="hljs-number">15</span>))
+        },
+    ]
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> UserModule {}
+</code></pre>
+				<p>user.service.ts</p>
+				<pre><code class="lang-typescript">import { Service, Inject } from "@rxdi/core";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+
+@Service()
+export class UserService {
+    constructor(
+        @Inject('createUniqueHash') private ipfsDownloadedFactory: { testKey: () =&gt; string },
+        @Inject('testFactoryAsync') private testFactoryAsync: { testKey: () =&gt; string },
+        @Inject('testChainableFactoryFunction') private chainableFactory: Observable&lt;number&gt;
+
+    ) {
+        console.log('UserService', this.ipfsDownloadedFactory.testKey(), this.testFactoryAsync);
+        this.chainableFactory
+            .pipe(
+                map((res) =&gt; res)
+            )
+            .subscribe(value =&gt; console.log('Value chaining factory ', value));
+
+    }
+}
+</code></pre>
+				<p>Result</p>
+				<pre><code class="lang-typescript"><span class="hljs-number">1529604446114</span> Bootstrap -&gt; <span class="hljs-meta">@Module</span>(<span class="hljs-string">'AppModule'</span>)(adb785e839fa19736cea0920cd39b783): loading...
+<span class="hljs-number">1529604446116</span> Bootstrap -&gt; <span class="hljs-meta">@Module</span>(<span class="hljs-string">'UserModule'</span>)(<span class="hljs-number">9</span>ed4f039657f52019d2d9adb0f9df09f): loading...
+<span class="hljs-number">1529604446118</span> Bootstrap -&gt; <span class="hljs-meta">@Module</span>(<span class="hljs-string">'UserModule'</span>)(<span class="hljs-number">9</span>ed4f039657f52019d2d9adb0f9df09f): finished!
+<span class="hljs-number">1529604446118</span> Bootstrap -&gt; <span class="hljs-meta">@Module</span>(<span class="hljs-string">'AppModule'</span>)(adb785e839fa19736cea0920cd39b783): finished!
+<span class="hljs-number">1529604446119</span> Bootstrap -&gt; <span class="hljs-meta">@Service</span>(<span class="hljs-string">'createUniqueHash'</span>): loading...
+<span class="hljs-number">1529604446121</span> Bootstrap -&gt; <span class="hljs-meta">@Service</span>(<span class="hljs-string">'createUniqueHash'</span>): will be downloaded inside ./node_modules/<span class="hljs-meta">@helpers</span>/createUniqueHash.js folder and loaded <span class="hljs-keyword">from</span> there
+<span class="hljs-number">1529604446121</span> Bootstrap -&gt; <span class="hljs-meta">@Service</span>(<span class="hljs-string">'createUniqueHash'</span>): https:<span class="hljs-comment">//ipfs.infura.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug downloading...</span>
+<span class="hljs-number">1529604446137</span> Bootstrap -&gt; <span class="hljs-meta">@Service</span>(<span class="hljs-string">'testFactoryAsync'</span>): loading...
+<span class="hljs-number">1529604446146</span> Bootstrap -&gt; <span class="hljs-meta">@Service</span>(<span class="hljs-string">'testFactoryAsync'</span>): loading finished! <span class="hljs-number">21</span>:<span class="hljs-number">07</span>:<span class="hljs-number">26</span>
+<span class="hljs-number">1529604446795</span> Done!
+<span class="hljs-number">1529604446797</span> Bootstrap: <span class="hljs-meta">@Service</span>(<span class="hljs-string">'createUniqueHash.js'</span>): Saved inside /home/rampage/Desktop/concept-starter/node_modules/<span class="hljs-meta">@helpers</span>
+<span class="hljs-number">1529604446808</span> Bootstrap -&gt; <span class="hljs-meta">@Service</span>(<span class="hljs-string">'createUniqueHash'</span>): loading finished! <span class="hljs-number">21</span>:<span class="hljs-number">07</span>:<span class="hljs-number">26</span>
+<span class="hljs-number">1529604446810</span> Done!
+<span class="hljs-number">1529604446811</span> Bootstrap: <span class="hljs-meta">@Service</span>(<span class="hljs-string">'createUniqueHash.js'</span>): Saved inside /home/rampage/Desktop/concept-starter/node_modules/<span class="hljs-meta">@helpers</span>
+<span class="hljs-number">1529604446812</span> Bootstrap -&gt; press start!
+<span class="hljs-number">1529604446813</span> Start -&gt; <span class="hljs-meta">@Module</span>(<span class="hljs-string">'UserModule'</span>)(<span class="hljs-number">9</span>ed4f039657f52019d2d9adb0f9df09f): <span class="hljs-meta">@Service</span>(<span class="hljs-string">'UserService'</span>)(ea785b316b77dbfe5cb361a7cdcbcb31) initialized!
+UserService TestKey dad2a
+Value chaining factory  <span class="hljs-number">15</span>
+<span class="hljs-number">1529604446813</span> Start -&gt; <span class="hljs-meta">@Module</span>(<span class="hljs-string">'UserModule'</span>)(<span class="hljs-number">9</span>ed4f039657f52019d2d9adb0f9df09f): loaded!
+<span class="hljs-number">1529604446813</span> Start -&gt; <span class="hljs-meta">@Module</span>(<span class="hljs-string">'AppModule'</span>)(adb785e839fa19736cea0920cd39b783): loaded!
+Started!
+AppStopped
+</code></pre>
+				<h3 id="forroot-configuration-for-modules">ForRoot configuration for modules</h3>
+				<pre><code class="lang-typescript"><span class="hljs-keyword">import</span> { Module, ModuleWithServices, InjectionToken } <span class="hljs-keyword">from</span> <span class="hljs-string">'@rxdi/core'</span>;
+
+<span class="hljs-meta">@Service</span>()
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> MODULE_DI_CONFIG {
+    text: <span class="hljs-built_in">string</span> = <span class="hljs-string">'Hello world'</span>;
+}
+
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> MY_MODULE_CONFIG = <span class="hljs-keyword">new</span> InjectionToken&lt;MODULE_DI_CONFIG&gt;(<span class="hljs-string">'my-module-config'</span>);
+
+
+<span class="hljs-meta">@Module</span>({
+  imports: []
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> YourModule {
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> forRoot(config?: <span class="hljs-built_in">any</span>): ModuleWithServices {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-keyword">module</span>: YourModule,
+      services: [
+          { provide: MY_MODULE_CONFIG, useValue: { text: <span class="hljs-string">'Hello world'</span> } },
+          { provide: MY_MODULE_CONFIG, useClass: MODULE_DI_CONFIG },
+          { 
+            provide: MY_MODULE_CONFIG,
+            useFactory: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+                <span class="hljs-keyword">return</span> {text: <span class="hljs-string">'Hello world'</span>};
+            }
+          },
+          {
+            provide: <span class="hljs-string">'ipfsDownloadableFactory'</span>,
+            useDynamic: {
+                fileName: <span class="hljs-string">'createUniqueHash'</span>,
+                <span class="hljs-keyword">namespace</span>: <span class="hljs-string">'@helpers'</span>,
+                extension: <span class="hljs-string">'js'</span>,
+                typings: <span class="hljs-string">''</span>,
+                outputFolder: <span class="hljs-string">'/node_modules/'</span>,
+                link: <span class="hljs-string">'https://ipfs.infura.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug'</span>
+            }
+          }
+      ],
+      components: [],
+      frameworkImports: []
+    }
+  }
+}
+</code></pre>
+				<p>Build with <a href="https://parceljs.org/getting_started.html">Parcel</a></p>
+				<p>Install Parcel:</p>
+				<pre><code class="lang-bash">npm install -g parcel-bundler
+</code></pre>
+				<p>Build single bundle from first bootstrapped file in this case <code>main.ts</code></p>
+				<pre><code class="lang-bash">parcel build src/main.ts --target node
+</code></pre>
+				<p>This command will generate single file from this application inside <code>dist/main.js</code> with mappings <code>dist/main.map</code></p>
+				<p>Starting bundled application</p>
+				<pre><code class="lang-bash">node ./dist/main.js
+</code></pre>
+				<p>Important!</p>
+				<p>This will not bundle your node modules only rxdi application.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_container_.html">"container/<wbr>Container"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_containerinstance_.html">"container/<wbr>Container<wbr>Instance"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_token_.html">"container/<wbr>Token"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_decorators_inject_.html">"container/decorators/<wbr>Inject"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_decorators_injectmany_.html">"container/decorators/<wbr>Inject<wbr>Many"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_decorators_plugin_.html">"container/decorators/<wbr>Plugin"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_decorators_service_.html">"container/decorators/<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_error_cannotinjecterror_.html">"container/error/<wbr>Cannot<wbr>Inject<wbr>Error"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_error_missingprovidedservicetypeerror_.html">"container/error/<wbr>Missing<wbr>Provided<wbr>Service<wbr>Type<wbr>Error"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_error_servicenotfounderror_.html">"container/error/<wbr>Service<wbr>Not<wbr>Found<wbr>Error"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_index_.html">"container/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_types_handler_.html">"container/types/<wbr>Handler"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_types_objecttype_.html">"container/types/<wbr>Object<wbr>Type"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_types_serviceidentifier_.html">"container/types/<wbr>Service<wbr>Identifier"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_types_servicemetadata_.html">"container/types/<wbr>Service<wbr>Metadata"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_types_serviceoptions_.html">"container/types/<wbr>Service<wbr>Options"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_types_hooks_index_.html">"container/types/hooks/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_types_hooks_on_before_.html">"container/types/hooks/on-<wbr>before"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_container_types_hooks_on_init_.html">"container/types/hooks/on-<wbr>init"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_component_component_decorator_.html">"decorators/component/component.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_component_index_.html">"decorators/component/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_controller_controller_decorator_.html">"decorators/controller/controller.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_controller_index_.html">"decorators/controller/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_effect_effect_decorator_.html">"decorators/effect/effect.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_effect_index_.html">"decorators/effect/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_index_.html">"decorators/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_inject_soft_index_.html">"decorators/inject-<wbr>soft/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_inject_soft_inject_soft_decorator_.html">"decorators/inject-<wbr>soft/inject-<wbr>soft.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_injector_index_.html">"decorators/injector/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_injector_injector_decorator_.html">"decorators/injector/injector.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_module_index_.html">"decorators/module/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_module_module_decorator_.html">"decorators/module/module.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_module_module_interfaces_.html">"decorators/module/module.interfaces"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_bootstrap_.html">"helpers/bootstrap"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_create_unique_hash_.html">"helpers/create-<wbr>unique-<wbr>hash"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_events_.html">"helpers/events"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_exit_handler_.html">"helpers/exit-<wbr>handler"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_generic_constructor_.html">"helpers/generic-<wbr>constructor"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_index_.html">"helpers/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">"index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_after_starter_after_starter_service_.html">"services/after-<wbr>starter/after-<wbr>starter.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_bootstrap_logger_bootstrap_logger_.html">"services/bootstrap-<wbr>logger/bootstrap-<wbr>logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_bootstrap_logger_index_.html">"services/bootstrap-<wbr>logger/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_bootstrap_bootstrap_service_.html">"services/bootstrap/bootstrap.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_bootstrap_index_.html">"services/bootstrap/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_bootstraps_bootstraps_service_.html">"services/bootstraps/bootstraps.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_bootstraps_index_.html">"services/bootstraps/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_cache_cache_layer_.html">"services/cache/cache-<wbr>layer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_cache_cache_layer_interfaces_.html">"services/cache/cache-<wbr>layer.interfaces"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_cache_cache_layer_service_.html">"services/cache/cache-<wbr>layer.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_cache_index_.html">"services/cache/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_components_components_service_.html">"services/components/components.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_components_index_.html">"services/components/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_compression_compression_service_.html">"services/compression/compression.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_compression_index_.html">"services/compression/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_config_config_model_.html">"services/config/config.model"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_config_config_service_.html">"services/config/config.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_config_index_.html">"services/config/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_constructor_watcher_constructor_watcher_.html">"services/constructor-<wbr>watcher/constructor-<wbr>watcher"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_constructor_watcher_index_.html">"services/constructor-<wbr>watcher/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_controllers_controllers_service_.html">"services/controllers/controllers.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_controllers_index_.html">"services/controllers/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_effect_effect_service_.html">"services/effect/effect.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_effect_index_.html">"services/effect/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_exit_handler_exit_handler_service_.html">"services/exit-<wbr>handler/exit-<wbr>handler.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_exit_handler_index_.html">"services/exit-<wbr>handler/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_external_importer_external_importer_.html">"services/external-<wbr>importer/external-<wbr>importer"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_external_importer_external_importer_config_.html">"services/external-<wbr>importer/external-<wbr>importer-<wbr>config"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_external_importer_external_importer_systemjs_.html">"services/external-<wbr>importer/external-<wbr>importer-<wbr>systemjs"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_external_importer_index_.html">"services/external-<wbr>importer/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_file_file_service_.html">"services/file/file.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_file_index_.html">"services/file/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_index_.html">"services/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_lazy_factory_lazy_factory_service_.html">"services/lazy-<wbr>factory/lazy-<wbr>factory.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_metadata_index_.html">"services/metadata/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_metadata_metadata_service_.html">"services/metadata/metadata.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_module_helpers_validators_.html">"services/module/helpers/validators"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_module_index_.html">"services/module/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_module_module_service_.html">"services/module/module.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_plugin_manager_plugin_manager_.html">"services/plugin-<wbr>manager/plugin-<wbr>manager"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_plugin_plugin_service_.html">"services/plugin/plugin.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_request_index_.html">"services/request/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_request_request_service_.html">"services/request/request.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_resolver_index_.html">"services/resolver/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_resolver_resolver_service_.html">"services/resolver/resolver.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_services_index_.html">"services/services/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_services_services_service_.html">"services/services/services.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_app_module_.html">"testing-<wbr>app/app/app.module"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_core_core_module_.html">"testing-<wbr>app/app/core/core.module"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_index_.html">"testing-<wbr>app/app/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_user_index_.html">"testing-<wbr>app/app/user/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_user_services_index_.html">"testing-<wbr>app/app/user/services/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_user_services_user_index_.html">"testing-<wbr>app/app/user/services/user/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_user_services_user_user_service_.html">"testing-<wbr>app/app/user/services/user/user.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_user_user_module_.html">"testing-<wbr>app/app/user/user.module"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_app_user_user_tokens_.html">"testing-<wbr>app/app/user/user.tokens"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_index_.html">"testing-<wbr>app/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_testing_app_main_.html">"testing-<wbr>app/main"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

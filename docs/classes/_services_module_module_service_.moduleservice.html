@@ -1,0 +1,796 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ModuleService | @rxdi/core</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@rxdi/core</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="../modules/_services_module_module_service_.html">&quot;services/module/module.service&quot;</a>
+				</li>
+				<li>
+					<a href="_services_module_module_service_.moduleservice.html">ModuleService</a>
+				</li>
+			</ul>
+			<h1>Class ModuleService</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">ModuleService</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#bootstraps" class="tsd-kind-icon">bootstraps</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#componentsservice" class="tsd-kind-icon">components<wbr>Service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#controllersservice" class="tsd-kind-icon">controllers<wbr>Service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#effectsservice" class="tsd-kind-icon">effects<wbr>Service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#externalimporter" class="tsd-kind-icon">external<wbr>Importer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#lazyfactoryservice" class="tsd-kind-icon">lazy<wbr>Factory<wbr>Service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#pluginservice" class="tsd-kind-icon">plugin<wbr>Service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#servicesservice" class="tsd-kind-icon">services<wbr>Service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_services_module_module_service_.moduleservice.html#validators" class="tsd-kind-icon">validators</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#watcherservice" class="tsd-kind-icon">watcher<wbr>Service</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setafterplugins" class="tsd-kind-icon">set<wbr>After<wbr>Plugins</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setbeforeplugins" class="tsd-kind-icon">set<wbr>Before<wbr>Plugins</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setbootstraps" class="tsd-kind-icon">set<wbr>Bootstraps</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setcomponents" class="tsd-kind-icon">set<wbr>Components</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setcontrollers" class="tsd-kind-icon">set<wbr>Controllers</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#seteffects" class="tsd-kind-icon">set<wbr>Effects</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setimports" class="tsd-kind-icon">set<wbr>Imports</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setinjecteddependencies" class="tsd-kind-icon">set<wbr>Injected<wbr>Dependencies</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setplugins" class="tsd-kind-icon">set<wbr>Plugins</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setservices" class="tsd-kind-icon">set<wbr>Services</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setuseclass" class="tsd-kind-icon">set<wbr>Use<wbr>Class</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setusedynamic" class="tsd-kind-icon">set<wbr>Use<wbr>Dynamic</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setusefactory" class="tsd-kind-icon">set<wbr>Use<wbr>Factory</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_module_module_service_.moduleservice.html#setusevalue" class="tsd-kind-icon">set<wbr>Use<wbr>Value</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="bootstraps" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> bootstraps</h3>
+					<div class="tsd-signature tsd-kind-icon">bootstraps<span class="tsd-signature-symbol">:</span> <a href="_services_bootstraps_bootstraps_service_.bootstrapsservices.html" class="tsd-signature-type">BootstrapsServices</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L26">services/module/module.service.ts:26</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="componentsservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> components<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">components<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_services_components_components_service_.componentsservice.html" class="tsd-signature-type">ComponentsService</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L23">services/module/module.service.ts:23</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="controllersservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> controllers<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">controllers<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_services_controllers_controllers_service_.controllersservice.html" class="tsd-signature-type">ControllersService</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L24">services/module/module.service.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="effectsservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> effects<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">effects<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_services_effect_effect_service_.effectsservice.html" class="tsd-signature-type">EffectsService</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L25">services/module/module.service.ts:25</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="externalimporter" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> external<wbr>Importer</h3>
+					<div class="tsd-signature tsd-kind-icon">external<wbr>Importer<span class="tsd-signature-symbol">:</span> <a href="_services_external_importer_external_importer_.externalimporter.html" class="tsd-signature-type">ExternalImporter</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L27">services/module/module.service.ts:27</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="lazyfactoryservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> lazy<wbr>Factory<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">lazy<wbr>Factory<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_services_lazy_factory_lazy_factory_service_.lazyfactory.html" class="tsd-signature-type">LazyFactory</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L21">services/module/module.service.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="pluginservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> plugin<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">plugin<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_services_plugin_plugin_service_.pluginservice.html" class="tsd-signature-type">PluginService</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L22">services/module/module.service.ts:22</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="servicesservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> services<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">services<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_services_services_services_service_.servicesservice.html" class="tsd-signature-type">ServicesService</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L29">services/module/module.service.ts:29</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="validators" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> validators</h3>
+					<div class="tsd-signature tsd-kind-icon">validators<span class="tsd-signature-symbol">:</span> <a href="_services_module_helpers_validators_.modulevalidators.html" class="tsd-signature-type">ModuleValidators</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L28">services/module/module.service.ts:28</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="watcherservice" class="tsd-anchor"></a>
+					<h3>watcher<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">watcher<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_services_constructor_watcher_constructor_watcher_.constructorwatcherservice.html" class="tsd-signature-type">ConstructorWatcherService</a><span class="tsd-signature-symbol"> =&nbsp;constructorWatcherService</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L19">services/module/module.service.ts:19</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setafterplugins" class="tsd-anchor"></a>
+					<h3>set<wbr>After<wbr>Plugins</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>After<wbr>Plugins<span class="tsd-signature-symbol">(</span>plugins<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, currentModule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L150">services/module/module.service.ts:150</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>plugins: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/_decorators_module_module_interfaces_.metadata.html" class="tsd-signature-type">Metadata</a></h5>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>currentModule: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setbeforeplugins" class="tsd-anchor"></a>
+					<h3>set<wbr>Before<wbr>Plugins</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Before<wbr>Plugins<span class="tsd-signature-symbol">(</span>plugins<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, currentModule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L161">services/module/module.service.ts:161</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>plugins: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/_decorators_module_module_interfaces_.metadata.html" class="tsd-signature-type">Metadata</a></h5>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>currentModule: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setbootstraps" class="tsd-anchor"></a>
+					<h3>set<wbr>Bootstraps</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Bootstraps<span class="tsd-signature-symbol">(</span>bootstraps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, currentModule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L139">services/module/module.service.ts:139</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>bootstraps: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/_decorators_module_module_interfaces_.metadata.html" class="tsd-signature-type">Metadata</a></h5>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>currentModule: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setcomponents" class="tsd-anchor"></a>
+					<h3>set<wbr>Components</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Components<span class="tsd-signature-symbol">(</span>components<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, currentModule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L117">services/module/module.service.ts:117</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>components: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>currentModule: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setcontrollers" class="tsd-anchor"></a>
+					<h3>set<wbr>Controllers</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Controllers<span class="tsd-signature-symbol">(</span>controllers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, currentModule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L95">services/module/module.service.ts:95</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>controllers: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>currentModule: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="seteffects" class="tsd-anchor"></a>
+					<h3>set<wbr>Effects</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Effects<span class="tsd-signature-symbol">(</span>effects<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, currentModule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L106">services/module/module.service.ts:106</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>effects: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>currentModule: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setimports" class="tsd-anchor"></a>
+					<h3>set<wbr>Imports</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Imports<span class="tsd-signature-symbol">(</span>imports<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L172">services/module/module.service.ts:172</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>imports: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/_decorators_module_module_interfaces_.metadata.html" class="tsd-signature-type">Metadata</a></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setinjecteddependencies" class="tsd-anchor"></a>
+					<h3>set<wbr>Injected<wbr>Dependencies</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Injected<wbr>Dependencies<span class="tsd-signature-symbol">(</span>service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L58">services/module/module.service.ts:58</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>service: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setplugins" class="tsd-anchor"></a>
+					<h3>set<wbr>Plugins</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Plugins<span class="tsd-signature-symbol">(</span>plugins<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, currentModule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L128">services/module/module.service.ts:128</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>plugins: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/_decorators_module_module_interfaces_.metadata.html" class="tsd-signature-type">Metadata</a></h5>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>currentModule: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setservices" class="tsd-anchor"></a>
+					<h3>set<wbr>Services</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Services<span class="tsd-signature-symbol">(</span>services<span class="tsd-signature-symbol">: </span><a href="../interfaces/_decorators_module_module_interfaces_.serviceargumentsinternal.html" class="tsd-signature-type">ServiceArgumentsInternal</a><span class="tsd-signature-symbol">[]</span>, original<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, currentModule<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L31">services/module/module.service.ts:31</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>services: <a href="../interfaces/_decorators_module_module_interfaces_.serviceargumentsinternal.html" class="tsd-signature-type">ServiceArgumentsInternal</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>original: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/_decorators_module_module_interfaces_.metadata.html" class="tsd-signature-type">Metadata</a></h5>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5>currentModule: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setuseclass" class="tsd-anchor"></a>
+					<h3>set<wbr>Use<wbr>Class</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Use<wbr>Class<span class="tsd-signature-symbol">(</span>service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L72">services/module/module.service.ts:72</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>service: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setusedynamic" class="tsd-anchor"></a>
+					<h3>set<wbr>Use<wbr>Dynamic</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Use<wbr>Dynamic<span class="tsd-signature-symbol">(</span>service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L80">services/module/module.service.ts:80</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>service: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setusefactory" class="tsd-anchor"></a>
+					<h3>set<wbr>Use<wbr>Factory</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Use<wbr>Factory<span class="tsd-signature-symbol">(</span>service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L85">services/module/module.service.ts:85</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>service: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setusevalue" class="tsd-anchor"></a>
+					<h3>set<wbr>Use<wbr>Value</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Use<wbr>Value<span class="tsd-signature-symbol">(</span>service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/rxdi/core/blob/a6eff81/src/services/module/module.service.ts#L65">services/module/module.service.ts:65</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>service: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="../modules/_services_module_module_service_.html">"services/module/module.service"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_services_module_module_service_.moduleservice.html" class="tsd-kind-icon">Module<wbr>Service</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#bootstraps" class="tsd-kind-icon">bootstraps</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#componentsservice" class="tsd-kind-icon">components<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#controllersservice" class="tsd-kind-icon">controllers<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#effectsservice" class="tsd-kind-icon">effects<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#externalimporter" class="tsd-kind-icon">external<wbr>Importer</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#lazyfactoryservice" class="tsd-kind-icon">lazy<wbr>Factory<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#pluginservice" class="tsd-kind-icon">plugin<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#servicesservice" class="tsd-kind-icon">services<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_services_module_module_service_.moduleservice.html#validators" class="tsd-kind-icon">validators</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#watcherservice" class="tsd-kind-icon">watcher<wbr>Service</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setafterplugins" class="tsd-kind-icon">set<wbr>After<wbr>Plugins</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setbeforeplugins" class="tsd-kind-icon">set<wbr>Before<wbr>Plugins</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setbootstraps" class="tsd-kind-icon">set<wbr>Bootstraps</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setcomponents" class="tsd-kind-icon">set<wbr>Components</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setcontrollers" class="tsd-kind-icon">set<wbr>Controllers</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#seteffects" class="tsd-kind-icon">set<wbr>Effects</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setimports" class="tsd-kind-icon">set<wbr>Imports</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setinjecteddependencies" class="tsd-kind-icon">set<wbr>Injected<wbr>Dependencies</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setplugins" class="tsd-kind-icon">set<wbr>Plugins</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setservices" class="tsd-kind-icon">set<wbr>Services</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setuseclass" class="tsd-kind-icon">set<wbr>Use<wbr>Class</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setusedynamic" class="tsd-kind-icon">set<wbr>Use<wbr>Dynamic</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setusefactory" class="tsd-kind-icon">set<wbr>Use<wbr>Factory</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_services_module_module_service_.moduleservice.html#setusevalue" class="tsd-kind-icon">set<wbr>Use<wbr>Value</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
