@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/core",
-  "version": "0.0.151",
+  "version": "0.0.152",
   "description": "",
   "main": "index.ts",
   "scripts": {
@@ -36,7 +36,6 @@
     "ts-jest": "^22.4.0",
     "tslint": "^5.8.0",
     "tslint-language-service": "^0.9.8"
-
   },
   "jest": {
     "testEnvironment": "node",
