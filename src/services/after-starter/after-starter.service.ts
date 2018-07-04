@@ -1,5 +1,5 @@
-import { Service } from "../../container";
-import { Subject } from "rxjs";
+import { Service } from '../../container';
+import { Subject } from 'rxjs';
 
 @Service()
 export class AfterStarterService {

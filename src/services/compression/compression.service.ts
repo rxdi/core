@@ -33,7 +33,7 @@ export class CompressionService {
                 .pipe(createWriteStream(output))
                 .on('finish', () => observer.next(true))
                 .on('error', (err) => observer.error(err));
-        })
+        });
     }
 
 }

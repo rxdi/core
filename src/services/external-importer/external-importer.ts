@@ -63,7 +63,7 @@ export class ExternalImporter {
                     [token]: config.link
                 }
             }, config.SystemJsConfig));
-            return SystemJS.import(config.link)
+            return SystemJS.import(config.link);
         }
         return Observable.create(async observer => {
 

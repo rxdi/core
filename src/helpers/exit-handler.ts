@@ -6,7 +6,7 @@ import { Container } from '../container';
 export const exitHandlerInit = () => {
     const handler = Container.get(ExitHandlerService);
     handler.init();
-    
+
     // do something when app is closing
     process.on('exit', handler.exitHandler.bind(handler, { cleanup: true }));
     // catches ctrl+c event

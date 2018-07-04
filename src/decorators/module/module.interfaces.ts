@@ -23,7 +23,7 @@ export interface ModuleWithServices {
     components?: Array<Function>;
     beforePlugins?: Array<Function | PluginInterface>;
     plugins?: Array<Function | PluginInterface>;
-    afterPlugins?: Array<Function | PluginInterface>,
+    afterPlugins?: Array<Function | PluginInterface>;
 }
 
 export type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect' | 'component';
@@ -55,6 +55,6 @@ export interface ModuleArguments<T, K> extends Metadata {
     components?: Array<Function>;
     beforePlugins?: Array<T | PluginInterface>;
     plugins?: Array<T | PluginInterface>;
-    afterPlugins?: Array<T | PluginInterface>,
+    afterPlugins?: Array<T | PluginInterface>;
     bootstrap?: Array<Function>;
 }

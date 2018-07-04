@@ -1,5 +1,5 @@
-import { Bootstrap } from "../helpers/bootstrap";
-import { AppModule } from "./app/app.module";
+import { Bootstrap } from '../helpers/bootstrap';
+import { AppModule } from './app/app.module';
 
 Bootstrap(AppModule, {
     init: true,

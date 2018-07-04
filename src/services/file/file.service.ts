@@ -51,8 +51,8 @@ export class FileService {
                     observer.next(result);
                 }
             });
-        })
-    };
+        });
+    }
 
 
     private filewalker(dir, done) {
@@ -62,7 +62,7 @@ export class FileService {
             if (err) {
                 return done(err);
             }
-            var pending = list.length;
+            let pending = list.length;
             if (!pending) {
                 return done(null, results);
             }

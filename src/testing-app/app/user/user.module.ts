@@ -13,7 +13,7 @@ export class TestHapiPlugin implements PluginInterface {
     constructor(
         // @Inject(HAPI_SERVER) private server: Server
     ) {
-        console.log("PLUGIN");
+        console.log('PLUGIN');
     }
 
     async register() {
@@ -50,7 +50,7 @@ export class TestHapiPlugin implements PluginInterface {
             useFactory: async () => {
                 return new Promise((resolve) => {
                     setTimeout(() => resolve('dad2a'), 0);
-                })
+                });
             }
         },
         {

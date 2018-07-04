@@ -6,9 +6,9 @@
   "scripts": {
     "postpublish": "git push -f ssh://git@gitlab.youvolio.com:522/rxdi/core.git && git push --tags && git push ssh://git@gitlab.youvolio.com:522/rxdi/core.git --tags",
     "start": "gapi start --local --path=./src/testing-app/main.ts",
-    "lint": "dir",
-    "fakelint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "test": "gapi test"
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "pretest": "npm run lint",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,38 @@
   },
   "devDependencies": {
     "@types/node": "^10.3.3",
+    "@types/jest": "^23.1.4",
     "@types/systemjs": "^0.20.6",
-    "typescript": "^2.7.1"
+    "typescript": "^2.7.1",
+    "jest": "^22.4.2",
+    "jest-cli": "^22.4.2",
+    "ts-jest": "^22.4.0",
+    "tslint": "^5.8.0",
+    "tslint-language-service": "^0.9.8"
+
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "html"
+    ],
+    "rootDir": "./",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
+    "verbose": true,
+    "collectCoverage": false
   }
 }

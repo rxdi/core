@@ -21,7 +21,7 @@ export class MetadataService {
     validateCustomInjectableKeys(keys: Array<'useFactory' | 'provide' | 'useValue' | 'useClass' | 'useDynamic' | string>) {
         keys.forEach(key => {
             console.log('TOVA NE E SHEGA', key);
-        })
+        });
     }
 
     validateCustomInjectable(injectable, module, original) {
@@ -34,9 +34,9 @@ export class MetadataService {
                 ${JSON.stringify(`${original}`, null, 2)}
 
                 Hint: System recieved Object but it is not with appropriate format you must provide object with following parameters:
-                
+
                 YourObject: ${JSON.stringify(injectable)}
-                
+
                 Option 1. [YourClass]
 
                 Option 2. [{provide: 'your-value', useClass: YourClass}]

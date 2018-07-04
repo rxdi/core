@@ -1,11 +1,11 @@
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { Inject } from "../../../../../container/decorators/Inject";
-import { Service } from "../../../../../container/decorators/Service";
-import { CompressionService, constructorWatcherService } from "../../../../../services";
-import { FileService } from "../../../../../services/file";
-import { CREATE_UNIQUE_HASH } from "../../user.tokens";
-import { Controller } from "../../../../../decorators/controller/controller.decorator";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Inject } from '../../../../../container/decorators/Inject';
+import { Service } from '../../../../../container/decorators/Service';
+import { CompressionService, constructorWatcherService } from '../../../../../services';
+import { FileService } from '../../../../../services/file';
+import { CREATE_UNIQUE_HASH } from '../../user.tokens';
+import { Controller } from '../../../../../decorators/controller/controller.decorator';
 
 
 @Controller()
@@ -33,7 +33,7 @@ export class UserService  {
     }
 
     OnInit() {
-        console.log('DOUBELE INITaaaaaaaaaaaaaaa')
+        console.log('DOUBELE INITaaaaaaaaaaaaaaa');
     }
     testService(key) {
         console.log(key);

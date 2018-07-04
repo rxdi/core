@@ -320,11 +320,11 @@ export class ContainerInstance {
                 type.prototype.OnBefore.bind(type)();
             }
             value = new (type.bind.apply(type, params))();
-            
+
             // if (value.render) {
             //     debugger
             // //    const test = new value['__proto__'].constructor()
-            // Extend React class Correctly 
+            // Extend React class Correctly
             //    Object.assign(value['__proto__'].constructor.prototype, value);
             //    console.log(value['__proto__'].constructor.prototype);
             //     console.log(type['metadata']['moduleName'], value);

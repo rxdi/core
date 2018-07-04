@@ -48,6 +48,6 @@ export class ResolverService {
                 }
             });
             return res;
-        }
+        };
     }
 }

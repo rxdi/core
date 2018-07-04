@@ -1,6 +1,6 @@
-import { createUniqueHash } from "../../helpers/create-unique-hash";
-import { ServiceMetadata } from "../../container/types/ServiceMetadata";
-import { Container } from "../../container/Container";
+import { createUniqueHash } from '../../helpers/create-unique-hash';
+import { ServiceMetadata } from '../../container/types/ServiceMetadata';
+import { Container } from '../../container/Container';
 
 export function Component<T, K extends keyof T>(options?: {init?: boolean}): Function {
     return function (target: Function) {

@@ -9,7 +9,7 @@ export class LoggerConfig {
 export class PrivateCryptoModel {
     algorithm?: string;
     cyperIv?: string;
-    cyperKey?: string
+    cyperKey?: string;
 }
 
 export class ExperimentalFeatures {

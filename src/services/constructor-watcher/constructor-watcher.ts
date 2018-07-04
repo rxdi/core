@@ -11,7 +11,7 @@ export class ConstructorWatcherService {
         return this._constructors.get(currentClass.name)['value'];
     }
 
-    createConstructor(name: string, value){
+    createConstructor(name: string, value) {
         if (this._constructors.has(name)) {
             return this.getConstructor(name);
         }
@@ -28,7 +28,7 @@ export class ConstructorWatcherService {
         }
     }
 
-    
+
 }
 
 export const constructorWatcherService = new ConstructorWatcherService();

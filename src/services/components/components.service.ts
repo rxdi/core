@@ -1,4 +1,4 @@
-import { Service } from "../../container/decorators/Service";
+import { Service } from '../../container/decorators/Service';
 import { BehaviorSubject } from 'rxjs';
 
 @Service()
@@ -13,8 +13,5 @@ export class ComponentsService {
     getComponents() {
         return this.components.getValue();
     }
-
-
-    
 
 }

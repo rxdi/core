@@ -22,4 +22,4 @@ export interface Duplicates extends Metadata {
   dupeName: string;
   originalName: string;
   class: Function;
-};
+}

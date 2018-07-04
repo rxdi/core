@@ -1,4 +1,4 @@
-import { InjectionToken } from "../../../container/Token";
+import { InjectionToken } from '../../../container/Token';
 
 export interface CREATE_UNIQUE_HASH {
     testKey(key: string): string;

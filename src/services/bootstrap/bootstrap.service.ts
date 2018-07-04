@@ -89,7 +89,7 @@ export class BootstrapService {
             ...this.pluginService.getPlugins()
                 .filter(filter)
                 .map(async c => this.registerPlugin(c))
-        ]
+        ];
     }
 
     private asyncChainableComponents() {
@@ -101,7 +101,7 @@ export class BootstrapService {
             ...this.componentsService.getComponents()
                 .filter(filter)
                 .map(async c => await Container.get(c))
-        ]
+        ];
     }
 
     private asyncChainableBootstraps() {
@@ -109,7 +109,7 @@ export class BootstrapService {
             this.chainableObservable,
             ...this.bootstrapsService.getBootstraps()
                 .map(async c => await Container.get(c))
-        ]
+        ];
     }
 
     private asyncChainableEffects() {
@@ -121,7 +121,7 @@ export class BootstrapService {
             ...this.effectsService.getEffects()
                 .filter(filter)
                 .map(async c => await Container.get(c))
-        ]
+        ];
     }
 
     private asyncChainableServices() {
@@ -133,7 +133,7 @@ export class BootstrapService {
             ...this.servicesService.getServices()
                 .filter(filter)
                 .map(async c => await Container.get(c))
-        ]
+        ];
     }
 
     private asyncChainableControllers() {
@@ -145,7 +145,7 @@ export class BootstrapService {
             ...this.controllersService.getControllers()
                 .filter(filter)
                 .map(async c => await Container.get(c))
-        ]
+        ];
     }
 
     private asyncChainablePluginsAfterRegister() {
@@ -157,7 +157,7 @@ export class BootstrapService {
             ...this.pluginService.getAfterPlugins()
                 .filter(filter)
                 .map(async c => await this.registerPlugin(c))
-        ]
+        ];
     }
 
     private asyncChainablePluginsBeforeRegister() {
@@ -169,7 +169,7 @@ export class BootstrapService {
             ...this.pluginService.getBeforePlugins()
                 .filter(filter)
                 .map(async c => this.registerPlugin(c))
-        ]
+        ];
     }
 
     private async registerPlugin(pluggable: Function | PluginInterface) {
