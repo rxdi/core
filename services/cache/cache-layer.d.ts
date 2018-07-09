@@ -7,12 +7,12 @@ export declare class CacheLayer<T> {
     map: Map<any, any>;
     get(name: any): T;
     constructor(layer: CacheLayerInterface);
-    private initHook;
-    private onExpireAll;
-    private putItemHook;
+    private initHook(layer);
+    private onExpireAll(layer);
+    private putItemHook(layerItem);
     getItem(key: string): T;
     putItem(layerItem: T): T;
-    private onExpire;
+    private onExpire(key);
     removeItem(key: string): void;
     getItemObservable(key: string): Observable<T>;
     flushCache(): Observable<boolean>;

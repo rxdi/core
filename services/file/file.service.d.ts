@@ -5,5 +5,5 @@ export declare class FileService {
     isPresent(path: string): boolean;
     mkdirp(folder: any): Observable<boolean>;
     fileWalker(dir: any): Observable<string[]>;
-    private filewalker;
+    private filewalker(dir, done);
 }

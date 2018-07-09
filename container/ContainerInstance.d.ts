@@ -91,25 +91,25 @@ export declare class ContainerInstance {
     /**
      * Filters registered service in the with a given service identifier.
      */
-    private filterServices;
+    private filterServices(identifier);
     /**
      * Finds registered service in the with a given service identifier.
      */
-    private findService;
+    private findService(identifier);
     /**
      * Gets service value.
      */
-    private getServiceValue;
+    private getServiceValue(identifier, service);
     /**
      * Initializes all parameter types for a given target service class.
      */
-    private initializeParams;
+    private initializeParams(type, paramTypes);
     /**
      * Checks if given type is primitive (e.g. string, boolean, number, object).
      */
-    private isTypePrimitive;
+    private isTypePrimitive(param);
     /**
      * Applies all registered handlers on a given target class.
      */
-    private applyPropertyHandlers;
+    private applyPropertyHandlers(target, instance);
 }

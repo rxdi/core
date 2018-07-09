@@ -17,7 +17,7 @@ commands:
     core:
       - tsc
       - find . -not -path "./node_modules/*" -type f -iname \*.js -delete
-      - parcel build --target node src/index.ts
+      - parcel build --target browser src/index.ts
       - cp -r dist/index.js index.js
       - gapi build clean
     clean:
