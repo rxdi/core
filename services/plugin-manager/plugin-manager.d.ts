@@ -1,5 +1,5 @@
-import { PluginService } from "../plugin/plugin.service";
-import { PluginInterface } from "../../container";
+import { PluginService } from '../plugin/plugin.service';
+import { PluginInterface } from '../../container';
 export declare class PluginManager {
     private pluginService;
     constructor(pluginService: PluginService);

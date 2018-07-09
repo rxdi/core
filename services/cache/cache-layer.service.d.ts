@@ -15,9 +15,9 @@ export declare class CacheService {
     searchForItem(classItem: any): any;
     searchForDuplicatesByHash(key: string): Duplicates[];
     createLayer<T>(layer: CacheLayerInterface): CacheLayer<CacheLayerItem<T>>;
-    private LayerHook<T>(layerInstance);
-    private protectLayerFromInvaders<T>(cacheLayer);
-    private OnExpire<T>(layerInstance);
+    private LayerHook;
+    private protectLayerFromInvaders;
+    private OnExpire;
     removeLayer<T>(layerInstance: CacheLayer<CacheLayerItem<T>>): void;
     transferItems(name: string, newCacheLayers: CacheLayerInterface[]): CacheLayer<CacheLayerItem<any>>[];
     flushCache(): Observable<boolean>;

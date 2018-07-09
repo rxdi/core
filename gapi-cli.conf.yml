@@ -13,3 +13,13 @@ commands:
   testing:
     browser: jest --env jsdom --testPathPattern="/src/.*\\.browser.spec.(ts|tsx|js)$"
     node: jest --env node --testPathPattern="/src/.*\\.spec.(ts|tsx|js)$"
+  build:
+    core:
+      - tsc
+      - find . -not -path "./node_modules/*" -type f -iname \*.js -delete
+      - parcel build --target node src/index.ts
+      - cp -r dist/index.js index.js
+      - gapi build clean
+    clean:
+      - rm -rf dist
+      - rm -rf .cache

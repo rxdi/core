@@ -6,8 +6,10 @@
   "scripts": {
     "postpublish": "git push -f ssh://git@gitlab.youvolio.com:522/rxdi/core.git && git push --tags && git push ssh://git@gitlab.youvolio.com:522/rxdi/core.git --tags",
     "start": "gapi start --local --path=./src/testing-app/main.ts",
+    "build": "gapi build core",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
+    "parcel-build": "parcel build --target node src/index.ts",
     "test-browser": "gapi testing browser",
     "test": "gapi testing node"
   },
@@ -28,15 +30,15 @@
     "systemjs": "^0.21.4"
   },
   "devDependencies": {
-    "@types/node": "^10.3.3",
     "@types/jest": "^23.1.4",
+    "@types/node": "^10.3.3",
     "@types/systemjs": "^0.20.6",
-    "typescript": "^2.7.1",
     "jest": "^22.4.2",
     "jest-cli": "^22.4.2",
     "ts-jest": "^22.4.0",
     "tslint": "^5.8.0",
-    "tslint-language-service": "^0.9.8"
+    "tslint-language-service": "^0.9.8",
+    "typescript": "^2.9.2"
   },
   "jest": {
     "testEnvironment": "node",
