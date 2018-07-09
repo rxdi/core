@@ -9,7 +9,6 @@
     "build": "gapi build core",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
-    "parcel-build": "parcel build --target node src/index.ts",
     "test-browser": "gapi testing browser",
     "test": "gapi testing node"
   },
@@ -24,7 +23,6 @@
   },
   "homepage": "https://github.com/rxdi/core#readme",
   "dependencies": {
-    "mkdirp": "^0.5.1",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.1",
     "systemjs": "^0.21.4"

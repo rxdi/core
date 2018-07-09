@@ -1,11 +1,11 @@
 import { Service } from '../../container';
 import { writeFileSync, existsSync, readdir, stat } from 'fs';
-import * as mkdirp from 'mkdirp';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BootstrapLogger } from '../bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { resolve } from 'path';
+import { mkdirp } from './dist';
 
 @Service()
 export class FileService {
