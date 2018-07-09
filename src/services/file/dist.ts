@@ -1,6 +1,6 @@
-var path = require('path');
-var fs = require('fs');
-var _0777 = parseInt('0777', 8);
+const path = require('path');
+const fs = require('fs');
+const _0777 = parseInt('0777', 8);
 
 
 export function mkdirp(p?, opts?, f?, made?) {
@@ -11,18 +11,18 @@ export function mkdirp(p?, opts?, f?, made?) {
     else if (!opts || typeof opts !== 'object') {
         opts = { mode: opts };
     }
-    
-    var mode = opts.mode;
-    var xfs = opts.fs || fs;
-    
+
+    let mode = opts.mode;
+    const xfs = opts.fs || fs;
+
     if (mode === undefined) {
         mode = _0777 & (~process.umask());
     }
     if (!made) made = null;
-    
-    var cb = f || function () {};
+
+    const cb = f || function () { };
     p = path.resolve(p);
-    
+
     xfs.mkdir(p, mode, function (er) {
         if (!er) {
             made = made || p;
@@ -43,7 +43,7 @@ export function mkdirp(p?, opts?, f?, made?) {
                 xfs.stat(p, function (er2, stat) {
                     // if the stat fails, then that's super weird.
                     // let the original error be the failure reason.
-                    if (er2 || !stat.isDirectory()) cb(er, made)
+                    if (er2 || !stat.isDirectory()) cb(er, made);
                     else cb(null, made);
                 });
                 break;
@@ -55,10 +55,10 @@ export function mkdirpSync(p?, opts?, made?) {
     if (!opts || typeof opts !== 'object') {
         opts = { mode: opts };
     }
-    
-    var mode = opts.mode;
-    var xfs = opts.fs || fs;
-    
+
+    let mode = opts.mode;
+    const xfs = opts.fs || fs;
+
     if (mode === undefined) {
         mode = _0777 & (~process.umask());
     }
@@ -72,7 +72,7 @@ export function mkdirpSync(p?, opts?, made?) {
     }
     catch (err0) {
         switch (err0.code) {
-            case 'ENOENT' :
+            case 'ENOENT':
                 made = mkdirpSync(path.dirname(p), opts, made);
                 mkdirpSync(p, opts, made);
                 break;
@@ -81,7 +81,7 @@ export function mkdirpSync(p?, opts?, made?) {
             // there already.  If so, then hooray!  If not, then something
             // is borked.
             default:
-                var stat;
+                let stat;
                 try {
                     stat = xfs.statSync(p);
                 }
@@ -94,4 +94,4 @@ export function mkdirpSync(p?, opts?, made?) {
     }
 
     return made;
-};
+}
