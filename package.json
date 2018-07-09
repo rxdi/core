@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/core",
-  "version": "0.0.166",
+  "version": "0.0.167",
   "description": "",
   "main": "index.ts",
   "scripts": {
@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/rxdi/core/issues"
   },
-  "homepage": "https://github.com/rxdi/core#readme",
+  "homepage": "https://github.com/rxdi/core/blob/master/README.md",
   "dependencies": {
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.1",
