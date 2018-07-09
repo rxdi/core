@@ -19,9 +19,9 @@ export class MetadataService {
     }
 
     validateCustomInjectableKeys(keys: Array<'useFactory' | 'provide' | 'useValue' | 'useClass' | 'useDynamic' | string>) {
-        keys.forEach(key => {
-            console.log('TOVA NE E SHEGA', key);
-        });
+        // keys.forEach(key => {
+        //     console.log('TOVA NE E SHEGA', key);
+        // });
     }
 
     validateCustomInjectable(injectable, module, original) {

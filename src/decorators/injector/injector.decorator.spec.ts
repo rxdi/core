@@ -1,7 +1,7 @@
 import { Injector } from './injector.decorator';
 import { Container } from '../../container';
 
-describe('Decorators: @GapiInjector', () => {
+describe('Decorators: @Injector', () => {
     it('Should inject value to property "valueExecutor" inside target ClassTestExecutor', (done) => {
         class ClassTestProvider {
             public valueProvider = 1;

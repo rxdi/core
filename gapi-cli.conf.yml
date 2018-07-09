@@ -7,3 +7,9 @@ config:
   schema:
     introspectionEndpoint: http://localhost:9000/graphql
     introspectionOutputFolder: ./src/app/core/api-introspection
+
+
+commands:
+  testing:
+    browser: jest --env jsdom --testPathPattern="/src/.*\\.browser.spec.(ts|tsx|js)$"
+    node: jest --env node --testPathPattern="/src/.*\\.spec.(ts|tsx|js)$"

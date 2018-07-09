@@ -8,7 +8,8 @@
     "start": "gapi start --local --path=./src/testing-app/main.ts",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
-    "test": "jest"
+    "test-browser": "gapi testing browser",
+    "test": "gapi testing node"
   },
   "repository": {
     "type": "git",
@@ -59,6 +60,6 @@
     },
     "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
     "verbose": true,
-    "collectCoverage": false
+    "collectCoverage": true
   }
 }
