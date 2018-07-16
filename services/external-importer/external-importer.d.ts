@@ -1,4 +1,4 @@
-import { ExternalImporterConfig } from './external-importer-config';
+import { ExternalImporterConfig, ExternalImporterIpfsConfig } from './external-importer-config';
 import { Observable } from 'rxjs';
 import { RequestService } from '../request';
 import { FileService } from '../file';
@@ -15,5 +15,8 @@ export declare class ExternalImporter {
     encryptFile(fileFullPath: string): any;
     decryptFile(fileFullPath: string): any;
     isWeb(): boolean;
+    downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<string>;
+    downloadIpfsModule(config: ExternalImporterIpfsConfig): Observable<string>;
+    downloadTypings(config: ExternalImporterConfig): Observable<any>;
     importModule(config: ExternalImporterConfig, token: string): Promise<any>;
 }

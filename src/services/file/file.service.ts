@@ -16,8 +16,9 @@ export class FileService {
         return this.mkdirp(folder)
             .pipe(
                 map(() => {
-                    this.logger.logFileService(`Bootstrap: @Service('${fileName}'): Saved inside ${folder}`);
-                    return writeFileSync(`${folder}/${fileName}`, file);
+                    this.logger.logFileService(`Bootstrap: @Service('${moduleName}'): Saved inside ${folder}`);
+                    writeFileSync(`${folder}/${fileName}`, file);
+                    return `${folder}/${fileName}`;
                 })
             );
     }

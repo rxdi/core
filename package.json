@@ -12,6 +12,9 @@
     "test-browser": "gapi testing browser",
     "test": "gapi testing node"
   },
+  "bin": {
+    "rxdi": "./bin/root.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/core"
@@ -37,6 +40,12 @@
     "tslint": "^5.8.0",
     "tslint-language-service": "^0.9.8",
     "typescript": "^2.9.2"
+  },
+  "ipfs": {
+    "ipfsProvider": "http://127.0.0.1:8080/ipfs/",
+    "dependencies": [
+      "QmU68GpadeYHcB4Vn9EGETn4XWXjCxM5ogdTfpidW2SDMU"
+    ]
   },
   "jest": {
     "testEnvironment": "node",

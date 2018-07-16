@@ -14,3 +14,8 @@ export class ExternalImporterConfig {
     SystemJsConfig?: Config;
     outputFolder?: string | '/node_modules/';
 }
+
+export class ExternalImporterIpfsConfig {
+    ipfsProvider: string;
+    hash: string;
+}

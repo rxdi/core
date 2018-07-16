@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 export declare class FileService {
     private logger;
-    writeFileSync(folder: string, fileName: any, moduleName: any, file: any): Observable<void>;
+    writeFileSync(folder: string, fileName: any, moduleName: any, file: any): Observable<string>;
     isPresent(path: string): boolean;
     mkdirp(folder: any): Observable<boolean>;
     fileWalker(dir: any): Observable<string[]>;

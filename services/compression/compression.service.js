@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const zlib_1 = require("zlib");
-const crypto_1 = require("crypto");
 const rxjs_1 = require("rxjs");
 const container_1 = require("../../container");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
@@ -22,7 +21,6 @@ let CompressionService = class CompressionService {
         return rxjs_1.Observable.create(observer => {
             fs_1.createReadStream(input)
                 .pipe(zlib_1.createGzip())
-                .pipe(crypto_1.createCipheriv(config.algorithm, config.cyperKey, config.cyperIv))
                 .pipe(fs_1.createWriteStream(output))
                 .on('finish', () => observer.next(true))
                 .on('error', (err) => observer.error(err));
@@ -32,12 +30,29 @@ let CompressionService = class CompressionService {
         const config = this.config.config.experimental.crypto || options;
         return rxjs_1.Observable.create(observer => {
             fs_1.createReadStream(input)
-                .pipe(crypto_1.createDecipheriv(config.algorithm, config.cyperKey, config.cyperIv))
                 .pipe(zlib_1.createGunzip())
                 .pipe(fs_1.createWriteStream(output))
                 .on('finish', () => observer.next(true))
                 .on('error', (err) => observer.error(err));
         });
+    }
+    gZipAll() {
+        // var archiver = require('archiver');
+        // var output = createWriteStream('./example.tar.gz');
+        // var archive = archiver('tar', {
+        //     gzip: true,
+        //     zlib: { level: 9 } // Sets the compression level.
+        // });
+        // archive.on('error', function (err) {
+        //     throw err;
+        // });
+        // // pipe archive data to the output file
+        // archive.pipe(output);
+        // // append files
+        // archive.file('/path/to/file0.txt', { name: 'file0-or-change-this-whatever.txt' });
+        // archive.file('/path/to/README.md', { name: 'foobar.md' });
+        // // Wait for streams to complete
+        // archive.finalize();
     }
 };
 __decorate([

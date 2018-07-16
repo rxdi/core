@@ -62,6 +62,47 @@ let ExternalImporter = class ExternalImporter {
         catch (e) { }
         return value;
     }
+    downloadIpfsModules(modules) {
+        return rxjs_1.from(modules)
+            .pipe(operators_1.switchMap((m) => this.downloadIpfsModule(m)));
+    }
+    downloadIpfsModule(config) {
+        if (!config.ipfsProvider) {
+            throw new Error(`Missing configuration inside ${config.hash}`);
+        }
+        if (!config.hash) {
+            throw new Error(`Missing configuration inside ${config.ipfsProvider}`);
+        }
+        let folder;
+        let moduleLink;
+        let moduleTypings;
+        let moduleName;
+        return this.requestService.get(config.ipfsProvider + config.hash)
+            .pipe(operators_1.take(1), operators_1.map((r) => JSON.parse(r)), operators_1.map((m) => {
+            moduleName = m.name;
+            folder = `${process.cwd()}/node_modules/`;
+            moduleLink = `${config.ipfsProvider}${m.module}`;
+            moduleTypings = `${config.ipfsProvider}${m.typings}`;
+            this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
+            return m;
+        }), operators_1.switchMap(() => this.requestService.get(moduleLink)), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings)), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file)));
+    }
+    downloadTypings(config) {
+        if (!config.typings) {
+            return rxjs_1.of(null);
+        }
+        const moduleName = config.fileName;
+        const moduleNamespace = config.namespace;
+        const moduleLink = config.typings;
+        const modulesFolder = config.outputFolder || `/external_modules/`;
+        const folder = `${process.cwd()}${modulesFolder}@types/${moduleNamespace}`;
+        const fileName = `${moduleName}.d.ts`;
+        return this.requestService.get(moduleLink)
+            .pipe(operators_1.take(1), operators_1.map((res) => {
+            this.logger.logFileService(`Done!`);
+            return res;
+        }), operators_1.switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res)));
+    }
     importModule(config, token) {
         this.validateConfig(config);
         if (this.isWeb()) {
@@ -97,7 +138,7 @@ let ExternalImporter = class ExternalImporter {
                     .pipe(operators_1.take(1), operators_1.map((res) => {
                     this.logger.logImporter(`Done!`);
                     return res;
-                }), operators_1.switchMap((res) => this.fileService.writeFileSync(folder, fileName, moduleNamespace, res)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
+                }), operators_1.switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res)), operators_1.switchMap(() => this.importExternalModule(moduleName)), operators_1.switchMap(() => this.downloadTypings(config)))
                     .subscribe((m) => observer.next(m), err => observer.error(err));
             }
         }));
