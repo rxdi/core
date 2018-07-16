@@ -28,6 +28,7 @@ let ExitHandlerService = class ExitHandlerService {
         if (options.exit) {
             this.logger.logExitHandler('Unhandled error rejection');
         }
+        process.exit(1);
     }
     onExitApp(events) {
         return new rxjs_1.Observable(o => {
