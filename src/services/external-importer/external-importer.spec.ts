@@ -23,6 +23,7 @@ describe('Service: ExternalImporter', () => {
         ).subscribe();
     });
 
+
     // it('Should import external IPFS module and load it from browser cache', (done) => {
     //     spyOn(externalImporterService, 'isWeb').and.returnValue(true);
     //     const module: Observable<any> = <any>from(externalImporterService.importModule({

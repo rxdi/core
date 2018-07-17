@@ -18,6 +18,16 @@ Main repository [@rxdi/core](https://github.com/rxdi/core)
 
 More examples for [@rxdi](https://www.npmjs.com/~rxdi) infrastructure you can check inside [@gapi](https://www.npmjs.com/~gapi) namespace.
 
+##### @Beta Decentralized node_modules using ipfs network with rxdi infrastructure
+
+> Install `@rxdi/core` global so we will have `rxdi` command available `npm i -g @rxdi/core`
+
+> Install single decentralized ipfs module `rxdi install --hash=QmWtJLqyokMZE37DgncpY5HhFvtFQieBzMPDQ318aJeTw6 --provider=https://ipfs.io/ipfs/`
+
+> More details you can find [here](https://github.com/rxdi/ipfs-package-example) `ipfs-package-example`
+
+> Example module `https://ipfs.io/ipfs/QmWtJLqyokMZE37DgncpY5HhFvtFQieBzMPDQ318aJeTw6`
+
 ## Installation and basic examples:
 ##### To install this library, run:
 
