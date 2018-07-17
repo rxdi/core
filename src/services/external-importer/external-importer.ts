@@ -82,7 +82,7 @@ export class ExternalImporter {
                 map((r: string) => {
                     let res = r;
                     try {
-                        res = r.split('<!--meta-rxdi-ipfs-module-->')[1]
+                        res = r.split('<!--meta-rxdi-ipfs-module-->')[1];
                     } catch (e) { }
                     return res;
                 }),

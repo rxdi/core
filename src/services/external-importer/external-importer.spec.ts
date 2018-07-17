@@ -12,7 +12,7 @@ describe('Service: ExternalImporter', () => {
             extension: 'js',
             typings: '',
             outputFolder: '/node_modules/',
-            link: 'https://ipfs.infura.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug'
+            link: 'https://ipfs.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug'
         }, 'createUniqueHash');
         module.pipe(
             tap((res: { testKey: () => string; }) => {
