@@ -28,7 +28,7 @@ export class ExitHandlerService {
         if (options.exit) {
             this.logger.logExitHandler('Unhandled error rejection');
         }
-        process.exit(1);
+        process.exit(0);
     }
 
     onExitApp(events: Array<Signals | NodejsEvents>) {
