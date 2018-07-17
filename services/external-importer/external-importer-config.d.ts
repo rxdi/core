@@ -14,6 +14,6 @@ export declare class ExternalImporterConfig {
     outputFolder?: string | '/node_modules/';
 }
 export declare class ExternalImporterIpfsConfig {
-    ipfsProvider: string;
+    provider: string;
     hash: string;
 }

@@ -9,12 +9,12 @@ exports.loadDeps = (currentPackage, dependencies) => {
     if (!currentPackage) {
         throw new Error('Missing ipfs config!');
     }
-    if (!currentPackage.ipfsProvider) {
+    if (!currentPackage.provider) {
         throw new Error('Missing ipfsProvider package.json');
     }
-    const ipfsProvider = currentPackage.ipfsProvider;
+    const provider = currentPackage.provider;
     if (currentPackage.dependencies) {
-        currentPackage.dependencies.map(hash => dependencies.push({ hash, ipfsProvider }));
+        currentPackage.dependencies.map(hash => dependencies.push({ hash, provider }));
     }
 };
 exports.DownloadDependencies = (dependencies) => {
@@ -22,18 +22,28 @@ exports.DownloadDependencies = (dependencies) => {
 };
 if (process.argv[2] === 'install') {
     const dependencies = [];
-    let ipfsProvider = '';
+    let provider = 'https://ipfs.io/ipfs/';
     let hash = '';
     process.argv.forEach(function (val, index, array) {
-        if (index === 3 && val.includes('--hash=')) {
-            hash = val.split('--hash=')[1];
+        if (index === 3) {
+            if (val.length === 46) {
+                hash = val;
+            }
+            else if (val.includes('--hash=')) {
+                hash = val.split('--hash=')[1];
+            }
         }
-        if (index === 4 && val.includes('--provider=')) {
-            ipfsProvider = val.split('--provider=')[1];
+        if (index === 4) {
+            if (val.includes('--provider=')) {
+                provider = val.split('--provider=')[1];
+            }
+            else if (val.includes('http')) {
+                provider = val;
+            }
         }
     });
     if (hash) {
-        exports.loadDeps({ ipfsProvider: ipfsProvider, dependencies: [hash] }, dependencies);
+        exports.loadDeps({ provider, dependencies: [hash] }, dependencies);
     }
     if (!hash && fileService.isPresent(`${process.cwd() + `/${process.argv[3]}`}`)) {
         const customJson = require(`${process.cwd() + `/${process.argv[3]}`}`);

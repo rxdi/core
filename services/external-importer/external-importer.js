@@ -67,29 +67,35 @@ let ExternalImporter = class ExternalImporter {
             .pipe(operators_1.switchMap((m) => this.downloadIpfsModule(m)));
     }
     downloadIpfsModule(config) {
-        if (!config.ipfsProvider) {
+        if (!config.provider) {
             throw new Error(`Missing configuration inside ${config.hash}`);
         }
         if (!config.hash) {
-            throw new Error(`Missing configuration inside ${config.ipfsProvider}`);
+            throw new Error(`Missing configuration inside ${config.provider}`);
         }
         let folder;
         let moduleLink;
         let moduleTypings;
         let moduleName;
-        return this.requestService.get(config.ipfsProvider + config.hash)
+        return this.requestService.get(config.provider + config.hash)
             .pipe(operators_1.take(1), operators_1.map((r) => {
-            let res = r;
-            try {
-                res = r.split('<!--meta-rxdi-ipfs-module-->')[1];
+            if (!r) {
+                throw new Error('Recieved undefined from provided address' + config.provider + config.hash);
             }
-            catch (e) { }
+            let res = r;
+            const metaString = '<!--meta-rxdi-ipfs-module-->';
+            if (res.includes(metaString)) {
+                try {
+                    res = r.split(metaString)[1];
+                }
+                catch (e) { }
+            }
             return res;
         }), operators_1.map((r) => JSON.parse(r)), operators_1.map((m) => {
             moduleName = m.name;
             folder = `${process.cwd()}/node_modules/`;
-            moduleLink = `${config.ipfsProvider}${m.module}`;
-            moduleTypings = `${config.ipfsProvider}${m.typings}`;
+            moduleLink = `${config.provider}${m.module}`;
+            moduleTypings = `${config.provider}${m.typings}`;
             this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
             return m;
         }), operators_1.switchMap(() => this.requestService.get(moduleLink)), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings)), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file)));

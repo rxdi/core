@@ -22,7 +22,7 @@ More examples for [@rxdi](https://www.npmjs.com/~rxdi) infrastructure you can ch
 
 > Install `@rxdi/core` global so we will have `rxdi` command available `npm i -g @rxdi/core`
 
-> Install single decentralized ipfs module `rxdi install --hash=QmWtJLqyokMZE37DgncpY5HhFvtFQieBzMPDQ318aJeTw6 --provider=https://ipfs.io/ipfs/`
+> Install single decentralized ipfs module `rxdi install QmWtJLqyokMZE37DgncpY5HhFvtFQieBzMPDQ318aJeTw6`
 
 > More details you can find [here](https://github.com/rxdi/ipfs-package-example) `ipfs-package-example`
 

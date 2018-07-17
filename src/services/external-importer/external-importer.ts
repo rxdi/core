@@ -64,34 +64,40 @@ export class ExternalImporter {
 
     downloadIpfsModule(config: ExternalImporterIpfsConfig) {
 
-        if (!config.ipfsProvider) {
+        if (!config.provider) {
             throw new Error(`Missing configuration inside ${config.hash}`);
         }
 
         if (!config.hash) {
-            throw new Error(`Missing configuration inside ${config.ipfsProvider}`);
+            throw new Error(`Missing configuration inside ${config.provider}`);
         }
 
         let folder;
         let moduleLink;
         let moduleTypings;
         let moduleName;
-        return this.requestService.get(config.ipfsProvider + config.hash)
+        return this.requestService.get(config.provider + config.hash)
             .pipe(
                 take(1),
                 map((r: string) => {
+                    if (!r) {
+                        throw new Error('Recieved undefined from provided address' + config.provider + config.hash);
+                    }
                     let res = r;
-                    try {
-                        res = r.split('<!--meta-rxdi-ipfs-module-->')[1];
-                    } catch (e) { }
+                    const metaString = '<!--meta-rxdi-ipfs-module-->';
+                    if (res.includes(metaString)) {
+                        try {
+                            res = r.split(metaString)[1];
+                        } catch (e) { }
+                    }
                     return res;
                 }),
                 map((r: string) => JSON.parse(r)),
                 map((m: { name: string; module: string; typings: string; }) => {
                     moduleName = m.name;
                     folder = `${process.cwd()}/node_modules/`;
-                    moduleLink = `${config.ipfsProvider}${m.module}`;
-                    moduleTypings = `${config.ipfsProvider}${m.typings}`;
+                    moduleLink = `${config.provider}${m.module}`;
+                    moduleTypings = `${config.provider}${m.typings}`;
                     this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
                     return m;
                 }),

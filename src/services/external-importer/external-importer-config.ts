@@ -16,6 +16,6 @@ export class ExternalImporterConfig {
 }
 
 export class ExternalImporterIpfsConfig {
-    ipfsProvider: string;
+    provider: string;
     hash: string;
 }
