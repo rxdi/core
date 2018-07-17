@@ -79,10 +79,16 @@ export class ExternalImporter {
         return this.requestService.get(config.ipfsProvider + config.hash)
             .pipe(
                 take(1),
+                map((r: string) => {
+                    let res = r;
+                    try {
+                        res = r.split('<!--meta-rxdi-ipfs-module-->')[1]
+                    } catch (e) { }
+                    return res;
+                }),
                 map((r: string) => JSON.parse(r)),
                 map((m: { name: string; module: string; typings: string; }) => {
                     moduleName = m.name;
-
                     folder = `${process.cwd()}/node_modules/`;
                     moduleLink = `${config.ipfsProvider}${m.module}`;
                     moduleTypings = `${config.ipfsProvider}${m.typings}`;
