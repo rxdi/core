@@ -1,4 +1,4 @@
-import { ExternalImporterIpfsConfig } from 'services';
+import { ExternalImporterIpfsConfig } from '../services/external-importer/external-importer-config';
 import { Observable } from 'rxjs';
 export interface PackagesConfig {
     dependencies: string[];
