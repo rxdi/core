@@ -21,7 +21,7 @@ export class ExternalImporter {
     @Injector(BootstrapLogger) private logger: BootstrapLogger;
     @Injector(CompressionService) compressionService: CompressionService;
     @Injector(ConfigService) private configService: ConfigService;
-
+    defaultProvider: string = 'https://ipfs.io/ipfs/';
     importExternalModule(module: string) {
         return from(SystemJS.import(module));
     }
@@ -64,8 +64,11 @@ export class ExternalImporter {
 
     isModulePresent(hash) {
         const file = this.loadPackageJson();
-        const ipfsConfig: PackagesConfig[] = file.ipfs;
+        let ipfsConfig: PackagesConfig[] = file.ipfs;
         const found = [];
+        if (!ipfsConfig) {
+            ipfsConfig = this.defaultIpfsConfig();
+        }
         ipfsConfig.forEach(c => {
             const present = c.dependencies.filter(dep => dep === hash);
             if (present.length) {
@@ -77,8 +80,11 @@ export class ExternalImporter {
 
     filterUniquePackages() {
         const file = this.loadPackageJson();
-        const ipfsConfig: PackagesConfig[] = file.ipfs;
+        let ipfsConfig: PackagesConfig[] = file.ipfs;
         let dups = [];
+        if (!ipfsConfig) {
+            ipfsConfig = this.defaultIpfsConfig();
+        }
         ipfsConfig.forEach(c => {
             const uniq = c.dependencies
                 .map((name) => {
@@ -99,9 +105,16 @@ export class ExternalImporter {
         return dups.length;
     }
 
+    defaultIpfsConfig() {
+        return [{ provider: this.defaultProvider, dependencies: [] }];
+    }
+    
     addPackageToJson(hash: string) {
         const file = this.loadPackageJson();
-        const ipfsConfig: PackagesConfig[] = file.ipfs;
+        let ipfsConfig: PackagesConfig[] = file.ipfs;
+        if (!ipfsConfig) {
+            ipfsConfig = this.defaultIpfsConfig();
+        }
         if (this.isModulePresent(hash)) {
             this.logger.log(`Package with hash: ${hash} present and will not be downloaded!`);
         } else {

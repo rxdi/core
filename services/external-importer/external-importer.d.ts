@@ -7,6 +7,7 @@ export declare class ExternalImporter {
     private logger;
     compressionService: CompressionService;
     private configService;
+    defaultProvider: string;
     importExternalModule(module: string): Observable<any>;
     validateConfig(config: ExternalImporterConfig): void;
     encryptFile(fileFullPath: string): any;
@@ -15,6 +16,10 @@ export declare class ExternalImporter {
     loadPackageJson(): any;
     isModulePresent(hash: any): number;
     filterUniquePackages(): number;
+    defaultIpfsConfig(): {
+        provider: string;
+        dependencies: any[];
+    }[];
     addPackageToJson(hash: string): void;
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<any[]>;
     downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<string>;

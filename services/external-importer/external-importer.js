@@ -29,6 +29,9 @@ const compression_service_1 = require("../compression/compression.service");
 const config_1 = require("../config");
 const fs_1 = require("fs");
 let ExternalImporter = class ExternalImporter {
+    constructor() {
+        this.defaultProvider = 'https://ipfs.io/ipfs/';
+    }
     importExternalModule(module) {
         return rxjs_1.from(SystemJS.import(module));
     }
@@ -68,8 +71,11 @@ let ExternalImporter = class ExternalImporter {
     }
     isModulePresent(hash) {
         const file = this.loadPackageJson();
-        const ipfsConfig = file.ipfs;
+        let ipfsConfig = file.ipfs;
         const found = [];
+        if (!ipfsConfig) {
+            ipfsConfig = this.defaultIpfsConfig();
+        }
         ipfsConfig.forEach(c => {
             const present = c.dependencies.filter(dep => dep === hash);
             if (present.length) {
@@ -80,8 +86,11 @@ let ExternalImporter = class ExternalImporter {
     }
     filterUniquePackages() {
         const file = this.loadPackageJson();
-        const ipfsConfig = file.ipfs;
+        let ipfsConfig = file.ipfs;
         let dups = [];
+        if (!ipfsConfig) {
+            ipfsConfig = this.defaultIpfsConfig();
+        }
         ipfsConfig.forEach(c => {
             const uniq = c.dependencies
                 .map((name) => {
@@ -99,9 +108,15 @@ let ExternalImporter = class ExternalImporter {
         }
         return dups.length;
     }
+    defaultIpfsConfig() {
+        return [{ provider: this.defaultProvider, dependencies: [] }];
+    }
     addPackageToJson(hash) {
         const file = this.loadPackageJson();
-        const ipfsConfig = file.ipfs;
+        let ipfsConfig = file.ipfs;
+        if (!ipfsConfig) {
+            ipfsConfig = this.defaultIpfsConfig();
+        }
         if (this.isModulePresent(hash)) {
             this.logger.log(`Package with hash: ${hash} present and will not be downloaded!`);
         }

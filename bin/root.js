@@ -28,10 +28,13 @@ if (process.argv.toString().includes('-v') || process.argv.toString().includes('
 }
 const fileService = Container_1.Container.get(file_service_1.FileService);
 if (process.argv[2] === 'install' || process.argv[2] === 'i') {
-    let provider = 'https://ipfs.io/ipfs/';
+    let provider = externalImporter.defaultProvider;
     let hash = '';
     let json;
     let modulesToDownload = [];
+    let customConfigFile;
+    let packageJsonConfigFile;
+    let rxdiConfigFile;
     process.argv.forEach(function (val, index, array) {
         if (index === 3) {
             if (val.length === 46) {
@@ -56,17 +59,20 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
             }
         }
     });
+    customConfigFile = `${process.cwd() + `/${process.argv[3]}`}`;
+    packageJsonConfigFile = `${process.cwd() + '/package.json'}`;
+    rxdiConfigFile = `${process.cwd() + '/.rxdi.json'}`;
     if (hash) {
         modulesToDownload = [exports.DownloadDependencies(exports.loadDeps({ provider, dependencies: [hash] }))];
     }
-    if (!hash && fileService.isPresent(`${process.cwd() + `/${process.argv[3]}`}`)) {
-        json = require(`${process.cwd() + `/${process.argv[3]}`}`).ipfs;
+    if (!hash && fileService.isPresent(customConfigFile)) {
+        json = require(customConfigFile).ipfs;
     }
-    if (!hash && fileService.isPresent(`${process.cwd() + '/package.json'}`)) {
-        json = require(`${process.cwd() + '/package.json'}`).ipfs;
+    if (!hash && fileService.isPresent(packageJsonConfigFile)) {
+        json = require(packageJsonConfigFile).ipfs;
     }
-    if (!hash && fileService.isPresent(`${process.cwd() + '/.rxdi.json'}`)) {
-        json = require(`${process.cwd() + '/.rxdi.json'}`).ipfs;
+    if (!hash && fileService.isPresent(rxdiConfigFile)) {
+        json = require(rxdiConfigFile).ipfs;
     }
     if (!hash) {
         json = json || [];
