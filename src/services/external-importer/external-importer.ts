@@ -63,7 +63,13 @@ export class ExternalImporter {
     }
 
     loadPackageJson() {
-        return JSON.parse(readFileSync(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
+        let packageJson;
+        try {
+            packageJson = JSON.parse(readFileSync(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
+        } catch (e) {
+            packageJson = {};
+        }
+        return packageJson;
     }
 
     isModulePresent(hash) {

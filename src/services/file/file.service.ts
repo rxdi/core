@@ -74,7 +74,7 @@ export class FileService {
     private filewalker(dir, done) {
         let results = [];
         const fileWalker = this.filewalker.bind(this);
-        readdir(dir, function (err, list) {
+        readdir(dir, (err, list) => {
             if (err) {
                 return done(err);
             }
@@ -82,12 +82,12 @@ export class FileService {
             if (!pending) {
                 return done(null, results);
             }
-            list.forEach(function (file) {
+            list.forEach( (file) => {
                 file = resolve(dir, file);
-                stat(file, function (err, stat) {
+                stat(file, (err, stat) => {
                     if (stat && stat.isDirectory()) {
                         results.push(file);
-                        fileWalker(file, function (err, res) {
+                        fileWalker(file, (err, res) => {
                             results = results.concat(res);
                             if (!--pending) {
                                 done(null, results);

@@ -70,7 +70,14 @@ let ExternalImporter = class ExternalImporter {
         return value;
     }
     loadPackageJson() {
-        return JSON.parse(fs_1.readFileSync(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
+        let packageJson;
+        try {
+            packageJson = JSON.parse(fs_1.readFileSync(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
+        }
+        catch (e) {
+            packageJson = {};
+        }
+        return packageJson;
     }
     isModulePresent(hash) {
         const file = this.loadPackageJson();

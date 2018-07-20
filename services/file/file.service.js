@@ -67,7 +67,7 @@ let FileService = class FileService {
     filewalker(dir, done) {
         let results = [];
         const fileWalker = this.filewalker.bind(this);
-        fs_1.readdir(dir, function (err, list) {
+        fs_1.readdir(dir, (err, list) => {
             if (err) {
                 return done(err);
             }
@@ -75,12 +75,12 @@ let FileService = class FileService {
             if (!pending) {
                 return done(null, results);
             }
-            list.forEach(function (file) {
+            list.forEach((file) => {
                 file = path_1.resolve(dir, file);
-                fs_1.stat(file, function (err, stat) {
+                fs_1.stat(file, (err, stat) => {
                     if (stat && stat.isDirectory()) {
                         results.push(file);
-                        fileWalker(file, function (err, res) {
+                        fileWalker(file, (err, res) => {
                             results = results.concat(res);
                             if (!--pending) {
                                 done(null, results);
