@@ -96,7 +96,7 @@ export class ExternalImporter {
         }
         let folder;
         let moduleLink;
-        let configLink = config.provider + config.hash;
+        const configLink = config.provider + config.hash;
         let moduleTypings;
         let moduleName;
         let originalModuleConfig;
