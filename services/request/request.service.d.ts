@@ -1,4 +1,6 @@
 import { Observable } from 'rxjs';
 export declare class RequestService {
-    get(link: string): Observable<{}>;
+    private cache;
+    private logger;
+    get(link: string, cacheKey?: any): Observable<any>;
 }

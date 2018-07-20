@@ -4,5 +4,8 @@ export interface PackagesConfig {
     dependencies: string[];
     provider: string;
 }
-export declare const loadDeps: (currentPackage: PackagesConfig, dependencies: ExternalImporterIpfsConfig[]) => void;
+export declare const loadDeps: (jsonIpfs: PackagesConfig) => {
+    hash: string;
+    provider: string;
+}[];
 export declare const DownloadDependencies: (dependencies: ExternalImporterIpfsConfig[]) => Observable<any>;

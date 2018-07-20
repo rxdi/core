@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
-const cache_layer_1 = require("../cache/cache-layer");
+const cache_layer_1 = require("./cache-layer");
 const events_1 = require("../../helpers/events");
 const container_1 = require("../../container");
 const bootstrap_logger_1 = require("../bootstrap-logger");

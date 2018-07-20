@@ -5,17 +5,16 @@ const Container_1 = require("../container/Container");
 const external_importer_1 = require("../services/external-importer/external-importer");
 const file_service_1 = require("../services/file/file.service");
 const config_service_1 = require("../services/config/config.service");
-exports.loadDeps = (currentPackage, dependencies) => {
-    if (!currentPackage) {
+const rxjs_1 = require("rxjs");
+exports.loadDeps = (jsonIpfs) => {
+    if (!jsonIpfs) {
         throw new Error('Missing ipfs config!');
     }
-    if (!currentPackage.provider) {
+    if (!jsonIpfs.provider) {
         throw new Error('Missing ipfsProvider package.json');
     }
-    const provider = currentPackage.provider;
-    if (currentPackage.dependencies) {
-        currentPackage.dependencies.map(hash => dependencies.push({ hash, provider }));
-    }
+    jsonIpfs.dependencies = jsonIpfs.dependencies || [];
+    return jsonIpfs.dependencies.map(hash => { return { hash, provider: jsonIpfs.provider }; });
 };
 exports.DownloadDependencies = (dependencies) => {
     return Container_1.Container.get(external_importer_1.ExternalImporter).downloadIpfsModules(dependencies);
@@ -25,9 +24,10 @@ if (process.argv.toString().includes('-v') || process.argv.toString().includes('
 }
 const fileService = Container_1.Container.get(file_service_1.FileService);
 if (process.argv[2] === 'install' || process.argv[2] === 'i') {
-    const dependencies = [];
     let provider = 'https://ipfs.io/ipfs/';
     let hash = '';
+    let json;
+    let modulesToDownload;
     process.argv.forEach(function (val, index, array) {
         if (index === 3) {
             if (val.length === 46) {
@@ -53,21 +53,18 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
         }
     });
     if (hash) {
-        exports.loadDeps({ provider, dependencies: [hash] }, dependencies);
+        modulesToDownload = [exports.DownloadDependencies(exports.loadDeps({ provider, dependencies: [hash] }))];
     }
     if (!hash && fileService.isPresent(`${process.cwd() + `/${process.argv[3]}`}`)) {
-        const customJson = require(`${process.cwd() + `/${process.argv[3]}`}`).ipfs;
-        exports.loadDeps(customJson, dependencies);
+        json = require(`${process.cwd() + `/${process.argv[3]}`}`).ipfs;
     }
     if (!hash && fileService.isPresent(`${process.cwd() + '/package.json'}`)) {
-        const ipfsConfig = require(`${process.cwd() + '/package.json'}`).ipfs;
-        if (ipfsConfig) {
-            exports.loadDeps(ipfsConfig, dependencies);
-        }
+        json = require(`${process.cwd() + '/package.json'}`).ipfs;
     }
     if (!hash && fileService.isPresent(`${process.cwd() + '/.rxdi.json'}`)) {
-        const rxdiJson = require(`${process.cwd() + '/.rxdi.json'}`).ipfs;
-        exports.loadDeps(rxdiJson, dependencies);
+        json = require(`${process.cwd() + '/.rxdi.json'}`).ipfs;
     }
-    exports.DownloadDependencies(dependencies).subscribe(() => console.log(JSON.stringify(dependencies, null, 2), '\nModules installed!'), e => console.error(e));
+    modulesToDownload = modulesToDownload || json.map(json => exports.DownloadDependencies(exports.loadDeps(json)));
+    rxjs_1.combineLatest(modulesToDownload)
+        .subscribe((c) => console.log(JSON.stringify(c, null, 2), '\nModules installed!'), e => console.error(e));
 }

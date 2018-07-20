@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
-import { CacheLayer } from '../cache/cache-layer';
-import { CacheLayerItem, CacheLayerInterface, Duplicates } from '../cache/cache-layer.interfaces';
+import { CacheLayer } from './cache-layer';
+import { CacheLayerItem, CacheLayerInterface, Duplicates } from './cache-layer.interfaces';
 import { InternalEvents, InternalLayers } from '../../helpers/events';
 import { Service } from '../../container';
 import { Metadata } from '../../decorators/module/module.interfaces';

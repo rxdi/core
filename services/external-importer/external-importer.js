@@ -64,12 +64,12 @@ let ExternalImporter = class ExternalImporter {
         return value;
     }
     downloadIpfsModules(modules) {
-        return rxjs_1.from(modules)
-            .pipe(operators_1.switchMap((m) => this.downloadIpfsModule(m)));
+        const latest = modules.map(m => this.downloadIpfsModule(m));
+        return rxjs_2.combineLatest(latest.length ? latest : rxjs_1.of());
     }
     downloadIpfsModuleConfig(config) {
-        return this.requestService.get(config.provider + config.hash)
-            .pipe(operators_1.take(1), operators_1.map((r) => {
+        return this.requestService.get(config.provider + config.hash, config.hash)
+            .pipe(operators_1.map((r) => {
             if (!r) {
                 throw new Error('Recieved undefined from provided address' + config.provider + config.hash);
             }
@@ -111,11 +111,17 @@ let ExternalImporter = class ExternalImporter {
             this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
             return m;
         }), operators_1.switchMap((m) => this.combineDependencies(m.dependencies, config)), operators_1.switchMap((res) => {
-            console.log(`--------------------${moduleName}--------------------`);
-            console.log(`\nDownloading... ${configLink} `);
-            console.log(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
-            return this.requestService.get(moduleLink);
-        }), operators_1.switchMap((file) => this.fileService.writeFileAsync(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings)), operators_1.switchMap((file) => this.fileService.writeFileAsync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file)));
+            this.logger.logFileService(`--------------------${moduleName}--------------------`);
+            this.logger.logFileService(`\nDownloading... ${configLink} `);
+            this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
+            return this.requestService.get(moduleLink, config.hash);
+        }), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file)), operators_1.map(() => {
+            return {
+                provider: config.provider,
+                name: originalModuleConfig.name,
+                dependencies: originalModuleConfig.dependencies
+            };
+        }));
     }
     downloadTypings(config) {
         if (!config.typings) {

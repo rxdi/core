@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CacheLayer } from '../cache/cache-layer';
-import { CacheLayerItem, CacheLayerInterface, Duplicates } from '../cache/cache-layer.interfaces';
+import { CacheLayer } from './cache-layer';
+import { CacheLayerItem, CacheLayerInterface, Duplicates } from './cache-layer.interfaces';
 import { BootstrapLogger } from '../bootstrap-logger';
 export declare class CacheService {
     private logger;
