@@ -64,7 +64,7 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
     if (!hash && fileService.isPresent(`${process.cwd() + '/.rxdi.json'}`)) {
         json = require(`${process.cwd() + '/.rxdi.json'}`).ipfs;
     }
-    modulesToDownload = modulesToDownload || json.map(json => exports.DownloadDependencies(exports.loadDeps(json)));
+    modulesToDownload = modulesToDownload || json && json.length ? json.map(json => exports.DownloadDependencies(exports.loadDeps(json))) : null;
     rxjs_1.combineLatest(modulesToDownload)
         .subscribe((c) => console.log(JSON.stringify(c, null, 2), '\nModules installed!'), e => console.error(e));
 }

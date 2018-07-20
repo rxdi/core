@@ -1,10 +1,10 @@
 import { Service } from '../../container';
 import { ExternalImporterConfig, ExternalImporterIpfsConfig } from './external-importer-config';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable, of, combineLatest } from 'rxjs';
+import { map, switchMap, take, filter, tap } from 'rxjs/operators';
 import { RequestService } from '../request';
 import { FileService } from '../file';
-import { map, switchMap, take, combineAll, switchMapTo } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
+
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import SystemJS = require('systemjs');
@@ -77,7 +77,13 @@ export class ExternalImporter {
                     }
                     return res;
                 }),
-                map((r: string) => JSON.parse(r)),
+                map((r: string) => {
+                    let res = r;
+                    try {
+                        res = JSON.parse(r);
+                    } catch (e) {}
+                    return res;
+                }),
         );
     }
 
@@ -102,7 +108,13 @@ export class ExternalImporter {
         let originalModuleConfig;
         return this.downloadIpfsModuleConfig(config)
             .pipe(
-                map((m: { name: string; module: string; typings: string; dependencies: Array<any> }) => {
+                tap(res => {
+                    if (!res['module']) {
+                        console.log('Todo: create logic to load module which is not from rxdi infrastructure for now can be used useDynamic which will do the same job!');
+                    }
+                }),
+                filter((res: { name: string; module: string; typings: string; dependencies: Array<any> }) => !!res.module),
+                map((m) => {
                     moduleName = m.name;
                     originalModuleConfig = m;
                     folder = `${process.cwd()}/node_modules/`;

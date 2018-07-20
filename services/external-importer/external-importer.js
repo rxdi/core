@@ -19,10 +19,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const container_1 = require("../../container");
 const rxjs_1 = require("rxjs");
+const operators_1 = require("rxjs/operators");
 const request_1 = require("../request");
 const file_1 = require("../file");
-const operators_1 = require("rxjs/operators");
-const rxjs_2 = require("rxjs");
 const bootstrap_logger_1 = require("../bootstrap-logger/bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const SystemJS = require("systemjs");
@@ -65,7 +64,7 @@ let ExternalImporter = class ExternalImporter {
     }
     downloadIpfsModules(modules) {
         const latest = modules.map(m => this.downloadIpfsModule(m));
-        return rxjs_2.combineLatest(latest.length ? latest : rxjs_1.of());
+        return rxjs_1.combineLatest(latest.length ? latest : rxjs_1.of());
     }
     downloadIpfsModuleConfig(config) {
         return this.requestService.get(config.provider + config.hash, config.hash)
@@ -82,10 +81,17 @@ let ExternalImporter = class ExternalImporter {
                 catch (e) { }
             }
             return res;
-        }), operators_1.map((r) => JSON.parse(r)));
+        }), operators_1.map((r) => {
+            let res = r;
+            try {
+                res = JSON.parse(r);
+            }
+            catch (e) { }
+            return res;
+        }));
     }
     combineDependencies(dependencies, config) {
-        return rxjs_2.combineLatest(dependencies.length ? dependencies.map(d => this.downloadIpfsModule({ provider: config.provider, hash: d })) : rxjs_1.of(''));
+        return rxjs_1.combineLatest(dependencies.length ? dependencies.map(d => this.downloadIpfsModule({ provider: config.provider, hash: d })) : rxjs_1.of(''));
     }
     downloadIpfsModule(config) {
         if (!config.provider) {
@@ -101,7 +107,11 @@ let ExternalImporter = class ExternalImporter {
         let moduleName;
         let originalModuleConfig;
         return this.downloadIpfsModuleConfig(config)
-            .pipe(operators_1.map((m) => {
+            .pipe(operators_1.tap(res => {
+            if (!res['module']) {
+                console.log('Todo: create logic to load module which is not from rxdi infrastructure for now can be used useDynamic which will do the same job!');
+            }
+        }), operators_1.filter((res) => !!res.module), operators_1.map((m) => {
             moduleName = m.name;
             originalModuleConfig = m;
             folder = `${process.cwd()}/node_modules/`;

@@ -13,7 +13,7 @@ export declare class ExternalImporter {
     decryptFile(fileFullPath: string): any;
     isWeb(): boolean;
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<any[]>;
-    downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<any>;
+    downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<string>;
     private combineDependencies(dependencies, config);
     downloadIpfsModule(config: ExternalImporterIpfsConfig): any;
     downloadTypings(config: ExternalImporterConfig): Observable<any>;
