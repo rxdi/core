@@ -13,10 +13,10 @@ export class RequestService {
     @Injector(RequestCacheService) private cache: RequestCacheService;
     @Injector(BootstrapLogger) private logger: BootstrapLogger;
 
-    get(link: string, cacheKey?: any) {
-        if (cacheKey && this.cache.cacheLayer.map.has(cacheKey)) {
+    get(link: string, cacheHash?: any) {
+        if (this.cache.cacheLayer.map.has(link)) {
             this.logger.log(`Item returned from cacahe: ${link}`);
-            return of(this.cache.get(cacheKey).data);
+            return of(this.cache.cacheLayer.get(link).data);
         }
         return new Observable((o) => {
             if (link.includes('https://')) {
@@ -40,7 +40,7 @@ export class RequestService {
             }
         })
             .pipe(
-                tap((res) => this.cache.put(cacheKey, res))
+                tap((res) => this.cache.cacheLayer.putItem({key: link, data: res}))
             );
     }
 }

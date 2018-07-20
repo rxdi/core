@@ -18,10 +18,10 @@ const injector_decorator_1 = require("../../decorators/injector/injector.decorat
 const operators_1 = require("rxjs/operators");
 const bootstrap_logger_1 = require("../bootstrap-logger");
 let RequestService = class RequestService {
-    get(link, cacheKey) {
-        if (cacheKey && this.cache.cacheLayer.map.has(cacheKey)) {
+    get(link, cacheHash) {
+        if (this.cache.cacheLayer.map.has(link)) {
             this.logger.log(`Item returned from cacahe: ${link}`);
-            return rxjs_1.of(this.cache.get(cacheKey).data);
+            return rxjs_1.of(this.cache.cacheLayer.get(link).data);
         }
         return new rxjs_1.Observable((o) => {
             if (link.includes('https://')) {
@@ -45,7 +45,7 @@ let RequestService = class RequestService {
                 });
             }
         })
-            .pipe(operators_1.tap((res) => this.cache.put(cacheKey, res)));
+            .pipe(operators_1.tap((res) => this.cache.cacheLayer.putItem({ key: link, data: res })));
     }
 };
 __decorate([
