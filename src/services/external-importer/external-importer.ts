@@ -3,7 +3,8 @@ import { ExternalImporterConfig, ExternalImporterIpfsConfig } from './external-i
 import { from, Observable, of } from 'rxjs';
 import { RequestService } from '../request';
 import { FileService } from '../file';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, combineAll, switchMapTo } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import SystemJS = require('systemjs');
@@ -13,9 +14,9 @@ import { ConfigService } from '../config';
 @Service()
 export class ExternalImporter {
 
-    @Injector(RequestService) requestService: RequestService;
-    @Injector(FileService) fileService: FileService;
-    @Injector(BootstrapLogger) logger: BootstrapLogger;
+    @Injector(RequestService) private requestService: RequestService;
+    @Injector(FileService) private fileService: FileService;
+    @Injector(BootstrapLogger) private logger: BootstrapLogger;
     @Injector(CompressionService) compressionService: CompressionService;
     @Injector(ConfigService) private configService: ConfigService;
 
@@ -62,20 +63,7 @@ export class ExternalImporter {
             );
     }
 
-    downloadIpfsModule(config: ExternalImporterIpfsConfig) {
-
-        if (!config.provider) {
-            throw new Error(`Missing configuration inside ${config.hash}`);
-        }
-
-        if (!config.hash) {
-            throw new Error(`Missing configuration inside ${config.provider}`);
-        }
-
-        let folder;
-        let moduleLink;
-        let moduleTypings;
-        let moduleName;
+    downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig) {
         return this.requestService.get(config.provider + config.hash)
             .pipe(
                 take(1),
@@ -93,19 +81,52 @@ export class ExternalImporter {
                     return res;
                 }),
                 map((r: string) => JSON.parse(r)),
-                map((m: { name: string; module: string; typings: string; }) => {
+        );
+    }
+
+    private combineDependencies(dependencies: any[], config: ExternalImporterIpfsConfig) {
+        return combineLatest(dependencies.length ? dependencies.map(d => this.downloadIpfsModule({ provider: config.provider, hash: d })) : of(''));
+    }
+
+    downloadIpfsModule(config: ExternalImporterIpfsConfig) {
+
+        if (!config.provider) {
+            throw new Error(`Missing configuration inside ${config.hash}`);
+        }
+
+        if (!config.hash) {
+            throw new Error(`Missing configuration inside ${config.provider}`);
+        }
+        let folder;
+        let moduleLink;
+        let configLink = config.provider + config.hash;
+        let moduleTypings;
+        let moduleName;
+        let originalModuleConfig;
+        return this.downloadIpfsModuleConfig(config)
+            .pipe(
+                map((m: { name: string; module: string; typings: string; dependencies: Array<any> }) => {
                     moduleName = m.name;
+                    originalModuleConfig = m;
                     folder = `${process.cwd()}/node_modules/`;
                     moduleLink = `${config.provider}${m.module}`;
                     moduleTypings = `${config.provider}${m.typings}`;
+                    m.dependencies = m.dependencies || [];
                     this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
                     return m;
                 }),
-                switchMap(() => this.requestService.get(moduleLink)),
-                switchMap((file) => this.fileService.writeFileSync(folder + moduleName, 'index.js', moduleName, file)),
+                switchMap((m) => this.combineDependencies(m.dependencies, config)),
+                switchMap((res) => {
+                    console.log(`--------------------${moduleName}--------------------`);
+                    console.log(`\nDownloading... ${configLink} `);
+                    console.log(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
+                    return this.requestService.get(moduleLink);
+                }),
+                switchMap((file) => this.fileService.writeFileAsync(folder + moduleName, 'index.js', moduleName, file)),
                 switchMap(() => this.requestService.get(moduleTypings)),
-                switchMap((file) => this.fileService.writeFileSync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file))
+                switchMap((file) => this.fileService.writeFileAsync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file))
             );
+
     }
 
     downloadTypings(config: ExternalImporterConfig) {
@@ -166,7 +187,6 @@ export class ExternalImporter {
             } else {
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): will be downloaded inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): ${moduleLink} downloading...`);
-
                 this.requestService.get(moduleLink)
                     .pipe(
                         take(1),

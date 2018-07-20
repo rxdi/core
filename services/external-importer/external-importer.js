@@ -22,6 +22,7 @@ const rxjs_1 = require("rxjs");
 const request_1 = require("../request");
 const file_1 = require("../file");
 const operators_1 = require("rxjs/operators");
+const rxjs_2 = require("rxjs");
 const bootstrap_logger_1 = require("../bootstrap-logger/bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const SystemJS = require("systemjs");
@@ -66,17 +67,7 @@ let ExternalImporter = class ExternalImporter {
         return rxjs_1.from(modules)
             .pipe(operators_1.switchMap((m) => this.downloadIpfsModule(m)));
     }
-    downloadIpfsModule(config) {
-        if (!config.provider) {
-            throw new Error(`Missing configuration inside ${config.hash}`);
-        }
-        if (!config.hash) {
-            throw new Error(`Missing configuration inside ${config.provider}`);
-        }
-        let folder;
-        let moduleLink;
-        let moduleTypings;
-        let moduleName;
+    downloadIpfsModuleConfig(config) {
         return this.requestService.get(config.provider + config.hash)
             .pipe(operators_1.take(1), operators_1.map((r) => {
             if (!r) {
@@ -91,14 +82,40 @@ let ExternalImporter = class ExternalImporter {
                 catch (e) { }
             }
             return res;
-        }), operators_1.map((r) => JSON.parse(r)), operators_1.map((m) => {
+        }), operators_1.map((r) => JSON.parse(r)));
+    }
+    combineDependencies(dependencies, config) {
+        return rxjs_2.combineLatest(dependencies.length ? dependencies.map(d => this.downloadIpfsModule({ provider: config.provider, hash: d })) : rxjs_1.of(''));
+    }
+    downloadIpfsModule(config) {
+        if (!config.provider) {
+            throw new Error(`Missing configuration inside ${config.hash}`);
+        }
+        if (!config.hash) {
+            throw new Error(`Missing configuration inside ${config.provider}`);
+        }
+        let folder;
+        let moduleLink;
+        let configLink = config.provider + config.hash;
+        let moduleTypings;
+        let moduleName;
+        let originalModuleConfig;
+        return this.downloadIpfsModuleConfig(config)
+            .pipe(operators_1.map((m) => {
             moduleName = m.name;
+            originalModuleConfig = m;
             folder = `${process.cwd()}/node_modules/`;
             moduleLink = `${config.provider}${m.module}`;
             moduleTypings = `${config.provider}${m.typings}`;
+            m.dependencies = m.dependencies || [];
             this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
             return m;
-        }), operators_1.switchMap(() => this.requestService.get(moduleLink)), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings)), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file)));
+        }), operators_1.switchMap((m) => this.combineDependencies(m.dependencies, config)), operators_1.switchMap((res) => {
+            console.log(`--------------------${moduleName}--------------------`);
+            console.log(`\nDownloading... ${configLink} `);
+            console.log(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
+            return this.requestService.get(moduleLink);
+        }), operators_1.switchMap((file) => this.fileService.writeFileAsync(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings)), operators_1.switchMap((file) => this.fileService.writeFileAsync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file)));
     }
     downloadTypings(config) {
         if (!config.typings) {

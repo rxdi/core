@@ -69,5 +69,5 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
         const rxdiJson = require(`${process.cwd() + '/.rxdi.json'}`).ipfs;
         exports.loadDeps(rxdiJson, dependencies);
     }
-    exports.DownloadDependencies(dependencies).subscribe(() => console.log(JSON.stringify(dependencies, null, 2), '\nModules installed!'));
+    exports.DownloadDependencies(dependencies).subscribe(() => console.log(JSON.stringify(dependencies, null, 2), '\nModules installed!'), e => console.error(e));
 }

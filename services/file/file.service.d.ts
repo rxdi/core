@@ -2,7 +2,9 @@ import { Observable } from 'rxjs';
 export declare class FileService {
     private logger;
     writeFileSync(folder: string, fileName: any, moduleName: any, file: any): Observable<string>;
+    writeFileAsync(folder: string, fileName: any, moduleName: any, file: any): Observable<string>;
     isPresent(path: string): boolean;
+    private writeFileAsyncP(folder, fileName, content);
     mkdirp(folder: any): Observable<boolean>;
     fileWalker(dir: any): Observable<string[]>;
     private filewalker(dir, done);

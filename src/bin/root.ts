@@ -30,7 +30,7 @@ export const DownloadDependencies = (dependencies: ExternalImporterIpfsConfig[])
 
 
 if (process.argv.toString().includes('-v') || process.argv.toString().includes('--verbose')) {
-    Container.get(ConfigService).setConfig({ logger: { logging: true, hashes: true, date: true, exitHandler: true, fileService: true } })
+    Container.get(ConfigService).setConfig({ logger: { logging: true, hashes: true, date: true, exitHandler: true, fileService: true } });
 }
 
 const fileService = Container.get(FileService);
@@ -82,5 +82,5 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
         loadDeps(rxdiJson, dependencies);
     }
 
-    DownloadDependencies(dependencies).subscribe(() => console.log(JSON.stringify(dependencies, null, 2), '\nModules installed!'));
+    DownloadDependencies(dependencies).subscribe(() => console.log(JSON.stringify(dependencies, null, 2), '\nModules installed!'), e => console.error(e));
 }

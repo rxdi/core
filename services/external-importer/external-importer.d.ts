@@ -1,13 +1,10 @@
 import { ExternalImporterConfig, ExternalImporterIpfsConfig } from './external-importer-config';
 import { Observable } from 'rxjs';
-import { RequestService } from '../request';
-import { FileService } from '../file';
-import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { CompressionService } from '../compression/compression.service';
 export declare class ExternalImporter {
-    requestService: RequestService;
-    fileService: FileService;
-    logger: BootstrapLogger;
+    private requestService;
+    private fileService;
+    private logger;
     compressionService: CompressionService;
     private configService;
     importExternalModule(module: string): Observable<any>;
@@ -15,8 +12,10 @@ export declare class ExternalImporter {
     encryptFile(fileFullPath: string): any;
     decryptFile(fileFullPath: string): any;
     isWeb(): boolean;
-    downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<string>;
-    downloadIpfsModule(config: ExternalImporterIpfsConfig): Observable<string>;
+    downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<{}>;
+    downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<any>;
+    private combineDependencies(dependencies, config);
+    downloadIpfsModule(config: ExternalImporterIpfsConfig): any;
     downloadTypings(config: ExternalImporterConfig): Observable<any>;
     importModule(config: ExternalImporterConfig, token: string): Promise<any>;
 }

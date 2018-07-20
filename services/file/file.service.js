@@ -26,8 +26,18 @@ let FileService = class FileService {
             return `${folder}/${fileName}`;
         }));
     }
+    writeFileAsync(folder, fileName, moduleName, file) {
+        return this.mkdirp(folder)
+            .pipe(operators_1.switchMap(() => this.writeFileAsyncP(folder, fileName, file)), operators_1.map(() => {
+            this.logger.logFileService(`Bootstrap: external @Module('${moduleName}') namespace: Saved inside ${folder}`);
+            return `${folder}/${fileName}`;
+        }));
+    }
     isPresent(path) {
         return fs_1.existsSync(path);
+    }
+    writeFileAsyncP(folder, fileName, content) {
+        return rxjs_1.Observable.create(o => fs_1.writeFile(`${folder}/${fileName}`, content, () => o.next(true)));
     }
     mkdirp(folder) {
         return rxjs_1.Observable.create(observer => {
