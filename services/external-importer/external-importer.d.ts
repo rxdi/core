@@ -12,6 +12,11 @@ export declare class ExternalImporter {
     encryptFile(fileFullPath: string): any;
     decryptFile(fileFullPath: string): any;
     isWeb(): boolean;
+    loadPackageJson(): any;
+    findCurrentModule(): void;
+    isModulePresent(hash: any): number;
+    filterUniquePackages(): number;
+    addPackageToJson(hash: string): void;
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<any[]>;
     downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<string>;
     private combineDependencies(dependencies, config);

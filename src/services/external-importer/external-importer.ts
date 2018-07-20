@@ -1,4 +1,4 @@
-import { Service } from '../../container';
+import { Service, Container } from '../../container';
 import { ExternalImporterConfig, ExternalImporterIpfsConfig } from './external-importer-config';
 import { from, Observable, of, combineLatest } from 'rxjs';
 import { map, switchMap, take, filter, tap } from 'rxjs/operators';
@@ -10,6 +10,8 @@ import { Injector } from '../../decorators/injector/injector.decorator';
 import SystemJS = require('systemjs');
 import { CompressionService } from '../compression/compression.service';
 import { ConfigService } from '../config';
+import { readFileSync, writeFileSync } from 'fs';
+import { PackagesConfig } from '../../bin/root';
 
 @Service()
 export class ExternalImporter {
@@ -56,6 +58,59 @@ export class ExternalImporter {
         return value;
     }
 
+    loadPackageJson() {
+        return JSON.parse(readFileSync(`${process.cwd()}/package.json`, { encoding: 'utf-8' }));
+    }
+
+    isModulePresent(hash) {
+        const file = this.loadPackageJson();
+        const ipfsConfig: PackagesConfig[] = file.ipfs;
+        const found = [];
+        ipfsConfig.forEach(c => {
+            const present = c.dependencies.filter(dep => dep === hash);
+            if (present.length) {
+                found.push(present[0]);
+            }
+        });
+        return found.length;
+    }
+
+    filterUniquePackages() {
+        const file = this.loadPackageJson();
+        const ipfsConfig: PackagesConfig[] = file.ipfs;
+        let dups = [];
+        ipfsConfig.forEach(c => {
+            const uniq = c.dependencies
+                .map((name) => {
+                    return { count: 1, name: name };
+                })
+                .reduce((a, b) => {
+                    a[b.name] = (a[b.name] || 0) + b.count;
+                    return a;
+                }, {});
+
+            const duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1);
+            dups = [...dups, ...duplicates];
+        });
+
+        if (dups.length) {
+            throw new Error(`There are packages which are with the same hash ${JSON.stringify(dups)}`);
+        }
+        return dups.length;
+    }
+
+    addPackageToJson(hash: string) {
+        const file = this.loadPackageJson();
+        const ipfsConfig: PackagesConfig[] = file.ipfs;
+        if (this.isModulePresent(hash)) {
+            this.logger.log(`Package with hash: ${hash} present and will not be downloaded!`);
+        } else {
+            ipfsConfig[0].dependencies.push(hash);
+            file.ipfs = ipfsConfig;
+        }
+        writeFileSync(`${process.cwd()}/package.json`, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
+    }
+
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]) {
         const latest = modules.map(m => this.downloadIpfsModule(m));
         return combineLatest(latest.length ? latest : of());
@@ -81,7 +136,7 @@ export class ExternalImporter {
                     let res = r;
                     try {
                         res = JSON.parse(r);
-                    } catch (e) {}
+                    } catch (e) { }
                     return res;
                 }),
         );

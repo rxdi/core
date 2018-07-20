@@ -5,7 +5,10 @@ import { FileService } from '../services/file/file.service';
 import { ExternalImporterIpfsConfig } from '../services/external-importer/external-importer-config';
 import { ConfigService } from '../services/config/config.service';
 import { Observable, combineLatest } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
+
+const externalImporter = Container.get(ExternalImporter);
 export interface PackagesConfig {
     dependencies: string[];
     provider: string;
@@ -19,7 +22,10 @@ export const loadDeps = (jsonIpfs: PackagesConfig) => {
         throw new Error('Missing ipfsProvider package.json');
     }
     jsonIpfs.dependencies = jsonIpfs.dependencies || [];
-    return jsonIpfs.dependencies.map(hash => { return { hash, provider: jsonIpfs.provider }; });
+
+    return jsonIpfs.dependencies.map(hash => {
+        return { hash, provider: jsonIpfs.provider };
+    }).filter(res => !!res);
 };
 
 export const DownloadDependencies = (dependencies: ExternalImporterIpfsConfig[]): Observable<any> => {
@@ -38,7 +44,7 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
     let provider = 'https://ipfs.io/ipfs/';
     let hash = '';
     let json: PackagesConfig[];
-    let modulesToDownload;
+    let modulesToDownload = [];
 
     process.argv.forEach(function (val, index, array) {
         if (index === 3) {
@@ -77,8 +83,15 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
     if (!hash && fileService.isPresent(`${process.cwd() + '/.rxdi.json'}`)) {
         json = require(`${process.cwd() + '/.rxdi.json'}`).ipfs;
     }
-
-    modulesToDownload = modulesToDownload || json && json.length ? json.map(json => DownloadDependencies(loadDeps(json))) : null;
+    json = json || [];
+    modulesToDownload = [...modulesToDownload, ...json.map(json => DownloadDependencies(loadDeps(json)))];
     combineLatest(modulesToDownload)
-        .subscribe((c) => console.log(JSON.stringify(c, null, 2), '\nModules installed!'), e => console.error(e));
+        .pipe(
+            tap(() => hash ? Container.get(ExternalImporter).addPackageToJson(hash) : null),
+            tap(() => externalImporter.filterUniquePackages())
+        )
+        .subscribe((c) => {
+
+            console.log(JSON.stringify(c, null, 2), '\nModules installed!');
+        }, e => console.error(e));
 }

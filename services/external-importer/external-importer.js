@@ -27,6 +27,7 @@ const injector_decorator_1 = require("../../decorators/injector/injector.decorat
 const SystemJS = require("systemjs");
 const compression_service_1 = require("../compression/compression.service");
 const config_1 = require("../config");
+const fs_1 = require("fs");
 let ExternalImporter = class ExternalImporter {
     importExternalModule(module) {
         return rxjs_1.from(SystemJS.import(module));
@@ -61,6 +62,56 @@ let ExternalImporter = class ExternalImporter {
         }
         catch (e) { }
         return value;
+    }
+    loadPackageJson() {
+        return JSON.parse(fs_1.readFileSync(`${process.cwd()}/package.json`, { encoding: 'utf-8' }));
+    }
+    findCurrentModule() {
+    }
+    isModulePresent(hash) {
+        const file = this.loadPackageJson();
+        const ipfsConfig = file.ipfs;
+        const found = [];
+        ipfsConfig.forEach(c => {
+            const present = c.dependencies.filter(dep => dep === hash);
+            if (present.length) {
+                found.push(present[0]);
+            }
+        });
+        return found.length;
+    }
+    filterUniquePackages() {
+        const file = this.loadPackageJson();
+        const ipfsConfig = file.ipfs;
+        let dups = [];
+        ipfsConfig.forEach(c => {
+            const uniq = c.dependencies
+                .map((name) => {
+                return { count: 1, name: name };
+            })
+                .reduce((a, b) => {
+                a[b.name] = (a[b.name] || 0) + b.count;
+                return a;
+            }, {});
+            const duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1);
+            dups = [...dups, ...duplicates];
+        });
+        if (dups.length) {
+            throw new Error(`There are packages which are with the same hash ${JSON.stringify(dups)}`);
+        }
+        return dups.length;
+    }
+    addPackageToJson(hash) {
+        const file = this.loadPackageJson();
+        const ipfsConfig = file.ipfs;
+        if (this.isModulePresent(hash)) {
+            this.logger.log(`Package with hash: ${hash} present and will not be downloaded!`);
+        }
+        else {
+            ipfsConfig[0].dependencies.push(hash);
+            file.ipfs = ipfsConfig;
+        }
+        fs_1.writeFileSync(`${process.cwd()}/package.json`, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
     }
     downloadIpfsModules(modules) {
         const latest = modules.map(m => this.downloadIpfsModule(m));
