@@ -8,6 +8,9 @@ export declare class ExternalImporter {
     compressionService: CompressionService;
     private configService;
     defaultProvider: string;
+    defaultNamespaceFolder: string;
+    defaultOutputFolder: string;
+    defaultPackageJsonFolder: string;
     importExternalModule(module: string): Observable<any>;
     validateConfig(config: ExternalImporterConfig): void;
     encryptFile(fileFullPath: string): any;
@@ -25,6 +28,6 @@ export declare class ExternalImporter {
     downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<string>;
     private combineDependencies(dependencies, config);
     downloadIpfsModule(config: ExternalImporterIpfsConfig): any;
-    downloadTypings(config: ExternalImporterConfig): Observable<any>;
+    downloadTypings(moduleLink: string): Observable<any>;
     importModule(config: ExternalImporterConfig, token: string): Promise<any>;
 }

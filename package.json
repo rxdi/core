@@ -64,13 +64,5 @@
     "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
     "verbose": true,
     "collectCoverage": true
-  },
-  "ipfs": [
-    {
-      "provider": "https://ipfs.io/ipfs/",
-      "dependencies": [
-        "QmeFUenbAy4kxKj6hA4kP662nwm11dGUTG8HZowBuapbFv"
-      ]
-    }
-  ]
+  }
 }

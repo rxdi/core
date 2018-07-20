@@ -4,14 +4,13 @@ import { from, Observable, of, combineLatest } from 'rxjs';
 import { map, switchMap, take, filter, tap } from 'rxjs/operators';
 import { RequestService } from '../request';
 import { FileService } from '../file';
-
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
-import SystemJS = require('systemjs');
 import { CompressionService } from '../compression/compression.service';
 import { ConfigService } from '../config';
 import { readFileSync, writeFileSync } from 'fs';
 import { PackagesConfig } from '../../bin/root';
+import SystemJS = require('systemjs');
 
 @Service()
 export class ExternalImporter {
@@ -21,7 +20,12 @@ export class ExternalImporter {
     @Injector(BootstrapLogger) private logger: BootstrapLogger;
     @Injector(CompressionService) compressionService: CompressionService;
     @Injector(ConfigService) private configService: ConfigService;
+
     defaultProvider: string = 'https://ipfs.io/ipfs/';
+    defaultNamespaceFolder: string = '@types';
+    defaultOutputFolder: string = 'node_modules';
+    defaultPackageJsonFolder: string = `${process.cwd()}/package.json`;
+
     importExternalModule(module: string) {
         return from(SystemJS.import(module));
     }
@@ -59,7 +63,7 @@ export class ExternalImporter {
     }
 
     loadPackageJson() {
-        return JSON.parse(readFileSync(`${process.cwd()}/package.json`, { encoding: 'utf-8' }));
+        return JSON.parse(readFileSync(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
     }
 
     isModulePresent(hash) {
@@ -108,7 +112,7 @@ export class ExternalImporter {
     defaultIpfsConfig() {
         return [{ provider: this.defaultProvider, dependencies: [] }];
     }
-    
+
     addPackageToJson(hash: string) {
         const file = this.loadPackageJson();
         let ipfsConfig: PackagesConfig[] = file.ipfs;
@@ -121,7 +125,7 @@ export class ExternalImporter {
             ipfsConfig[0].dependencies.push(hash);
             file.ipfs = ipfsConfig;
         }
-        writeFileSync(`${process.cwd()}/package.json`, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
+        writeFileSync(this.defaultPackageJsonFolder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
     }
 
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]) {
@@ -185,7 +189,7 @@ export class ExternalImporter {
                 map((m) => {
                     moduleName = m.name;
                     originalModuleConfig = m;
-                    folder = `${process.cwd()}/node_modules/`;
+                    folder = `${process.cwd()}/${this.defaultOutputFolder}/`;
                     moduleLink = `${config.provider}${m.module}`;
                     moduleTypings = `${config.provider}${m.typings}`;
                     m.dependencies = m.dependencies || [];
@@ -201,10 +205,11 @@ export class ExternalImporter {
                 }),
                 switchMap((file) => this.fileService.writeFileSync(folder + moduleName, 'index.js', moduleName, file)),
                 switchMap(() => this.requestService.get(moduleTypings, config.hash)),
-                switchMap((file) => this.fileService.writeFileSync(folder + `@types/${moduleName}`, 'index.d.ts', moduleName, file)),
+                switchMap((file) => this.fileService.writeFileSync(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)),
                 map(() => {
                     return {
                         provider: config.provider,
+                        hash: config.hash,
                         name: originalModuleConfig.name,
                         dependencies: originalModuleConfig.dependencies
                     };
@@ -213,16 +218,7 @@ export class ExternalImporter {
 
     }
 
-    downloadTypings(config: ExternalImporterConfig) {
-        if (!config.typings) {
-            return of(null);
-        }
-        const moduleName = config.fileName;
-        const moduleNamespace = config.namespace;
-        const moduleLink = config.typings;
-        const modulesFolder = config.outputFolder || `/external_modules/`;
-        const folder = `${process.cwd()}${modulesFolder}@types/${moduleNamespace}`;
-        const fileName = `${moduleName}.d.ts`;
+    downloadTypings(moduleLink: string) {
         return this.requestService.get(moduleLink)
             .pipe(
                 take(1),
@@ -230,8 +226,7 @@ export class ExternalImporter {
                     this.logger.logFileService(`Done!`);
                     return res;
                 }),
-                switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res))
-            );
+        );
     }
 
     importModule(config: ExternalImporterConfig, token: string): Promise<any> {
@@ -251,7 +246,7 @@ export class ExternalImporter {
             const moduleLink = config.link;
             const moduleExtension = config.extension;
             const moduleSystemJsConfig = config.SystemJsConfig || {};
-            const modulesFolder = config.outputFolder || `/external_modules/`;
+            const modulesFolder = config.outputFolder || `/${this.defaultOutputFolder}/`;
             const fileFullPath = `${process.cwd()}${modulesFolder}/${moduleNamespace}/${moduleName}.${moduleExtension}`;
             const folder = `${process.cwd()}${modulesFolder}${moduleNamespace}`;
             const fileName = `${moduleName}.${moduleExtension}`;
@@ -280,7 +275,8 @@ export class ExternalImporter {
                         }),
                         switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res)),
                         switchMap(() => this.importExternalModule(moduleName)),
-                        switchMap(() => this.downloadTypings(config))
+                        switchMap(() => this.downloadTypings(moduleLink)),
+                        switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res))
                     )
                     .subscribe(
                         (m) => observer.next(m),
