@@ -83,8 +83,10 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
     if (!hash && fileService.isPresent(`${process.cwd() + '/.rxdi.json'}`)) {
         json = require(`${process.cwd() + '/.rxdi.json'}`).ipfs;
     }
-    json = json || [];
-    modulesToDownload = [...modulesToDownload, ...json.map(json => DownloadDependencies(loadDeps(json)))];
+    if (!hash) {
+        json = json || [];
+        modulesToDownload = [...modulesToDownload, ...json.map(json => DownloadDependencies(loadDeps(json)))];
+    }
     combineLatest(modulesToDownload)
         .pipe(
             tap(() => hash ? Container.get(ExternalImporter).addPackageToJson(hash) : null),
