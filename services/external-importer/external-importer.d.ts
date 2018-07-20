@@ -13,7 +13,6 @@ export declare class ExternalImporter {
     decryptFile(fileFullPath: string): any;
     isWeb(): boolean;
     loadPackageJson(): any;
-    findCurrentModule(): void;
     isModulePresent(hash: any): number;
     filterUniquePackages(): number;
     addPackageToJson(hash: string): void;

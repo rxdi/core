@@ -66,8 +66,6 @@ let ExternalImporter = class ExternalImporter {
     loadPackageJson() {
         return JSON.parse(fs_1.readFileSync(`${process.cwd()}/package.json`, { encoding: 'utf-8' }));
     }
-    findCurrentModule() {
-    }
     isModulePresent(hash) {
         const file = this.loadPackageJson();
         const ipfsConfig = file.ipfs;
