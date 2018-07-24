@@ -18,13 +18,11 @@ const injector_decorator_1 = require("../../decorators/injector/injector.decorat
 const path_1 = require("path");
 const dist_1 = require("./dist");
 let FileService = class FileService {
-    writeFileSync(folder, fileName, moduleName, file) {
+    writeFile(folder, fileName, moduleName, file) {
         return this.mkdirp(folder)
-            .pipe(operators_1.map(() => {
+            .pipe(operators_1.tap(() => {
             this.logger.logFileService(`Bootstrap: @Service('${moduleName}'): Saved inside ${folder}`);
-            fs_1.writeFileSync(`${folder}/${fileName}`, file);
-            return `${folder}/${fileName}`;
-        }));
+        }), operators_1.switchMap(() => this.writeFileAsyncP(folder, fileName, file)));
     }
     writeFileAsync(folder, fileName, moduleName, file) {
         return this.mkdirp(folder)

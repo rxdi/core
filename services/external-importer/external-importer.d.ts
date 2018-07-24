@@ -28,6 +28,6 @@ export declare class ExternalImporter {
     downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<string>;
     private combineDependencies(dependencies, config);
     downloadIpfsModule(config: ExternalImporterIpfsConfig): any;
-    downloadTypings(moduleLink: string): Observable<any>;
+    downloadTypings(moduleLink: string, folder: any, fileName: any, config: ExternalImporterConfig): Observable<{}>;
     importModule(config: ExternalImporterConfig, token: string): Promise<any>;
 }

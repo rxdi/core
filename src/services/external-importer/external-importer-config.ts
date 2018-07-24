@@ -4,6 +4,7 @@ export class ExternalImporterConfig {
     link: string;
     fileName?: string;
     typings?: string;
+    typingsFileName?: string;
     namespace?: string;
     extension?: string;
     crypto?: {

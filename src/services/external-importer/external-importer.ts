@@ -209,9 +209,9 @@ export class ExternalImporter {
                     this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
                     return this.requestService.get(moduleLink, config.hash);
                 }),
-                switchMap((file) => this.fileService.writeFileSync(folder + moduleName, 'index.js', moduleName, file)),
+                switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)),
                 switchMap(() => this.requestService.get(moduleTypings, config.hash)),
-                switchMap((file) => this.fileService.writeFileSync(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)),
+                switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)),
                 map(() => {
                     return {
                         provider: config.provider,
@@ -224,7 +224,10 @@ export class ExternalImporter {
 
     }
 
-    downloadTypings(moduleLink: string) {
+    downloadTypings(moduleLink: string, folder, fileName, config: ExternalImporterConfig) {
+        if (!moduleLink) {
+            return of(true);
+        }
         return this.requestService.get(moduleLink)
             .pipe(
                 take(1),
@@ -232,6 +235,7 @@ export class ExternalImporter {
                     this.logger.logFileService(`Done!`);
                     return res;
                 }),
+                switchMap((res) => this.fileService.writeFile(folder, fileName, config.typingsFileName, res))
         );
     }
 
@@ -279,10 +283,9 @@ export class ExternalImporter {
                             this.logger.logImporter(`Done!`);
                             return res;
                         }),
-                        switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res)),
+                        switchMap((res) => this.fileService.writeFile(folder, fileName, config.fileName, res)),
+                        switchMap(() => this.downloadTypings(config.typings, folder, fileName, config)),
                         switchMap(() => this.importExternalModule(moduleName)),
-                        switchMap(() => this.downloadTypings(moduleLink)),
-                        switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res))
                     )
                     .subscribe(
                         (m) => observer.next(m),

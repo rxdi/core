@@ -1,7 +1,7 @@
 import { Service } from '../../container';
 import { writeFileSync, existsSync, readdir, stat, writeFile } from 'fs';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { BootstrapLogger } from '../bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { resolve } from 'path';
@@ -12,14 +12,13 @@ export class FileService {
 
     @Injector(BootstrapLogger) private logger: BootstrapLogger;
 
-    writeFileSync(folder: string, fileName, moduleName, file) {
+    writeFile(folder: string, fileName, moduleName, file) {
         return this.mkdirp(folder)
             .pipe(
-                map(() => {
+                tap(() => {
                     this.logger.logFileService(`Bootstrap: @Service('${moduleName}'): Saved inside ${folder}`);
-                    writeFileSync(`${folder}/${fileName}`, file);
-                    return `${folder}/${fileName}`;
-                })
+                }),
+                switchMap(() => this.writeFileAsyncP(folder, fileName, file))
             );
     }
 

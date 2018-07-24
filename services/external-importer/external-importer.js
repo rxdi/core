@@ -199,7 +199,7 @@ let ExternalImporter = class ExternalImporter {
             this.logger.logFileService(`\nDownloading... ${configLink} `);
             this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
             return this.requestService.get(moduleLink, config.hash);
-        }), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFileSync(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)), operators_1.map(() => {
+        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)), operators_1.map(() => {
             return {
                 provider: config.provider,
                 hash: config.hash,
@@ -208,12 +208,15 @@ let ExternalImporter = class ExternalImporter {
             };
         }));
     }
-    downloadTypings(moduleLink) {
+    downloadTypings(moduleLink, folder, fileName, config) {
+        if (!moduleLink) {
+            return rxjs_1.of(true);
+        }
         return this.requestService.get(moduleLink)
             .pipe(operators_1.take(1), operators_1.map((res) => {
             this.logger.logFileService(`Done!`);
             return res;
-        }));
+        }), operators_1.switchMap((res) => this.fileService.writeFile(folder, fileName, config.typingsFileName, res)));
     }
     importModule(config, token) {
         this.validateConfig(config);
@@ -250,7 +253,7 @@ let ExternalImporter = class ExternalImporter {
                     .pipe(operators_1.take(1), operators_1.map((res) => {
                     this.logger.logImporter(`Done!`);
                     return res;
-                }), operators_1.switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res)), operators_1.switchMap(() => this.importExternalModule(moduleName)), operators_1.switchMap(() => this.downloadTypings(moduleLink)), operators_1.switchMap((res) => this.fileService.writeFileSync(folder, fileName, config.fileName, res)))
+                }), operators_1.switchMap((res) => this.fileService.writeFile(folder, fileName, config.fileName, res)), operators_1.switchMap(() => this.downloadTypings(config.typings, folder, fileName, config)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
                     .subscribe((m) => observer.next(m), err => observer.error(err));
             }
         }));

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 export declare class FileService {
     private logger;
-    writeFileSync(folder: string, fileName: any, moduleName: any, file: any): Observable<string>;
+    writeFile(folder: string, fileName: any, moduleName: any, file: any): Observable<{}>;
     writeFileAsync(folder: string, fileName: any, moduleName: any, file: any): Observable<string>;
     isPresent(path: string): boolean;
     private writeFileAsyncP(folder, fileName, content);
