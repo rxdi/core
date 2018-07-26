@@ -320,7 +320,7 @@ export class ContainerInstance {
                 type.prototype.OnBefore.bind(type)();
             }
             value = new (type.bind.apply(type, params))();
-
+            constructorWatcherService.createConstructor(type['name'], { type, value });
             // if (value.render) {
             //     debugger
             // //    const test = new value['__proto__'].constructor()
@@ -334,7 +334,6 @@ export class ContainerInstance {
             if (value.OnInit) {
                 value.OnInit.bind(value)();
             }
-            constructorWatcherService.createConstructor(type['name'], { type, value });
         }
 
         if (service && !service.transient && value)

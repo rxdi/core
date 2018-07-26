@@ -192,6 +192,7 @@ class ContainerInstance {
                 type.prototype.OnBefore.bind(type)();
             }
             value = new (type.bind.apply(type, params))();
+            constructor_watcher_1.constructorWatcherService.createConstructor(type['name'], { type, value });
             // if (value.render) {
             //     debugger
             // //    const test = new value['__proto__'].constructor()
@@ -204,7 +205,6 @@ class ContainerInstance {
             if (value.OnInit) {
                 value.OnInit.bind(value)();
             }
-            constructor_watcher_1.constructorWatcherService.createConstructor(type['name'], { type, value });
         }
         if (service && !service.transient && value)
             service.value = value;
