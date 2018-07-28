@@ -234,8 +234,28 @@ export class YourModule {
 }
 ```
 
+[Parcel](https://parceljs.org/getting_started.html)
 
-Build with [Parcel](https://parceljs.org/getting_started.html)
+Inside `@gapi/cli` package there is a command called `gapi start --local --parcel`
+this command will run @gapi or @rxdi application with parcel there is a also command called `gapi build` which will take `src/main.ts` and will bundle it the same way like `parcel build src/main.ts --target node`
+
+To install `@gapi/cli` type:
+
+```bash
+npm i -g @gapi/cli
+```
+
+Start with `@gapi/cli`
+```bash
+gapi start --local --parcel
+```
+
+Build with `@gapi/cli`
+```bash
+gapi build
+```
+
+Or you can install Parcel globally and use instead of `@gapi/cli`
 
 Install Parcel:
 ```bash
