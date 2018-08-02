@@ -21,6 +21,7 @@ let CompressionService = class CompressionService {
         return rxjs_1.Observable.create(observer => {
             fs_1.createReadStream(input)
                 .pipe(zlib_1.createGzip())
+                // .pipe(createCipheriv(config.algorithm, config.cyperKey, config.cyperIv))
                 .pipe(fs_1.createWriteStream(output))
                 .on('finish', () => observer.next(true))
                 .on('error', (err) => observer.error(err));
@@ -30,6 +31,7 @@ let CompressionService = class CompressionService {
         const config = this.config.config.experimental.crypto || options;
         return rxjs_1.Observable.create(observer => {
             fs_1.createReadStream(input)
+                // .pipe(createDecipheriv(config.algorithm, config.cyperKey, config.cyperIv))
                 .pipe(zlib_1.createGunzip())
                 .pipe(fs_1.createWriteStream(output))
                 .on('finish', () => observer.next(true))

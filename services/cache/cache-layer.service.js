@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var CacheService_1;
 const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
 const cache_layer_1 = require("./cache-layer");
@@ -204,4 +205,3 @@ CacheService = CacheService_1 = __decorate([
     __metadata("design:paramtypes", [bootstrap_logger_1.BootstrapLogger])
 ], CacheService);
 exports.CacheService = CacheService;
-var CacheService_1;

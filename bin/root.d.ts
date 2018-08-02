@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { ExternalImporterIpfsConfig } from '../services/external-importer/external-importer-config';
 import { Observable } from 'rxjs';
 export interface PackagesConfig {

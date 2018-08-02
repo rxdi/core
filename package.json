@@ -27,19 +27,19 @@
   "homepage": "https://github.com/rxdi/core/blob/master/README.md",
   "dependencies": {
     "reflect-metadata": "^0.1.12",
-    "rxjs": "^6.2.1",
+    "rxjs": "^6.2.2",
     "systemjs": "^0.21.4"
   },
   "devDependencies": {
-    "@types/jest": "^23.1.4",
-    "@types/node": "^10.3.3",
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.5.5",
     "@types/systemjs": "^0.20.6",
-    "jest": "^22.4.2",
-    "jest-cli": "^22.4.2",
-    "ts-jest": "^22.4.0",
-    "tslint": "^5.8.0",
-    "tslint-language-service": "^0.9.8",
-    "typescript": "^2.9.2"
+    "jest": "^23.4.2",
+    "jest-cli": "^23.4.2",
+    "ts-jest": "^23.0.1",
+    "tslint": "^5.11.0",
+    "tslint-language-service": "^0.9.9",
+    "typescript": "^3.0.1"
   },
   "jest": {
     "testEnvironment": "node",

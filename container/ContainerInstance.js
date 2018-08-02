@@ -176,11 +176,11 @@ class ContainerInstance {
                 // in this case Type instance will be obtained from Container and its method 'create' will be called
                 value = this.get(service.factory[0])[service.factory[1]](...params);
             }
-            else {
+            else { // regular factory function
                 value = service.factory(...params);
             }
         }
-        else {
+        else { // otherwise simply create a new object instance
             if (!type)
                 throw new MissingProvidedServiceTypeError_1.MissingProvidedServiceTypeError(identifier);
             params.unshift(null);

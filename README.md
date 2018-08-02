@@ -278,3 +278,16 @@ node ./dist/main.js
 Important!
 
 This will not bundle your node modules only rxdi application.
+
+
+If you want to start app with `ts-node` for example you need to set inside `tsconfig.json` -> compilerOptions: {}
+
+```json
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    }
+}
+
+```

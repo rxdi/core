@@ -33,7 +33,7 @@ function Service(optionsOrServiceName) {
             service.global = optionsOrServiceName.global || false;
             service.transient = optionsOrServiceName.transient;
         }
-        else if (optionsOrServiceName) {
+        else if (optionsOrServiceName) { // ServiceOptions
             service.id = optionsOrServiceName.id;
             service.factory = optionsOrServiceName.factory;
             service.multiple = optionsOrServiceName.multiple;
