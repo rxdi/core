@@ -2,7 +2,7 @@ import { createUniqueHash } from '../../helpers/create-unique-hash';
 import { ServiceMetadata } from '../../container/types/ServiceMetadata';
 import { Container } from '../../container/Container';
 
-export function Controller<T, K extends keyof T>(options?: {init?: boolean}): Function {
+export function Controller<T>(options?: T | {init?: boolean}): Function {
     return function (target: Function) {
 
         const uniqueHashForClass = createUniqueHash(`${target}`);
@@ -21,7 +21,7 @@ export function Controller<T, K extends keyof T>(options?: {init?: boolean}): Fu
             `
         };
 
-        const service: ServiceMetadata<T, K> = {
+        const service: ServiceMetadata<T, any> = {
             type: target
         };
 
