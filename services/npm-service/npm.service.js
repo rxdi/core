@@ -12,17 +12,17 @@ const childProcess = require("child_process");
 let NpmService = class NpmService {
     constructor() {
         this.packagesToDownload = new rxjs_1.BehaviorSubject([]);
-        this.command = '';
+        this.packages = [];
     }
     setPackages(packages) {
         this.packagesToDownload.next(packages);
     }
     preparePackages() {
-        this.packagesToDownload.getValue().forEach((p) => this.command += `${p.name}@${p.version} `);
+        this.packages = this.packagesToDownload.getValue().map((p) => `${p.name}@${p.version}`);
     }
     installPackages() {
         this.preparePackages();
-        console.log(`Installing npm packages on child process! ${this.command}`);
+        console.log(`Installing npm packages on child process! ${this.packages.toString()}`);
         let child = null;
         if (child) {
             child.stdout.removeAllListeners('data');
@@ -30,7 +30,7 @@ let NpmService = class NpmService {
             child.removeAllListeners('exit');
             child.kill();
         }
-        child = childProcess.spawn('npm', ['i', this.command]);
+        child = childProcess.spawn('npm', ['i', ...this.packages]);
         child.stdout.on('data', (data) => {
             process.stdout.write(data);
         });
@@ -39,7 +39,7 @@ let NpmService = class NpmService {
         });
         child.on('exit', (code) => {
             console.log(`Child process exited with code ${code}`);
-            console.log(`Installing npm packages DONE! ${this.command}`);
+            console.log(`Installing npm packages DONE! ${this.packages.toString()}`);
             child = null;
         });
     }
