@@ -26,7 +26,7 @@ export declare class ExternalImporter {
     }[];
     addPackageToJson(hash: string): void;
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<any[]>;
-    downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<string>;
+    downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<any>;
     private combineDependencies;
     downloadIpfsModule(config: ExternalImporterIpfsConfig): any;
     downloadTypings(moduleLink: string, folder: any, fileName: any, config: ExternalImporterConfig): Observable<{}>;

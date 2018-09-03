@@ -31,7 +31,7 @@ export declare class BootstrapService {
     asyncChainables: Observable<any>[];
     config: ConfigModel;
     constructor(logger: BootstrapLogger, cacheService: CacheService, lazyFactoriesService: LazyFactory, configService: ConfigService, controllersService: ControllersService, effectsService: EffectsService, pluginService: PluginService, componentsService: ComponentsService, bootstrapsService: BootstrapsServices, servicesService: ServicesService, pluginManager: PluginManager, afterStarterService: AfterStarterService);
-    start(app: any, config?: ConfigModel): Observable<PluginManager>;
+    start(app: any, config?: ConfigModel): Observable<{}>;
     private final;
     private asyncChainablePluginsRegister;
     private asyncChainableComponents;

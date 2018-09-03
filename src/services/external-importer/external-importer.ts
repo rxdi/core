@@ -144,7 +144,7 @@ export class ExternalImporter {
     downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig) {
         return this.requestService.get(config.provider + config.hash, config.hash)
             .pipe(
-                map((r: string) => {
+                map((r) => {
                     if (!r) {
                         throw new Error('Recieved undefined from provided address' + config.provider + config.hash);
                     }
@@ -157,7 +157,7 @@ export class ExternalImporter {
                     }
                     return res;
                 }),
-                map((r: string) => {
+                map((r) => {
                     let res = r;
                     try {
                         res = JSON.parse(r);

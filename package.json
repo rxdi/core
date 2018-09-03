@@ -27,7 +27,7 @@
   "homepage": "https://github.com/rxdi/core/blob/master/README.md",
   "dependencies": {
     "reflect-metadata": "^0.1.12",
-    "rxjs": "^6.2.2",
+    "rxjs": "^6.3.1",
     "systemjs": "^0.21.4"
   },
   "devDependencies": {

@@ -43,14 +43,14 @@ export class BootstrapService {
         this.globalConfig = this.cacheService.createLayer<ConfigModel>({ name: InternalLayers.globalConfig });
     }
 
-    public start(app, config?: ConfigModel): Observable<PluginManager> {
+    public start(app, config?: ConfigModel) {
         this.configService.setConfig(config);
         this.globalConfig.putItem({ key: InternalEvents.init, data: config });
         Container.get(app);
         return of<string[]>(Array.from(this.lazyFactoriesService.lazyFactories.keys()))
             .pipe(
                 map((i) => i.map(injectable => this.prepareAsyncChainables(injectable))),
-                switchMap((res: Observable<Object>) => combineLatest(this.asyncChainables)
+                switchMap((res) => combineLatest(this.asyncChainables)
                     .pipe(
                         take(1),
                         map((c) => this.attachLazyLoadedChainables(res, c)),
