@@ -73,7 +73,7 @@ let ExternalImporter = class ExternalImporter {
     loadPackageJson() {
         let packageJson;
         try {
-            packageJson = JSON.parse(fs_1.readFileSync(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
+            packageJson = JSON.parse(fs_1.readFileSync.bind(null)(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
         }
         catch (e) {
             packageJson = {};
@@ -135,7 +135,7 @@ let ExternalImporter = class ExternalImporter {
             ipfsConfig[0].dependencies.push(hash);
             file.ipfs = ipfsConfig;
         }
-        fs_1.writeFileSync(this.defaultPackageJsonFolder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
+        fs_1.writeFileSync.bind(null)(this.defaultPackageJsonFolder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
     }
     downloadIpfsModules(modules) {
         const latest = modules.map(m => this.downloadIpfsModule(m));
