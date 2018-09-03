@@ -7,6 +7,7 @@ export declare class ExternalImporter {
     private logger;
     compressionService: CompressionService;
     private configService;
+    private npmService;
     defaultProvider: string;
     defaultNamespaceFolder: string;
     defaultOutputFolder: string;

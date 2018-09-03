@@ -25,6 +25,7 @@ const file_1 = require("../file");
 const bootstrap_logger_1 = require("../bootstrap-logger/bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const compression_service_1 = require("../compression/compression.service");
+const npm_service_1 = require("../npm-service/npm.service");
 const config_1 = require("../config");
 const fs_1 = require("fs");
 const SystemJS = require("systemjs");
@@ -192,9 +193,12 @@ let ExternalImporter = class ExternalImporter {
             moduleLink = `${config.provider}${m.module}`;
             moduleTypings = `${config.provider}${m.typings}`;
             m.dependencies = m.dependencies || [];
+            this.npmService.setPackages(m.packages);
             this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
             return m;
-        }), operators_1.switchMap((m) => this.combineDependencies(m.dependencies, config)), operators_1.switchMap((res) => {
+        }), operators_1.switchMap((m) => this.combineDependencies(m.dependencies, config)), operators_1.tap(() => {
+            this.npmService.installPackages();
+        }), operators_1.switchMap((res) => {
             this.logger.logFileService(`--------------------${moduleName}--------------------`);
             this.logger.logFileService(`\nDownloading... ${configLink} `);
             this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
@@ -204,7 +208,8 @@ let ExternalImporter = class ExternalImporter {
                 provider: config.provider,
                 hash: config.hash,
                 name: originalModuleConfig.name,
-                dependencies: originalModuleConfig.dependencies
+                dependencies: originalModuleConfig.dependencies,
+                packages: originalModuleConfig.packages
             };
         }));
     }
@@ -279,6 +284,10 @@ __decorate([
     injector_decorator_1.Injector(config_1.ConfigService),
     __metadata("design:type", config_1.ConfigService)
 ], ExternalImporter.prototype, "configService", void 0);
+__decorate([
+    injector_decorator_1.Injector(npm_service_1.NpmService),
+    __metadata("design:type", npm_service_1.NpmService)
+], ExternalImporter.prototype, "npmService", void 0);
 ExternalImporter = __decorate([
     container_1.Service()
 ], ExternalImporter);

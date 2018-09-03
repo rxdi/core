@@ -20,3 +20,16 @@ export class ExternalImporterIpfsConfig {
     provider: string;
     hash: string;
 }
+
+export interface NpmPackageConfig {
+    name: string;
+    version: string;
+}
+
+export interface ExternalModuleConfiguration {
+    name: string;
+    module: string;
+    typings: string;
+    dependencies?: Array<any>;
+    packages?: NpmPackageConfig[];
+}

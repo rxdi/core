@@ -93,7 +93,7 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
         json = json || [];
         modulesToDownload = [...modulesToDownload, ...json.map(json => DownloadDependencies(loadDeps(json)))];
     }
-
+    console.log('Decentralized rxdi modules installing...');
     combineLatest(modulesToDownload)
         .pipe(
             tap(() => hash ? Container.get(ExternalImporter).addPackageToJson(hash) : null),
@@ -101,6 +101,6 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
         )
         .subscribe((c) => {
 
-            console.log(JSON.stringify(c, null, 2), '\nModules installed!');
+            console.log(JSON.stringify(c, null, 2), '\nDecentralized rxdi modules installed!');
         }, e => console.error(e));
 }

@@ -1,5 +1,5 @@
 import { Service, Container } from '../../container';
-import { ExternalImporterConfig, ExternalImporterIpfsConfig } from './external-importer-config';
+import { ExternalImporterConfig, ExternalImporterIpfsConfig, ExternalModuleConfiguration } from './external-importer-config';
 import { from, Observable, of, combineLatest } from 'rxjs';
 import { map, switchMap, take, filter, tap } from 'rxjs/operators';
 import { RequestService } from '../request';
@@ -7,6 +7,7 @@ import { FileService } from '../file';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { CompressionService } from '../compression/compression.service';
+import { NpmService } from '../npm-service/npm.service';
 import { ConfigService } from '../config';
 import { readFileSync, writeFileSync } from 'fs';
 import { PackagesConfig } from '../../bin/root';
@@ -20,6 +21,7 @@ export class ExternalImporter {
     @Injector(BootstrapLogger) private logger: BootstrapLogger;
     @Injector(CompressionService) compressionService: CompressionService;
     @Injector(ConfigService) private configService: ConfigService;
+    @Injector(NpmService) private npmService: NpmService;
 
     defaultProvider: string = 'https://ipfs.io/ipfs/';
     defaultNamespaceFolder: string = '@types';
@@ -183,7 +185,7 @@ export class ExternalImporter {
         const configLink = config.provider + config.hash;
         let moduleTypings;
         let moduleName;
-        let originalModuleConfig;
+        let originalModuleConfig: ExternalModuleConfiguration;
         return this.downloadIpfsModuleConfig(config)
             .pipe(
                 tap(res => {
@@ -191,18 +193,22 @@ export class ExternalImporter {
                         console.log('Todo: create logic to load module which is not from rxdi infrastructure for now can be used useDynamic which will do the same job!');
                     }
                 }),
-                filter((res: { name: string; module: string; typings: string; dependencies: Array<any> }) => !!res.module),
-                map((m) => {
+                filter((res: ExternalModuleConfiguration) => !!res.module),
+                map((m: ExternalModuleConfiguration) => {
                     moduleName = m.name;
                     originalModuleConfig = m;
                     folder = `${process.cwd()}/${this.defaultOutputFolder}/`;
                     moduleLink = `${config.provider}${m.module}`;
                     moduleTypings = `${config.provider}${m.typings}`;
                     m.dependencies = m.dependencies || [];
+                    this.npmService.setPackages(m.packages);
                     this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
                     return m;
                 }),
                 switchMap((m) => this.combineDependencies(m.dependencies, config)),
+                tap(() => {
+                    this.npmService.installPackages();
+                }),
                 switchMap((res) => {
                     this.logger.logFileService(`--------------------${moduleName}--------------------`);
                     this.logger.logFileService(`\nDownloading... ${configLink} `);
@@ -217,7 +223,8 @@ export class ExternalImporter {
                         provider: config.provider,
                         hash: config.hash,
                         name: originalModuleConfig.name,
-                        dependencies: originalModuleConfig.dependencies
+                        dependencies: originalModuleConfig.dependencies,
+                        packages: originalModuleConfig.packages
                     };
                 })
             );
