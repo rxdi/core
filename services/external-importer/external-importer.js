@@ -188,16 +188,19 @@ let ExternalImporter = class ExternalImporter {
             }
         }), operators_1.filter((res) => !!res.module), operators_1.map((m) => {
             moduleName = m.name;
-            originalModuleConfig = m;
             folder = `${process.cwd()}/${this.defaultOutputFolder}/`;
             moduleLink = `${config.provider}${m.module}`;
             moduleTypings = `${config.provider}${m.typings}`;
             m.dependencies = m.dependencies || [];
+            m.packages = m.packages || [];
+            originalModuleConfig = m;
             this.npmService.setPackages(m.packages);
             this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
             return m;
         }), operators_1.switchMap((m) => this.combineDependencies(m.dependencies, config)), operators_1.tap(() => {
-            this.npmService.installPackages();
+            if (originalModuleConfig.packages.length) {
+                this.npmService.installPackages();
+            }
         }), operators_1.switchMap((res) => {
             this.logger.logFileService(`--------------------${moduleName}--------------------`);
             this.logger.logFileService(`\nDownloading... ${configLink} `);
