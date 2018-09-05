@@ -186,18 +186,18 @@ let ExternalImporter = class ExternalImporter {
             if (!res['module']) {
                 console.log('Todo: create logic to load module which is not from rxdi infrastructure for now can be used useDynamic which will do the same job!');
             }
-        }), operators_1.filter((res) => !!res.module), operators_1.map((m) => {
-            moduleName = m.name;
+        }), operators_1.filter((res) => !!res.module), operators_1.map((externalModule) => {
+            moduleName = externalModule.name;
             folder = `${process.cwd()}/${this.defaultOutputFolder}/`;
-            moduleLink = `${config.provider}${m.module}`;
-            moduleTypings = `${config.provider}${m.typings}`;
-            m.dependencies = m.dependencies || [];
-            m.packages = m.packages || [];
-            originalModuleConfig = m;
-            this.npmService.setPackages(m.packages);
-            this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(m)}`);
-            return m;
-        }), operators_1.switchMap((m) => this.combineDependencies(m.dependencies, config)), operators_1.tap(() => {
+            moduleLink = `${config.provider}${externalModule.module}`;
+            moduleTypings = `${config.provider}${externalModule.typings}`;
+            externalModule.dependencies = externalModule.dependencies || [];
+            externalModule.packages = externalModule.packages || [];
+            originalModuleConfig = externalModule;
+            this.npmService.setPackages(externalModule.packages);
+            this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(externalModule)}`);
+            return externalModule;
+        }), operators_1.switchMap((externalModule) => this.combineDependencies(externalModule.dependencies, config)), operators_1.tap(() => {
             if (originalModuleConfig.packages.length) {
                 this.npmService.installPackages();
             }
