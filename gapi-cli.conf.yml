@@ -27,7 +27,7 @@ commands:
   module:
     build:
       - ./node_modules/.bin/parcel build --target node src/index.ts
-      - ./node_modules/.bin/rxdi-merge --name @rxdi --project . --out dist/index.d.ts
+      - ./node_modules/.bin/rxdi-merge --name @rxdi/core --project . --out dist/index.d.ts
       - cp -r dist/* ./dmodule
       - gapi module clean
     clean:

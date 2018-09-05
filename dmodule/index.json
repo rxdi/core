@@ -1,7 +1,8 @@
 {
-    "name": "@rxdi",
-    "typings": "QmS76aezXcQshD5fszeSS21ayUooN4XQju7Gfm9FMQvAjm",
-    "module": "QmaruHXNjMM829TPPmBS6nQUpxNM9N2S923gZ1uZ5cwsrM",
+    "name": "@rxdi/core",
+    "version":"0.0.260",
+    "typings": "QmYVvA5bRnkW9gU7LT15WNJ1qLkfZ4coNRjxUsCXju1nH7",
+    "module": "QmS9ZxwS4wiLGaXbx27Xgu7kyYXv1SZnqykoU4v3WWXwc4",
     "packages": [
         {
             "name": "rxjs",

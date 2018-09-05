@@ -28,6 +28,12 @@ More examples for [@rxdi](https://www.npmjs.com/~rxdi) infrastructure you can ch
 
 > Example module `https://ipfs.io/ipfs/QmWtJLqyokMZE37DgncpY5HhFvtFQieBzMPDQ318aJeTw6`
 
+> `@rxdi/core` can be found also inside decentralized space [here](https://ipfs.io/ipfs/QmP9n7m1UWkFn2hqt7mnfQYnBtxmFyyvKZHN7hgngQb1gM)
+
+> `@rxdi/core` can be installed with '@rxdi/core' total inception :D `rxdi i QmP9n7m1UWkFn2hqt7mnfQYnBtxmFyyvKZHN7hgngQb1gM`
+
+> No more package downtime!
+
 ## Installation and basic examples:
 ##### To install this library, run:
 

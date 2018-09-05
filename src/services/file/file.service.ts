@@ -1,5 +1,5 @@
 import { Service } from '../../container';
-import { writeFileSync, existsSync, readdir, stat, writeFile } from 'fs';
+import { writeFileSync, existsSync, readdir, stat, writeFile, readFileSync, readFile } from 'fs';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { BootstrapLogger } from '../bootstrap-logger';
@@ -33,11 +33,19 @@ export class FileService {
             );
     }
 
+    writeFileSync(folder, file) {
+        return writeFileSync.bind(null)(folder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' }, );
+    }
+
+    readFile(file: string) {
+        return JSON.parse(readFileSync.bind(null)(file, { encoding: 'utf-8' }));
+    }
+
     isPresent(path: string) {
         return existsSync(path);
     }
 
-    private writeFileAsyncP(folder, fileName, content) {
+    writeFileAsyncP(folder, fileName, content) {
         return Observable.create(o => writeFile(`${folder}/${fileName}`, content, () => o.next(true)));
     }
 
@@ -81,7 +89,7 @@ export class FileService {
             if (!pending) {
                 return done(null, results);
             }
-            list.forEach( (file) => {
+            list.forEach((file) => {
                 file = resolve(dir, file);
                 stat(file, (err, stat) => {
                     if (stat && stat.isDirectory()) {

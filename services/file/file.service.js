@@ -31,6 +31,12 @@ let FileService = class FileService {
             return `${folder}/${fileName}`;
         }));
     }
+    writeFileSync(folder, file) {
+        return fs_1.writeFileSync.bind(null)(folder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
+    }
+    readFile(file) {
+        return JSON.parse(fs_1.readFileSync.bind(null)(file, { encoding: 'utf-8' }));
+    }
     isPresent(path) {
         return fs_1.existsSync(path);
     }

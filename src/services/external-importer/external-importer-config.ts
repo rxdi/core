@@ -28,8 +28,9 @@ export interface NpmPackageConfig {
 
 export interface ExternalModuleConfiguration {
     name: string;
-    module: string;
+    version: string;
     typings: string;
+    module: string;
     dependencies?: Array<any>;
     packages?: NpmPackageConfig[];
 }

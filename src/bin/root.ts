@@ -1,4 +1,4 @@
-// #!/usr/bin/env node
+#!/usr/bin/env node
 import { Container } from '../container/Container';
 import { ExternalImporter } from '../services/external-importer/external-importer';
 import { FileService } from '../services/file/file.service';

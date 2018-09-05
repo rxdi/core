@@ -27,7 +27,6 @@ const injector_decorator_1 = require("../../decorators/injector/injector.decorat
 const compression_service_1 = require("../compression/compression.service");
 const npm_service_1 = require("../npm-service/npm.service");
 const config_1 = require("../config");
-const fs_1 = require("fs");
 const SystemJS = require("systemjs");
 let ExternalImporter = class ExternalImporter {
     constructor() {
@@ -35,6 +34,7 @@ let ExternalImporter = class ExternalImporter {
         this.defaultNamespaceFolder = '@types';
         this.defaultOutputFolder = 'node_modules';
         this.defaultPackageJsonFolder = `${process.cwd()}/package.json`;
+        this.defaultTypescriptConfigJsonFolder = `${process.cwd()}/tsconfig.json`;
     }
     importExternalModule(module) {
         return rxjs_1.from(SystemJS.import(module));
@@ -70,10 +70,37 @@ let ExternalImporter = class ExternalImporter {
         catch (e) { }
         return value;
     }
+    loadTypescriptConfigJson() {
+        let tsConfig;
+        try {
+            tsConfig = this.fileService.readFile(this.defaultTypescriptConfigJsonFolder);
+        }
+        catch (e) {
+            tsConfig = {
+                compilerOptions: {
+                    typeRoots: []
+                }
+            };
+        }
+        return tsConfig;
+    }
+    addNamespaceToTypeRoots(namespace) {
+        const defaultNamespace = `./${this.defaultOutputFolder}/@types/${namespace}`;
+        const tsConfig = this.loadTypescriptConfigJson();
+        const foundNamespace = tsConfig.compilerOptions.typeRoots.filter((t) => t === defaultNamespace).length;
+        if (!foundNamespace) {
+            tsConfig.compilerOptions.typeRoots.push(defaultNamespace);
+            this.writeTypescriptConfigFile(tsConfig);
+        }
+        return rxjs_1.of(true);
+    }
+    writeTypescriptConfigFile(file) {
+        this.fileService.writeFileSync(process.cwd() + '/tsconfig.json', file);
+    }
     loadPackageJson() {
         let packageJson;
         try {
-            packageJson = JSON.parse(fs_1.readFileSync.bind(null)(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
+            packageJson = this.fileService.readFile(this.defaultPackageJsonFolder);
         }
         catch (e) {
             packageJson = {};
@@ -135,7 +162,7 @@ let ExternalImporter = class ExternalImporter {
             ipfsConfig[0].dependencies.push(hash);
             file.ipfs = ipfsConfig;
         }
-        fs_1.writeFileSync.bind(null)(this.defaultPackageJsonFolder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
+        this.fileService.writeFileSync(this.defaultPackageJsonFolder, file);
     }
     downloadIpfsModules(modules) {
         const latest = modules.map(m => this.downloadIpfsModule(m));
@@ -206,10 +233,13 @@ let ExternalImporter = class ExternalImporter {
             this.logger.logFileService(`\nDownloading... ${configLink} `);
             this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
             return this.requestService.get(moduleLink, config.hash);
-        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)), operators_1.map(() => {
+        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)), 
+        // switchMap(() => this.fileService.writeFileAsyncP(`${folder}${this.defaultNamespaceFolder}/${moduleName.split('/')[0]}`, 'index.d.ts', '')),
+        operators_1.switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])), operators_1.map(() => {
             return {
                 provider: config.provider,
                 hash: config.hash,
+                version: originalModuleConfig.version,
                 name: originalModuleConfig.name,
                 dependencies: originalModuleConfig.dependencies,
                 packages: originalModuleConfig.packages

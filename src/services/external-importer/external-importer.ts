@@ -27,6 +27,7 @@ export class ExternalImporter {
     defaultNamespaceFolder: string = '@types';
     defaultOutputFolder: string = 'node_modules';
     defaultPackageJsonFolder: string = `${process.cwd()}/package.json`;
+    defaultTypescriptConfigJsonFolder: string = `${process.cwd()}/tsconfig.json`;
 
     importExternalModule(module: string) {
         return from(SystemJS.import(module));
@@ -64,10 +65,39 @@ export class ExternalImporter {
         return value;
     }
 
+    loadTypescriptConfigJson() {
+        let tsConfig;
+        try {
+            tsConfig = this.fileService.readFile(this.defaultTypescriptConfigJsonFolder);
+        } catch (e) {
+            tsConfig = {
+                compilerOptions: {
+                    typeRoots: []
+                } 
+            };
+        }
+        return tsConfig;
+    }
+
+    addNamespaceToTypeRoots(namespace: string) {
+        const defaultNamespace = `./${this.defaultOutputFolder}/@types/${namespace}`;
+        const tsConfig: { compilerOptions: { typeRoots: string[] } } = this.loadTypescriptConfigJson();
+        const foundNamespace = tsConfig.compilerOptions.typeRoots.filter((t) => t === defaultNamespace).length;
+        if (!foundNamespace) {
+            tsConfig.compilerOptions.typeRoots.push(defaultNamespace);
+            this.writeTypescriptConfigFile(tsConfig);
+        }
+        return of(true);
+    }
+
+    writeTypescriptConfigFile(file) {
+        this.fileService.writeFileSync(process.cwd() + '/tsconfig.json', file);
+    }
+
     loadPackageJson() {
         let packageJson;
         try {
-            packageJson = JSON.parse(readFileSync.bind(null)(this.defaultPackageJsonFolder, { encoding: 'utf-8' }));
+            packageJson = this.fileService.readFile(this.defaultPackageJsonFolder);
         } catch (e) {
             packageJson = {};
         }
@@ -133,7 +163,7 @@ export class ExternalImporter {
             ipfsConfig[0].dependencies.push(hash);
             file.ipfs = ipfsConfig;
         }
-        writeFileSync.bind(null)(this.defaultPackageJsonFolder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
+        this.fileService.writeFileSync(this.defaultPackageJsonFolder, file);
     }
 
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]) {
@@ -164,7 +194,7 @@ export class ExternalImporter {
                     } catch (e) { }
                     return res;
                 }),
-        );
+            );
     }
 
     private combineDependencies(dependencies: any[], config: ExternalImporterIpfsConfig) {
@@ -221,10 +251,13 @@ export class ExternalImporter {
                 switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)),
                 switchMap(() => this.requestService.get(moduleTypings, config.hash)),
                 switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)),
+                // switchMap(() => this.fileService.writeFileAsyncP(`${folder}${this.defaultNamespaceFolder}/${moduleName.split('/')[0]}`, 'index.d.ts', '')),
+                switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])),
                 map(() => {
                     return {
                         provider: config.provider,
                         hash: config.hash,
+                        version: originalModuleConfig.version,
                         name: originalModuleConfig.name,
                         dependencies: originalModuleConfig.dependencies,
                         packages: originalModuleConfig.packages
@@ -246,7 +279,7 @@ export class ExternalImporter {
                     return res;
                 }),
                 switchMap((res) => this.fileService.writeFile(folder, fileName, config.typingsFileName, res))
-        );
+            );
     }
 
     importModule(config: ExternalImporterConfig, token: string): Promise<any> {

@@ -12,11 +12,15 @@ export declare class ExternalImporter {
     defaultNamespaceFolder: string;
     defaultOutputFolder: string;
     defaultPackageJsonFolder: string;
+    defaultTypescriptConfigJsonFolder: string;
     importExternalModule(module: string): Observable<any>;
     validateConfig(config: ExternalImporterConfig): void;
     encryptFile(fileFullPath: string): any;
     decryptFile(fileFullPath: string): any;
     isWeb(): boolean;
+    loadTypescriptConfigJson(): any;
+    addNamespaceToTypeRoots(namespace: string): Observable<boolean>;
+    writeTypescriptConfigFile(file: any): void;
     loadPackageJson(): any;
     isModulePresent(hash: any): number;
     filterUniquePackages(): number;

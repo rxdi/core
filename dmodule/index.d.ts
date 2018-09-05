@@ -1,4 +1,4 @@
-declare module '@rxdi/container/types/ObjectType' {
+declare module '@rxdi/core/container/types/ObjectType' {
 	/**
 	 * Special type allows to use Function and get known its type as T.
 	 */
@@ -7,7 +7,7 @@ declare module '@rxdi/container/types/ObjectType' {
 	};
 
 }
-declare module '@rxdi/container/Token' {
+declare module '@rxdi/core/container/Token' {
 	/**
 	 * Used to create unique typed service identifier.
 	 * Useful when service has only interface, but don't have a class.
@@ -23,9 +23,9 @@ declare module '@rxdi/container/Token' {
 	}
 
 }
-declare module '@rxdi/container/types/ServiceMetadata' {
-	import { ObjectType } from '@rxdi/container/types/ObjectType';
-	import { Token } from '@rxdi/container/Token';
+declare module '@rxdi/core/container/types/ServiceMetadata' {
+	import { ObjectType } from '@rxdi/core/container/types/ObjectType';
+	import { Token } from '@rxdi/core/container/Token';
 	/**
 	 * Service metadata is used to initialize service and store its state.
 	 */
@@ -66,8 +66,8 @@ declare module '@rxdi/container/types/ServiceMetadata' {
 	}
 
 }
-declare module '@rxdi/container/types/ServiceIdentifier' {
-	import { Token } from '@rxdi/container/Token';
+declare module '@rxdi/core/container/types/ServiceIdentifier' {
+	import { Token } from '@rxdi/core/container/Token';
 	/**
 	 * Unique service identifier.
 	 * Can be some class type, or string id, or instance of Token.
@@ -75,8 +75,8 @@ declare module '@rxdi/container/types/ServiceIdentifier' {
 	export type ServiceIdentifier = Function | Token<any> | string;
 
 }
-declare module '@rxdi/container/error/ServiceNotFoundError' {
-	import { ServiceIdentifier } from '@rxdi/container/types/ServiceIdentifier';
+declare module '@rxdi/core/container/error/ServiceNotFoundError' {
+	import { ServiceIdentifier } from '@rxdi/core/container/types/ServiceIdentifier';
 	/**
 	 * Thrown when requested service was not found.
 	 */
@@ -86,7 +86,7 @@ declare module '@rxdi/container/error/ServiceNotFoundError' {
 	}
 
 }
-declare module '@rxdi/container/error/MissingProvidedServiceTypeError' {
+declare module '@rxdi/core/container/error/MissingProvidedServiceTypeError' {
 	/**
 	 * Thrown when service is registered without type.
 	 */
@@ -96,7 +96,7 @@ declare module '@rxdi/container/error/MissingProvidedServiceTypeError' {
 	}
 
 }
-declare module '@rxdi/services/constructor-watcher/constructor-watcher' {
+declare module '@rxdi/core/services/constructor-watcher/constructor-watcher' {
 	export class ConstructorWatcherService {
 	    _constructors: Map<string, Function>;
 	    getConstructor(name: string): Function;
@@ -107,15 +107,15 @@ declare module '@rxdi/services/constructor-watcher/constructor-watcher' {
 	export const constructorWatcherService: ConstructorWatcherService;
 
 }
-declare module '@rxdi/services/constructor-watcher/index' {
-	export * from '@rxdi/services/constructor-watcher/constructor-watcher';
+declare module '@rxdi/core/services/constructor-watcher/index' {
+	export * from '@rxdi/core/services/constructor-watcher/constructor-watcher';
 
 }
-declare module '@rxdi/container/ContainerInstance' {
-	import { ServiceMetadata } from '@rxdi/container/types/ServiceMetadata';
-	import { ObjectType } from '@rxdi/container/types/ObjectType';
-	import { Token } from '@rxdi/container/Token';
-	import { ServiceIdentifier } from '@rxdi/container/types/ServiceIdentifier';
+declare module '@rxdi/core/container/ContainerInstance' {
+	import { ServiceMetadata } from '@rxdi/core/container/types/ServiceMetadata';
+	import { ObjectType } from '@rxdi/core/container/types/ObjectType';
+	import { Token } from '@rxdi/core/container/Token';
+	import { ServiceIdentifier } from '@rxdi/core/container/types/ServiceIdentifier';
 	/**
 	 * TypeDI can have multiple containers.
 	 * One container is ContainerInstance.
@@ -229,8 +229,8 @@ declare module '@rxdi/container/ContainerInstance' {
 	}
 
 }
-declare module '@rxdi/container/types/Handler' {
-	import { ContainerInstance } from '@rxdi/container/ContainerInstance';
+declare module '@rxdi/core/container/types/Handler' {
+	import { ContainerInstance } from '@rxdi/core/container/ContainerInstance';
 	/**
 	 * Used to register special 'handler' which will be executed on a service class during its initialization.
 	 * It can be used to create custom decorators and set/replace service class properties and constructor parameters.
@@ -258,13 +258,13 @@ declare module '@rxdi/container/types/Handler' {
 	}
 
 }
-declare module '@rxdi/container/Container' {
-	import { ServiceMetadata } from '@rxdi/container/types/ServiceMetadata';
-	import { ObjectType } from '@rxdi/container/types/ObjectType';
-	import { Handler } from '@rxdi/container/types/Handler';
-	import { Token } from '@rxdi/container/Token';
-	import { ServiceIdentifier } from '@rxdi/container/types/ServiceIdentifier';
-	import { ContainerInstance } from '@rxdi/container/ContainerInstance';
+declare module '@rxdi/core/container/Container' {
+	import { ServiceMetadata } from '@rxdi/core/container/types/ServiceMetadata';
+	import { ObjectType } from '@rxdi/core/container/types/ObjectType';
+	import { Handler } from '@rxdi/core/container/types/Handler';
+	import { Token } from '@rxdi/core/container/Token';
+	import { ServiceIdentifier } from '@rxdi/core/container/types/ServiceIdentifier';
+	import { ContainerInstance } from '@rxdi/core/container/ContainerInstance';
 	/**
 	 * Service container.
 	 */
@@ -364,9 +364,9 @@ declare module '@rxdi/container/Container' {
 	}
 
 }
-declare module '@rxdi/container/types/ServiceOptions' {
-	import { ObjectType } from '@rxdi/container/types/ObjectType';
-	import { Token } from '@rxdi/container/Token';
+declare module '@rxdi/core/container/types/ServiceOptions' {
+	import { ObjectType } from '@rxdi/core/container/types/ObjectType';
+	import { Token } from '@rxdi/core/container/Token';
 	/**
 	 * Service options passed to the @Service() decorator.
 	 * Allows to specify service id and/or factory used to create this service.
@@ -400,13 +400,13 @@ declare module '@rxdi/container/types/ServiceOptions' {
 	}
 
 }
-declare module '@rxdi/helpers/create-unique-hash' {
+declare module '@rxdi/core/helpers/create-unique-hash' {
 	export function createUniqueHash(key: any): string;
 
 }
-declare module '@rxdi/container/decorators/Service' {
-	import { ServiceOptions } from '@rxdi/container/types/ServiceOptions';
-	import { Token } from '@rxdi/container/Token';
+declare module '@rxdi/core/container/decorators/Service' {
+	import { ServiceOptions } from '@rxdi/core/container/types/ServiceOptions';
+	import { Token } from '@rxdi/core/container/Token';
 	export interface TypeProvide<T> extends Function {
 	    new (...args: any[]): T;
 	}
@@ -432,7 +432,7 @@ declare module '@rxdi/container/decorators/Service' {
 	export function Service<T, K extends keyof T>(options?: ServiceOptions<T, K>): Function;
 
 }
-declare module '@rxdi/services/external-importer/external-importer-systemjs' {
+declare module '@rxdi/core/services/external-importer/external-importer-systemjs' {
 	export type ModuleFormat = 'esm' | 'cjs' | 'amd' | 'global' | 'register';
 	export interface MetaConfig {
 	    /**
@@ -620,8 +620,8 @@ declare module '@rxdi/services/external-importer/external-importer-systemjs' {
 	}
 
 }
-declare module '@rxdi/services/external-importer/external-importer-config' {
-	import { Config } from '@rxdi/services/external-importer/external-importer-systemjs';
+declare module '@rxdi/core/services/external-importer/external-importer-config' {
+	import { Config } from '@rxdi/core/services/external-importer/external-importer-systemjs';
 	export class ExternalImporterConfig {
 	    link: string;
 	    fileName?: string;
@@ -654,10 +654,10 @@ declare module '@rxdi/services/external-importer/external-importer-config' {
 	}
 
 }
-declare module '@rxdi/decorators/module/module.interfaces' {
-	import { PluginInterface } from '@rxdi/container/decorators/Plugin';
-	import { ExternalImporterConfig } from '@rxdi/services/external-importer/external-importer-config';
-	import { InjectionToken } from '@rxdi/container/Token';
+declare module '@rxdi/core/decorators/module/module.interfaces' {
+	import { PluginInterface } from '@rxdi/core/container/decorators/Plugin';
+	import { ExternalImporterConfig } from '@rxdi/core/services/external-importer/external-importer-config';
+	import { InjectionToken } from '@rxdi/core/container/Token';
 	export interface ServiceArguments {
 	    name?: string;
 	    provide: string | InjectionToken<any> | Function;
@@ -711,9 +711,9 @@ declare module '@rxdi/decorators/module/module.interfaces' {
 	}
 
 }
-declare module '@rxdi/container/decorators/Plugin' {
-	import { ServiceOptions } from '@rxdi/container/types/ServiceOptions';
-	import { Token } from '@rxdi/container/Token';
+declare module '@rxdi/core/container/decorators/Plugin' {
+	import { ServiceOptions } from '@rxdi/core/container/types/ServiceOptions';
+	import { Token } from '@rxdi/core/container/Token';
 	export interface PluginInterface {
 	    name?: string;
 	    version?: string;
@@ -723,7 +723,7 @@ declare module '@rxdi/container/decorators/Plugin' {
 	export function Plugin<T, K extends keyof T>(optionsOrServiceName?: ServiceOptions<T, K> | Token<any> | string): Function;
 
 }
-declare module '@rxdi/container/error/CannotInjectError' {
+declare module '@rxdi/core/container/error/CannotInjectError' {
 	/**
 	 * Thrown when DI cannot inject value into property decorated by @Inject decorator.
 	 */
@@ -733,8 +733,8 @@ declare module '@rxdi/container/error/CannotInjectError' {
 	}
 
 }
-declare module '@rxdi/container/decorators/Inject' {
-	import { Token } from '@rxdi/container/Token';
+declare module '@rxdi/core/container/decorators/Inject' {
+	import { Token } from '@rxdi/core/container/Token';
 	/**
 	 * Injects a service into a class property or constructor parameter.
 	 */
@@ -749,8 +749,8 @@ declare module '@rxdi/container/decorators/Inject' {
 	export function Inject(token: Token<any>): Function;
 
 }
-declare module '@rxdi/container/decorators/InjectMany' {
-	import { Token } from '@rxdi/container/Token';
+declare module '@rxdi/core/container/decorators/InjectMany' {
+	import { Token } from '@rxdi/core/container/Token';
 	/**
 	 * Injects a service into a class property or constructor parameter.
 	 */
@@ -765,41 +765,41 @@ declare module '@rxdi/container/decorators/InjectMany' {
 	export function InjectMany(token: Token<any>): Function;
 
 }
-declare module '@rxdi/container/types/hooks/on-before' {
+declare module '@rxdi/core/container/types/hooks/on-before' {
 	export interface OnBefore {
 	    OnBefore(): void;
 	}
 
 }
-declare module '@rxdi/container/types/hooks/on-init' {
+declare module '@rxdi/core/container/types/hooks/on-init' {
 	export interface OnInit {
 	    OnInit(): void;
 	}
 
 }
-declare module '@rxdi/container/types/hooks/index' {
-	export * from '@rxdi/container/types/hooks/on-before';
-	export * from '@rxdi/container/types/hooks/on-init';
+declare module '@rxdi/core/container/types/hooks/index' {
+	export * from '@rxdi/core/container/types/hooks/on-before';
+	export * from '@rxdi/core/container/types/hooks/on-init';
 
 }
-declare module '@rxdi/container/index' {
-	export * from '@rxdi/container/decorators/Service';
-	export * from '@rxdi/container/decorators/Plugin';
-	export * from '@rxdi/container/decorators/Inject';
-	export * from '@rxdi/container/decorators/InjectMany';
-	export { Container } from '@rxdi/container/Container';
-	export { ContainerInstance } from '@rxdi/container/ContainerInstance';
-	export { Handler } from '@rxdi/container/types/Handler';
-	export { ServiceOptions } from '@rxdi/container/types/ServiceOptions';
-	export { ServiceIdentifier } from '@rxdi/container/types/ServiceIdentifier';
-	export { ServiceMetadata } from '@rxdi/container/types/ServiceMetadata';
-	export { ObjectType } from '@rxdi/container/types/ObjectType';
-	export { Token as InjectionToken } from '@rxdi/container/Token';
-	export * from '@rxdi/container/types/hooks/index';
+declare module '@rxdi/core/container/index' {
+	export * from '@rxdi/core/container/decorators/Service';
+	export * from '@rxdi/core/container/decorators/Plugin';
+	export * from '@rxdi/core/container/decorators/Inject';
+	export * from '@rxdi/core/container/decorators/InjectMany';
+	export { Container } from '@rxdi/core/container/Container';
+	export { ContainerInstance } from '@rxdi/core/container/ContainerInstance';
+	export { Handler } from '@rxdi/core/container/types/Handler';
+	export { ServiceOptions } from '@rxdi/core/container/types/ServiceOptions';
+	export { ServiceIdentifier } from '@rxdi/core/container/types/ServiceIdentifier';
+	export { ServiceMetadata } from '@rxdi/core/container/types/ServiceMetadata';
+	export { ObjectType } from '@rxdi/core/container/types/ObjectType';
+	export { Token as InjectionToken } from '@rxdi/core/container/Token';
+	export * from '@rxdi/core/container/types/hooks/index';
 
 }
-declare module '@rxdi/services/cache/cache-layer.interfaces' {
-	import { Metadata } from '@rxdi/decorators/module/module.interfaces';
+declare module '@rxdi/core/services/cache/cache-layer.interfaces' {
+	import { Metadata } from '@rxdi/core/decorators/module/module.interfaces';
 	export interface CacheLayerItem<T> {
 	    key: string;
 	    data: T;
@@ -822,8 +822,8 @@ declare module '@rxdi/services/cache/cache-layer.interfaces' {
 	}
 
 }
-declare module '@rxdi/services/cache/cache-layer' {
-	import { CacheLayerInterface, CacheServiceConfigInterface } from '@rxdi/services/cache/cache-layer.interfaces';
+declare module '@rxdi/core/services/cache/cache-layer' {
+	import { CacheLayerInterface, CacheServiceConfigInterface } from '@rxdi/core/services/cache/cache-layer.interfaces';
 	import { BehaviorSubject, Observable } from 'rxjs';
 	export class CacheLayer<T> {
 	    items: BehaviorSubject<Array<T>>;
@@ -844,7 +844,7 @@ declare module '@rxdi/services/cache/cache-layer' {
 	}
 
 }
-declare module '@rxdi/helpers/events' {
+declare module '@rxdi/core/helpers/events' {
 	export const InternalEvents: {
 	    load: "load";
 	    init: "init";
@@ -858,7 +858,7 @@ declare module '@rxdi/helpers/events' {
 	export type InternalLayers = keyof typeof InternalLayers;
 
 }
-declare module '@rxdi/services/config/config.model' {
+declare module '@rxdi/core/services/config/config.model' {
 	export class LoggerConfig {
 	    logging?: boolean;
 	    hashes?: boolean;
@@ -891,25 +891,25 @@ declare module '@rxdi/services/config/config.model' {
 	}
 
 }
-declare module '@rxdi/services/config/config.service' {
-	import { ConfigModel } from '@rxdi/services/config/config.model';
+declare module '@rxdi/core/services/config/config.service' {
+	import { ConfigModel } from '@rxdi/core/services/config/config.model';
 	export class ConfigService {
 	    config: ConfigModel;
 	    setConfig(config: ConfigModel): void;
 	}
 
 }
-declare module '@rxdi/services/config/index' {
-	export * from '@rxdi/services/config/config.model';
-	export * from '@rxdi/services/config/config.service';
+declare module '@rxdi/core/services/config/index' {
+	export * from '@rxdi/core/services/config/config.model';
+	export * from '@rxdi/core/services/config/config.service';
 
 }
-declare module '@rxdi/decorators/injector/injector.decorator' {
+declare module '@rxdi/core/decorators/injector/injector.decorator' {
 	export function Injector<T, K extends keyof T>(Service: T): Function;
 
 }
-declare module '@rxdi/services/bootstrap-logger/bootstrap-logger' {
-	import { ConfigService } from '@rxdi/services/config/index';
+declare module '@rxdi/core/services/bootstrap-logger/bootstrap-logger' {
+	import { ConfigService } from '@rxdi/core/services/config/index';
 	export class BootstrapLogger {
 	    configService: ConfigService;
 	    log(message: string): string[];
@@ -922,15 +922,15 @@ declare module '@rxdi/services/bootstrap-logger/bootstrap-logger' {
 	}
 
 }
-declare module '@rxdi/services/bootstrap-logger/index' {
-	export * from '@rxdi/services/bootstrap-logger/bootstrap-logger';
+declare module '@rxdi/core/services/bootstrap-logger/index' {
+	export * from '@rxdi/core/services/bootstrap-logger/bootstrap-logger';
 
 }
-declare module '@rxdi/services/cache/cache-layer.service' {
+declare module '@rxdi/core/services/cache/cache-layer.service' {
 	import { BehaviorSubject, Observable } from 'rxjs';
-	import { CacheLayer } from '@rxdi/services/cache/cache-layer';
-	import { CacheLayerItem, CacheLayerInterface, Duplicates } from '@rxdi/services/cache/cache-layer.interfaces';
-	import { BootstrapLogger } from '@rxdi/services/bootstrap-logger/index';
+	import { CacheLayer } from '@rxdi/core/services/cache/cache-layer';
+	import { CacheLayerItem, CacheLayerInterface, Duplicates } from '@rxdi/core/services/cache/cache-layer.interfaces';
+	import { BootstrapLogger } from '@rxdi/core/services/bootstrap-logger/index';
 	export class CacheService {
 	    private logger;
 	    constructor(logger: BootstrapLogger);
@@ -953,14 +953,14 @@ declare module '@rxdi/services/cache/cache-layer.service' {
 	}
 
 }
-declare module '@rxdi/services/cache/index' {
-	export * from '@rxdi/services/cache/cache-layer.service';
-	export * from '@rxdi/services/cache/cache-layer';
-	export * from '@rxdi/services/cache/cache-layer.interfaces';
+declare module '@rxdi/core/services/cache/index' {
+	export * from '@rxdi/core/services/cache/cache-layer.service';
+	export * from '@rxdi/core/services/cache/cache-layer';
+	export * from '@rxdi/core/services/cache/cache-layer.interfaces';
 
 }
-declare module '@rxdi/services/plugin/plugin.service' {
-	import { PluginInterface } from '@rxdi/container/index';
+declare module '@rxdi/core/services/plugin/plugin.service' {
+	import { PluginInterface } from '@rxdi/core/container/index';
 	export class PluginService {
 	    private plugins;
 	    private beforePlugins;
@@ -974,7 +974,7 @@ declare module '@rxdi/services/plugin/plugin.service' {
 	}
 
 }
-declare module '@rxdi/services/exit-handler/exit-handler.service' {
+declare module '@rxdi/core/services/exit-handler/exit-handler.service' {
 	import { Observable, Subject } from 'rxjs';
 	export type NodejsEvents = 'beforeExit' | 'disconnect' | 'exit' | 'rejectionHandled' | 'uncaughtException' | 'unhandledRejection' | 'warning' | 'message' | 'newListener' | 'removeListener';
 	export type Signals = 'SIGABRT' | 'SIGALRM' | 'SIGBUS' | 'SIGCHLD' | 'SIGCONT' | 'SIGFPE' | 'SIGHUP' | 'SIGILL' | 'SIGINT' | 'SIGIO' | 'SIGIOT' | 'SIGKILL' | 'SIGPIPE' | 'SIGPOLL' | 'SIGPROF' | 'SIGPWR' | 'SIGQUIT' | 'SIGSEGV' | 'SIGSTKFLT' | 'SIGSTOP' | 'SIGSYS' | 'SIGTERM' | 'SIGTRAP' | 'SIGTSTP' | 'SIGTTIN' | 'SIGTTOU' | 'SIGUNUSED' | 'SIGURG' | 'SIGUSR1' | 'SIGUSR2' | 'SIGVTALRM' | 'SIGWINCH' | 'SIGXCPU' | 'SIGXFSZ' | 'SIGBREAK' | 'SIGLOST' | 'SIGINFO';
@@ -987,12 +987,12 @@ declare module '@rxdi/services/exit-handler/exit-handler.service' {
 	}
 
 }
-declare module '@rxdi/services/exit-handler/index' {
-	export * from '@rxdi/services/exit-handler/exit-handler.service';
+declare module '@rxdi/core/services/exit-handler/index' {
+	export * from '@rxdi/core/services/exit-handler/exit-handler.service';
 
 }
-declare module '@rxdi/services/request/request.cache.service' {
-	import { CacheService, CacheLayer, CacheLayerItem } from '@rxdi/services/cache/index';
+declare module '@rxdi/core/services/request/request.cache.service' {
+	import { CacheService, CacheLayer, CacheLayerItem } from '@rxdi/core/services/cache/index';
 	export class RequestCacheService extends CacheService {
 	    cacheLayer: CacheLayer<CacheLayerItem<any>>;
 	    constructor();
@@ -1001,7 +1001,7 @@ declare module '@rxdi/services/request/request.cache.service' {
 	}
 
 }
-declare module '@rxdi/services/request/request.service' {
+declare module '@rxdi/core/services/request/request.service' {
 	import { Observable } from 'rxjs';
 	export class RequestService {
 	    private cache;
@@ -1010,36 +1010,38 @@ declare module '@rxdi/services/request/request.service' {
 	}
 
 }
-declare module '@rxdi/services/request/index' {
-	export * from '@rxdi/services/request/request.service';
-	export * from '@rxdi/services/request/request.cache.service';
+declare module '@rxdi/core/services/request/index' {
+	export * from '@rxdi/core/services/request/request.service';
+	export * from '@rxdi/core/services/request/request.cache.service';
 
 }
-declare module '@rxdi/services/file/dist' {
+declare module '@rxdi/core/services/file/dist' {
 	export function mkdirp(p?: any, opts?: any, f?: any, made?: any): void;
 	export function mkdirpSync(p?: any, opts?: any, made?: any): any;
 
 }
-declare module '@rxdi/services/file/file.service' {
+declare module '@rxdi/core/services/file/file.service' {
 	import { Observable } from 'rxjs';
 	export class FileService {
 	    private logger;
 	    writeFile(folder: string, fileName: any, moduleName: any, file: any): Observable<{}>;
 	    writeFileAsync(folder: string, fileName: any, moduleName: any, file: any): Observable<string>;
+	    writeFileSync(folder: any, file: any): any;
+	    readFile(file: string): any;
 	    isPresent(path: string): boolean;
-	    private writeFileAsyncP;
+	    writeFileAsyncP(folder: any, fileName: any, content: any): any;
 	    mkdirp(folder: any): Observable<boolean>;
 	    fileWalker(dir: any): Observable<string[]>;
 	    private filewalker;
 	}
 
 }
-declare module '@rxdi/services/file/index' {
-	export * from '@rxdi/services/file/file.service';
+declare module '@rxdi/core/services/file/index' {
+	export * from '@rxdi/core/services/file/file.service';
 
 }
-declare module '@rxdi/services/compression/compression.service' {
-	import { PrivateCryptoModel } from '@rxdi/services/config/index';
+declare module '@rxdi/core/services/compression/compression.service' {
+	import { PrivateCryptoModel } from '@rxdi/core/services/config/index';
 	export class CompressionService {
 	    private config;
 	    gZipFile(input: string, output: string, options?: PrivateCryptoModel): any;
@@ -1048,9 +1050,9 @@ declare module '@rxdi/services/compression/compression.service' {
 	}
 
 }
-declare module '@rxdi/services/npm-service/npm.service' {
+declare module '@rxdi/core/services/npm-service/npm.service' {
 	/// <reference types="node" />
-	import { NpmPackageConfig } from '@rxdi/services/external-importer/index';
+	import { NpmPackageConfig } from '@rxdi/core/services/external-importer/index';
 	import { BehaviorSubject } from 'rxjs';
 	import childProcess = require('child_process');
 	export class NpmService {
@@ -1063,8 +1065,8 @@ declare module '@rxdi/services/npm-service/npm.service' {
 	}
 
 }
-declare module '@rxdi/bin/root' {
-	import { ExternalImporterIpfsConfig } from '@rxdi/services/external-importer/external-importer-config';
+declare module '@rxdi/core/bin/root' {
+	import { ExternalImporterIpfsConfig } from '@rxdi/core/services/external-importer/external-importer-config';
 	import { Observable } from 'rxjs';
 	export interface PackagesConfig {
 	    dependencies: string[];
@@ -1077,10 +1079,10 @@ declare module '@rxdi/bin/root' {
 	export const DownloadDependencies: (dependencies: ExternalImporterIpfsConfig[]) => Observable<any>;
 
 }
-declare module '@rxdi/services/external-importer/external-importer' {
-	import { ExternalImporterConfig, ExternalImporterIpfsConfig } from '@rxdi/services/external-importer/external-importer-config';
+declare module '@rxdi/core/services/external-importer/external-importer' {
+	import { ExternalImporterConfig, ExternalImporterIpfsConfig } from '@rxdi/core/services/external-importer/external-importer-config';
 	import { Observable } from 'rxjs';
-	import { CompressionService } from '@rxdi/services/compression/compression.service';
+	import { CompressionService } from '@rxdi/core/services/compression/compression.service';
 	export class ExternalImporter {
 	    private requestService;
 	    private fileService;
@@ -1092,11 +1094,15 @@ declare module '@rxdi/services/external-importer/external-importer' {
 	    defaultNamespaceFolder: string;
 	    defaultOutputFolder: string;
 	    defaultPackageJsonFolder: string;
+	    defaultTypescriptConfigJsonFolder: string;
 	    importExternalModule(module: string): Observable<any>;
 	    validateConfig(config: ExternalImporterConfig): void;
 	    encryptFile(fileFullPath: string): any;
 	    decryptFile(fileFullPath: string): any;
 	    isWeb(): boolean;
+	    loadTypescriptConfigJson(): any;
+	    addNamespaceToTypeRoots(namespace: string): Observable<boolean>;
+	    writeTypescriptConfigFile(file: any): void;
 	    loadPackageJson(): any;
 	    isModulePresent(hash: any): number;
 	    filterUniquePackages(): number;
@@ -1114,12 +1120,12 @@ declare module '@rxdi/services/external-importer/external-importer' {
 	}
 
 }
-declare module '@rxdi/services/external-importer/index' {
-	export * from '@rxdi/services/external-importer/external-importer';
-	export * from '@rxdi/services/external-importer/external-importer-config';
+declare module '@rxdi/core/services/external-importer/index' {
+	export * from '@rxdi/core/services/external-importer/external-importer';
+	export * from '@rxdi/core/services/external-importer/external-importer-config';
 
 }
-declare module '@rxdi/services/lazy-factory/lazy-factory.service' {
+declare module '@rxdi/core/services/lazy-factory/lazy-factory.service' {
 	import { Observable } from 'rxjs';
 	export class LazyFactory {
 	    lazyFactories: Map<any, any>;
@@ -1128,8 +1134,8 @@ declare module '@rxdi/services/lazy-factory/lazy-factory.service' {
 	}
 
 }
-declare module '@rxdi/services/module/helpers/validators' {
-	import { Metadata, DecoratorType } from '@rxdi/decorators/module/module.interfaces';
+declare module '@rxdi/core/services/module/helpers/validators' {
+	import { Metadata, DecoratorType } from '@rxdi/core/decorators/module/module.interfaces';
 	export class ModuleValidators {
 	    validateEmpty(m: any, original: {
 	        metadata: Metadata;
@@ -1158,7 +1164,7 @@ declare module '@rxdi/services/module/helpers/validators' {
 	}
 
 }
-declare module '@rxdi/services/controllers/controllers.service' {
+declare module '@rxdi/core/services/controllers/controllers.service' {
 	export class ControllersService {
 	    private controllers;
 	    register(plugin: any): void;
@@ -1166,7 +1172,7 @@ declare module '@rxdi/services/controllers/controllers.service' {
 	}
 
 }
-declare module '@rxdi/services/effect/effect.service' {
+declare module '@rxdi/core/services/effect/effect.service' {
 	export class EffectsService {
 	    private effects;
 	    register(plugin: any): void;
@@ -1174,7 +1180,7 @@ declare module '@rxdi/services/effect/effect.service' {
 	}
 
 }
-declare module '@rxdi/services/components/components.service' {
+declare module '@rxdi/core/services/components/components.service' {
 	export class ComponentsService {
 	    private components;
 	    register(plugin: any): void;
@@ -1182,7 +1188,7 @@ declare module '@rxdi/services/components/components.service' {
 	}
 
 }
-declare module '@rxdi/services/bootstraps/bootstraps.service' {
+declare module '@rxdi/core/services/bootstraps/bootstraps.service' {
 	export class BootstrapsServices {
 	    private bootstraps;
 	    register(plugin: any): void;
@@ -1190,7 +1196,7 @@ declare module '@rxdi/services/bootstraps/bootstraps.service' {
 	}
 
 }
-declare module '@rxdi/services/services/services.service' {
+declare module '@rxdi/core/services/services/services.service' {
 	export class ServicesService {
 	    private services;
 	    register(plugin: any): void;
@@ -1198,9 +1204,9 @@ declare module '@rxdi/services/services/services.service' {
 	}
 
 }
-declare module '@rxdi/services/module/module.service' {
-	import { ServiceArgumentsInternal, Metadata } from '@rxdi/decorators/module/module.interfaces';
-	import { ConstructorWatcherService } from '@rxdi/services/constructor-watcher/constructor-watcher';
+declare module '@rxdi/core/services/module/module.service' {
+	import { ServiceArgumentsInternal, Metadata } from '@rxdi/core/decorators/module/module.interfaces';
+	import { ConstructorWatcherService } from '@rxdi/core/services/constructor-watcher/constructor-watcher';
 	export class ModuleService {
 	    watcherService: ConstructorWatcherService;
 	    private lazyFactoryService;
@@ -1241,12 +1247,12 @@ declare module '@rxdi/services/module/module.service' {
 	}
 
 }
-declare module '@rxdi/services/module/index' {
-	export * from '@rxdi/services/module/module.service';
-	export * from '@rxdi/services/module/helpers/validators';
+declare module '@rxdi/core/services/module/index' {
+	export * from '@rxdi/core/services/module/module.service';
+	export * from '@rxdi/core/services/module/helpers/validators';
 
 }
-declare module '@rxdi/services/resolver/resolver.service' {
+declare module '@rxdi/core/services/resolver/resolver.service' {
 	import { Observable } from 'rxjs';
 	export class ResolverService {
 	    private bootstrapLogger;
@@ -1256,13 +1262,13 @@ declare module '@rxdi/services/resolver/resolver.service' {
 	}
 
 }
-declare module '@rxdi/services/resolver/index' {
-	export * from '@rxdi/services/resolver/resolver.service';
+declare module '@rxdi/core/services/resolver/index' {
+	export * from '@rxdi/core/services/resolver/resolver.service';
 
 }
-declare module '@rxdi/services/plugin-manager/plugin-manager' {
-	import { PluginService } from '@rxdi/services/plugin/plugin.service';
-	import { PluginInterface } from '@rxdi/container/index';
+declare module '@rxdi/core/services/plugin-manager/plugin-manager' {
+	import { PluginService } from '@rxdi/core/services/plugin/plugin.service';
+	import { PluginInterface } from '@rxdi/core/container/index';
 	export class PluginManager {
 	    private pluginService;
 	    constructor(pluginService: PluginService);
@@ -1271,29 +1277,29 @@ declare module '@rxdi/services/plugin-manager/plugin-manager' {
 	}
 
 }
-declare module '@rxdi/services/after-starter/after-starter.service' {
+declare module '@rxdi/core/services/after-starter/after-starter.service' {
 	import { Subject } from 'rxjs';
 	export class AfterStarterService {
 	    appStarted: Subject<boolean>;
 	}
 
 }
-declare module '@rxdi/services/bootstrap/bootstrap.service' {
+declare module '@rxdi/core/services/bootstrap/bootstrap.service' {
 	import { Observable } from 'rxjs';
-	import { BootstrapLogger } from '@rxdi/services/bootstrap-logger/bootstrap-logger';
-	import { CacheService } from '@rxdi/services/cache/cache-layer.service';
-	import { LazyFactory } from '@rxdi/services/lazy-factory/lazy-factory.service';
-	import { ConfigService } from '@rxdi/services/config/config.service';
-	import { PluginService } from '@rxdi/services/plugin/plugin.service';
-	import { ConfigModel } from '@rxdi/services/config/config.model';
-	import { CacheLayer, CacheLayerItem } from '@rxdi/services/cache/index';
-	import { EffectsService } from '@rxdi/services/effect/effect.service';
-	import { ControllersService } from '@rxdi/services/controllers/controllers.service';
-	import { ComponentsService } from '@rxdi/services/components/components.service';
-	import { BootstrapsServices } from '@rxdi/services/bootstraps/bootstraps.service';
-	import { ServicesService } from '@rxdi/services/services/services.service';
-	import { PluginManager } from '@rxdi/services/plugin-manager/plugin-manager';
-	import { AfterStarterService } from '@rxdi/services/after-starter/after-starter.service';
+	import { BootstrapLogger } from '@rxdi/core/services/bootstrap-logger/bootstrap-logger';
+	import { CacheService } from '@rxdi/core/services/cache/cache-layer.service';
+	import { LazyFactory } from '@rxdi/core/services/lazy-factory/lazy-factory.service';
+	import { ConfigService } from '@rxdi/core/services/config/config.service';
+	import { PluginService } from '@rxdi/core/services/plugin/plugin.service';
+	import { ConfigModel } from '@rxdi/core/services/config/config.model';
+	import { CacheLayer, CacheLayerItem } from '@rxdi/core/services/cache/index';
+	import { EffectsService } from '@rxdi/core/services/effect/effect.service';
+	import { ControllersService } from '@rxdi/core/services/controllers/controllers.service';
+	import { ComponentsService } from '@rxdi/core/services/components/components.service';
+	import { BootstrapsServices } from '@rxdi/core/services/bootstraps/bootstraps.service';
+	import { ServicesService } from '@rxdi/core/services/services/services.service';
+	import { PluginManager } from '@rxdi/core/services/plugin-manager/plugin-manager';
+	import { AfterStarterService } from '@rxdi/core/services/after-starter/after-starter.service';
 	export class BootstrapService {
 	    private logger;
 	    private cacheService;
@@ -1330,26 +1336,26 @@ declare module '@rxdi/services/bootstrap/bootstrap.service' {
 	}
 
 }
-declare module '@rxdi/helpers/exit-handler' {
+declare module '@rxdi/core/helpers/exit-handler' {
 	export const exitHandlerInit: () => void;
 
 }
-declare module '@rxdi/helpers/bootstrap' {
+declare module '@rxdi/core/helpers/bootstrap' {
 	import 'reflect-metadata';
-	import { ConfigModel } from '@rxdi/services/config/config.model';
+	import { ConfigModel } from '@rxdi/core/services/config/config.model';
 	import { Observable } from 'rxjs';
 	export const Bootstrap: (app: any, config?: ConfigModel) => Observable<any>;
 	export const BootstrapPromisify: (app: any, config?: ConfigModel) => Promise<any>;
 	export const BootstrapFramework: (app: any, modules: any[], config?: ConfigModel) => Observable<any>;
 
 }
-declare module '@rxdi/helpers/index' {
-	export * from '@rxdi/helpers/bootstrap';
-	export * from '@rxdi/helpers/create-unique-hash';
-	export * from '@rxdi/helpers/generic-constructor';
+declare module '@rxdi/core/helpers/index' {
+	export * from '@rxdi/core/helpers/bootstrap';
+	export * from '@rxdi/core/helpers/create-unique-hash';
+	export * from '@rxdi/core/helpers/generic-constructor';
 
 }
-declare module '@rxdi/services/metadata/metadata.service' {
+declare module '@rxdi/core/services/metadata/metadata.service' {
 	export class MetadataService {
 	    generateHashData(module: any, original: Function): any[][];
 	    validateCustomInjectableKeys(keys: Array<'useFactory' | 'provide' | 'useValue' | 'useClass' | 'useDynamic' | string>): void;
@@ -1359,131 +1365,124 @@ declare module '@rxdi/services/metadata/metadata.service' {
 	}
 
 }
-declare module '@rxdi/services/metadata/index' {
-	export * from '@rxdi/services/metadata/metadata.service';
+declare module '@rxdi/core/services/metadata/index' {
+	export * from '@rxdi/core/services/metadata/metadata.service';
 
 }
-declare module '@rxdi/services/compression/index' {
-	export * from '@rxdi/services/compression/compression.service';
+declare module '@rxdi/core/services/compression/index' {
+	export * from '@rxdi/core/services/compression/compression.service';
 
 }
-declare module '@rxdi/services/effect/index' {
-	export * from '@rxdi/services/effect/effect.service';
+declare module '@rxdi/core/services/effect/index' {
+	export * from '@rxdi/core/services/effect/effect.service';
 
 }
-declare module '@rxdi/services/controllers/index' {
-	export * from '@rxdi/services/controllers/controllers.service';
+declare module '@rxdi/core/services/controllers/index' {
+	export * from '@rxdi/core/services/controllers/controllers.service';
 
 }
-declare module '@rxdi/services/components/index' {
-	export * from '@rxdi/services/components/components.service';
+declare module '@rxdi/core/services/components/index' {
+	export * from '@rxdi/core/services/components/components.service';
 
 }
-declare module '@rxdi/services/bootstraps/index' {
-	export * from '@rxdi/services/bootstraps/bootstraps.service';
+declare module '@rxdi/core/services/bootstraps/index' {
+	export * from '@rxdi/core/services/bootstraps/bootstraps.service';
 
 }
-declare module '@rxdi/services/services/index' {
-	export * from '@rxdi/services/services/services.service';
+declare module '@rxdi/core/services/services/index' {
+	export * from '@rxdi/core/services/services/services.service';
 
 }
-declare module '@rxdi/services/index' {
-	export * from '@rxdi/services/cache/index';
-	export * from '@rxdi/services/plugin/plugin.service';
-	export * from '@rxdi/services/bootstrap-logger/index';
-	export * from '@rxdi/services/exit-handler/index';
-	export * from '@rxdi/services/external-importer/index';
-	export * from '@rxdi/services/module/index';
-	export * from '@rxdi/services/resolver/index';
-	export * from '@rxdi/services/config/index';
-	export * from '@rxdi/services/metadata/index';
-	export * from '@rxdi/services/compression/index';
-	export * from '@rxdi/services/file/index';
-	export * from '@rxdi/services/constructor-watcher/index';
-	export * from '@rxdi/services/effect/index';
-	export * from '@rxdi/services/controllers/index';
-	export * from '@rxdi/services/components/index';
-	export * from '@rxdi/services/bootstraps/index';
-	export * from '@rxdi/services/services/index';
-	export * from '@rxdi/services/plugin-manager/plugin-manager';
-	export * from '@rxdi/services/after-starter/after-starter.service';
+declare module '@rxdi/core/services/index' {
+	export * from '@rxdi/core/services/cache/index';
+	export * from '@rxdi/core/services/plugin/plugin.service';
+	export * from '@rxdi/core/services/bootstrap-logger/index';
+	export * from '@rxdi/core/services/exit-handler/index';
+	export * from '@rxdi/core/services/external-importer/index';
+	export * from '@rxdi/core/services/module/index';
+	export * from '@rxdi/core/services/resolver/index';
+	export * from '@rxdi/core/services/config/index';
+	export * from '@rxdi/core/services/metadata/index';
+	export * from '@rxdi/core/services/compression/index';
+	export * from '@rxdi/core/services/file/index';
+	export * from '@rxdi/core/services/constructor-watcher/index';
+	export * from '@rxdi/core/services/effect/index';
+	export * from '@rxdi/core/services/controllers/index';
+	export * from '@rxdi/core/services/components/index';
+	export * from '@rxdi/core/services/bootstraps/index';
+	export * from '@rxdi/core/services/services/index';
+	export * from '@rxdi/core/services/plugin-manager/plugin-manager';
+	export * from '@rxdi/core/services/after-starter/after-starter.service';
 
 }
-declare module '@rxdi/helpers/generic-constructor' {
+declare module '@rxdi/core/helpers/generic-constructor' {
 	export function GenericConstruct(module: any, original: any, currentModule: any): (constructor: any, args: any) => any;
 
 }
-declare module '@rxdi/decorators/module/module.decorator' {
-	import { ModuleArguments } from '@rxdi/decorators/module/module.interfaces';
+declare module '@rxdi/core/decorators/module/module.decorator' {
+	import { ModuleArguments } from '@rxdi/core/decorators/module/module.interfaces';
 	export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Function;
 
 }
-declare module '@rxdi/decorators/module/index' {
-	export * from '@rxdi/decorators/module/module.decorator';
-	export * from '@rxdi/decorators/module/module.interfaces';
+declare module '@rxdi/core/decorators/module/index' {
+	export * from '@rxdi/core/decorators/module/module.decorator';
+	export * from '@rxdi/core/decorators/module/module.interfaces';
 
 }
-declare module '@rxdi/decorators/injector/index' {
-	export * from '@rxdi/decorators/injector/injector.decorator';
+declare module '@rxdi/core/decorators/injector/index' {
+	export * from '@rxdi/core/decorators/injector/injector.decorator';
 
 }
-declare module '@rxdi/decorators/inject-soft/inject-soft.decorator' {
+declare module '@rxdi/core/decorators/inject-soft/inject-soft.decorator' {
 	export function InjectSoft<T>(Service: Function): T;
 
 }
-declare module '@rxdi/decorators/inject-soft/index' {
-	export * from '@rxdi/decorators/inject-soft/inject-soft.decorator';
+declare module '@rxdi/core/decorators/inject-soft/index' {
+	export * from '@rxdi/core/decorators/inject-soft/inject-soft.decorator';
 
 }
-declare module '@rxdi/decorators/controller/controller.decorator' {
+declare module '@rxdi/core/decorators/controller/controller.decorator' {
 	export function Controller<T>(options?: T | {
 	    init?: boolean;
 	}): Function;
 
 }
-declare module '@rxdi/decorators/controller/index' {
-	export * from '@rxdi/decorators/controller/controller.decorator';
+declare module '@rxdi/core/decorators/controller/index' {
+	export * from '@rxdi/core/decorators/controller/controller.decorator';
 
 }
-declare module '@rxdi/decorators/effect/effect.decorator' {
+declare module '@rxdi/core/decorators/effect/effect.decorator' {
 	export function Effect<T, K extends keyof T>(options?: {
 	    init?: boolean;
 	}): Function;
 
 }
-declare module '@rxdi/decorators/effect/index' {
-	export * from '@rxdi/decorators/effect/effect.decorator';
+declare module '@rxdi/core/decorators/effect/index' {
+	export * from '@rxdi/core/decorators/effect/effect.decorator';
 
 }
-declare module '@rxdi/decorators/component/component.decorator' {
+declare module '@rxdi/core/decorators/component/component.decorator' {
 	export function Component<T, K extends keyof T>(options?: {
 	    init?: boolean;
 	}): Function;
 
 }
-declare module '@rxdi/decorators/component/index' {
-	export * from '@rxdi/decorators/component/component.decorator';
+declare module '@rxdi/core/decorators/component/index' {
+	export * from '@rxdi/core/decorators/component/component.decorator';
 
 }
-declare module '@rxdi/decorators/index' {
-	export * from '@rxdi/decorators/module/index';
-	export * from '@rxdi/decorators/injector/index';
-	export * from '@rxdi/decorators/inject-soft/index';
-	export * from '@rxdi/decorators/controller/index';
-	export * from '@rxdi/decorators/effect/index';
-	export * from '@rxdi/decorators/component/index';
+declare module '@rxdi/core/decorators/index' {
+	export * from '@rxdi/core/decorators/module/index';
+	export * from '@rxdi/core/decorators/injector/index';
+	export * from '@rxdi/core/decorators/inject-soft/index';
+	export * from '@rxdi/core/decorators/controller/index';
+	export * from '@rxdi/core/decorators/effect/index';
+	export * from '@rxdi/core/decorators/component/index';
 
 }
-declare module '@rxdi' {
-	export * from '@rxdi/container/index';
-	export * from '@rxdi/decorators/index';
-	export * from '@rxdi/helpers/index';
-	export * from '@rxdi/services/index';
-}
-
 declare module '@rxdi/core' {
-	export * from '@rxdi/container/index';
-	export * from '@rxdi/decorators/index';
-	export * from '@rxdi/helpers/index';
-	export * from '@rxdi/services/index';
+	export * from '@rxdi/core/container/index';
+	export * from '@rxdi/core/decorators/index';
+	export * from '@rxdi/core/helpers/index';
+	export * from '@rxdi/core/services/index';
 }
