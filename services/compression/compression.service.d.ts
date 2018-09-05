@@ -1,4 +1,4 @@
-import { PrivateCryptoModel } from '../config';
+import { PrivateCryptoModel } from '../config/index';
 export declare class CompressionService {
     private config;
     gZipFile(input: string, output: string, options?: PrivateCryptoModel): any;

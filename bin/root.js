@@ -1,6 +1,6 @@
-#!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// #!/usr/bin/env node
 const Container_1 = require("../container/Container");
 const external_importer_1 = require("../services/external-importer/external-importer");
 const file_service_1 = require("../services/file/file.service");

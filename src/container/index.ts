@@ -1,5 +1,3 @@
-import { Container } from './Container';
-
 export * from './decorators/Service';
 export * from './decorators/Plugin';
 export * from './decorators/Inject';
@@ -12,4 +10,4 @@ export { ServiceIdentifier } from './types/ServiceIdentifier';
 export { ServiceMetadata } from './types/ServiceMetadata';
 export { ObjectType } from './types/ObjectType';
 export { Token as InjectionToken } from './Token';
-export * from './types/hooks';
+export * from './types/hooks/index';

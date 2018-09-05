@@ -1,0 +1,19 @@
+{
+    "name": "@rxdi",
+    "typings": "QmS76aezXcQshD5fszeSS21ayUooN4XQju7Gfm9FMQvAjm",
+    "module": "QmaruHXNjMM829TPPmBS6nQUpxNM9N2S923gZ1uZ5cwsrM",
+    "packages": [
+        {
+            "name": "rxjs",
+            "version": "6.3.1"
+        },
+        {
+            "name": "systemjs",
+            "version": "0.21.4"
+        },
+        {
+            "name": "reflect-metadata",
+            "version": "0.1.12"
+        }
+    ]
+}

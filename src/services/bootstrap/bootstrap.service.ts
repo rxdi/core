@@ -9,7 +9,7 @@ import { ConfigService } from '../config/config.service';
 import { PluginService } from '../plugin/plugin.service';
 import { ConfigModel } from '../config/config.model';
 import { take, map, switchMap } from 'rxjs/operators';
-import { CacheLayer, CacheLayerItem } from '../cache';
+import { CacheLayer, CacheLayerItem } from '../cache/index';
 import { EffectsService } from '../effect/effect.service';
 import { ControllersService } from '../controllers/controllers.service';
 import { ComponentsService } from '../components/components.service';

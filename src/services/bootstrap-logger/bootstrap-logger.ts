@@ -1,5 +1,5 @@
 import { Service } from '../../container';
-import { ConfigService } from '../config';
+import { ConfigService } from '../config/index';
 import { Injector } from '../../decorators/injector/injector.decorator';
 
 @Service()

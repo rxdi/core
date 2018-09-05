@@ -5,7 +5,7 @@ import { CacheLayerItem, CacheLayerInterface, Duplicates } from './cache-layer.i
 import { InternalEvents, InternalLayers } from '../../helpers/events';
 import { Service } from '../../container';
 import { Metadata } from '../../decorators/module/module.interfaces';
-import { BootstrapLogger } from '../bootstrap-logger';
+import { BootstrapLogger } from '../bootstrap-logger/index';
 
 const FRIENDLY_ERROR_MESSAGES = {
   TRY_TO_UNSUBSCRIBE: 'Someone try to unsubscribe from collection directly... agghhh.. read docs! Blame: '

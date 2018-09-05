@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const plugin_service_1 = require("../plugin/plugin.service");
-const container_1 = require("../../container");
+const index_1 = require("../../container/index");
 let PluginManager = class PluginManager {
     constructor(pluginService) {
         this.pluginService = pluginService;
@@ -23,7 +23,7 @@ let PluginManager = class PluginManager {
     }
 };
 PluginManager = __decorate([
-    container_1.Service(),
+    index_1.Service(),
     __metadata("design:paramtypes", [plugin_service_1.PluginService])
 ], PluginManager);
 exports.PluginManager = PluginManager;

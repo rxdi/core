@@ -1,5 +1,5 @@
 import { PluginService } from '../plugin/plugin.service';
-import { Service, PluginInterface } from '../../container';
+import { Service, PluginInterface } from '../../container/index';
 
 @Service()
 export class PluginManager {

@@ -15,7 +15,7 @@ const operators_1 = require("rxjs/operators");
 const cache_layer_1 = require("./cache-layer");
 const events_1 = require("../../helpers/events");
 const container_1 = require("../../container");
-const bootstrap_logger_1 = require("../bootstrap-logger");
+const index_1 = require("../bootstrap-logger/index");
 const FRIENDLY_ERROR_MESSAGES = {
     TRY_TO_UNSUBSCRIBE: 'Someone try to unsubscribe from collection directly... agghhh.. read docs! Blame: '
 };
@@ -202,6 +202,6 @@ let CacheService = CacheService_1 = class CacheService {
 };
 CacheService = CacheService_1 = __decorate([
     container_1.Service(),
-    __metadata("design:paramtypes", [bootstrap_logger_1.BootstrapLogger])
+    __metadata("design:paramtypes", [index_1.BootstrapLogger])
 ], CacheService);
 exports.CacheService = CacheService;

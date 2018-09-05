@@ -31,12 +31,14 @@
     "systemjs": "^0.21.4"
   },
   "devDependencies": {
+    "@rxdi/dts-merge": "0.0.260",
     "@types/jest": "^23.3.1",
     "@types/node": "^10.5.5",
     "@types/systemjs": "^0.20.6",
     "jest": "^23.4.2",
     "jest-cli": "^23.4.2",
     "ts-jest": "^23.0.1",
+    "parcel-bundler": "^1.9.7",
     "tslint": "^5.11.0",
     "tslint-language-service": "^0.9.9",
     "typescript": "^3.0.1"

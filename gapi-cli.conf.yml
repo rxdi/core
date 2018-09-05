@@ -23,3 +23,19 @@ commands:
     clean:
       - rm -rf dist
       - rm -rf .cache
+
+  module:
+    build:
+      - ./node_modules/.bin/parcel build --target node src/index.ts
+      - ./node_modules/.bin/rxdi-merge --name @rxdi --project . --out dist/index.d.ts
+      - cp -r dist/* ./dmodule
+      - gapi module clean
+    clean:
+      - rm -rf dist
+      - rm -rf .cache
+      - rm -rf ./dmodule/index.map
+    deploy:
+      - jsipfs add ./dmodule/index.js
+      - jsipfs add ./dmodule/index.d.ts
+    deploy-config:
+      - jsipfs add ./dmodule/index.json

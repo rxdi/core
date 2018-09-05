@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const container_1 = require("../../container");
-const config_1 = require("../config");
+const index_1 = require("../config/index");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 let BootstrapLogger = class BootstrapLogger {
     log(message) {
@@ -60,8 +60,8 @@ let BootstrapLogger = class BootstrapLogger {
     }
 };
 __decorate([
-    injector_decorator_1.Injector(config_1.ConfigService),
-    __metadata("design:type", config_1.ConfigService)
+    injector_decorator_1.Injector(index_1.ConfigService),
+    __metadata("design:type", index_1.ConfigService)
 ], BootstrapLogger.prototype, "configService", void 0);
 BootstrapLogger = __decorate([
     container_1.Service()

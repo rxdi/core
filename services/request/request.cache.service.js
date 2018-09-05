@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const cache_1 = require("../cache");
+const index_1 = require("../cache/index");
 const container_1 = require("../../container");
 const bootstrap_logger_1 = require("../bootstrap-logger");
-let RequestCacheService = class RequestCacheService extends cache_1.CacheService {
+let RequestCacheService = class RequestCacheService extends index_1.CacheService {
     constructor() {
         super(container_1.Container.get(bootstrap_logger_1.BootstrapLogger));
         this.cacheLayer = this.createLayer({ name: 'request-cache-layer' });

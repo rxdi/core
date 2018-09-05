@@ -1,4 +1,4 @@
-import { PluginInterface } from '../../container';
+import { PluginInterface } from '../../container/index';
 export declare class PluginService {
     private plugins;
     private beforePlugins;

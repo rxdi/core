@@ -1,4 +1,4 @@
-import { CacheService, CacheLayer, CacheLayerItem } from '../cache';
+import { CacheService, CacheLayer, CacheLayerItem } from '../cache/index';
 import { Service, Container } from '../../container';
 import { BootstrapLogger } from '../bootstrap-logger';
 

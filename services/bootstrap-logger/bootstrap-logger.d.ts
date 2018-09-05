@@ -1,4 +1,4 @@
-import { ConfigService } from '../config';
+import { ConfigService } from '../config/index';
 export declare class BootstrapLogger {
     configService: ConfigService;
     log(message: string): string[];

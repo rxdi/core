@@ -14,7 +14,7 @@ const zlib_1 = require("zlib");
 const rxjs_1 = require("rxjs");
 const container_1 = require("../../container");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
-const config_1 = require("../config");
+const index_1 = require("../config/index");
 let CompressionService = class CompressionService {
     gZipFile(input, output, options = { cyperIv: '', algorithm: '', cyperKey: '' }) {
         const config = this.config.config.experimental.crypto || options;
@@ -58,8 +58,8 @@ let CompressionService = class CompressionService {
     }
 };
 __decorate([
-    injector_decorator_1.Injector(config_1.ConfigService),
-    __metadata("design:type", config_1.ConfigService)
+    injector_decorator_1.Injector(index_1.ConfigService),
+    __metadata("design:type", index_1.ConfigService)
 ], CompressionService.prototype, "config", void 0);
 CompressionService = __decorate([
     container_1.Service()

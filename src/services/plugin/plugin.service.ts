@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 // import { PluginBase, PluginNameVersion, PluginPackage } from 'hapi';
-import { Service, PluginInterface } from '../../container';
+import { Service, PluginInterface } from '../../container/index';
 
 @Service()
 export class PluginService {

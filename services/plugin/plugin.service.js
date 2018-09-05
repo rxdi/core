@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const rxjs_1 = require("rxjs");
 // import { PluginBase, PluginNameVersion, PluginPackage } from 'hapi';
-const container_1 = require("../../container");
+const index_1 = require("../../container/index");
 let PluginService = class PluginService {
     constructor() {
         this.plugins = new rxjs_1.BehaviorSubject([]);
@@ -35,6 +35,6 @@ let PluginService = class PluginService {
     }
 };
 PluginService = __decorate([
-    container_1.Service()
+    index_1.Service()
 ], PluginService);
 exports.PluginService = PluginService;

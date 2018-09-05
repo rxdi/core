@@ -5,7 +5,7 @@ import { LazyFactory } from '../lazy-factory/lazy-factory.service';
 import { ConfigService } from '../config/config.service';
 import { PluginService } from '../plugin/plugin.service';
 import { ConfigModel } from '../config/config.model';
-import { CacheLayer, CacheLayerItem } from '../cache';
+import { CacheLayer, CacheLayerItem } from '../cache/index';
 import { EffectsService } from '../effect/effect.service';
 import { ControllersService } from '../controllers/controllers.service';
 import { ComponentsService } from '../components/components.service';

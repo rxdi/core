@@ -5,7 +5,7 @@ import { createDecipheriv, createCipheriv } from 'crypto';
 import { Observable } from 'rxjs';
 import { Service } from '../../container';
 import { Injector } from '../../decorators/injector/injector.decorator';
-import { ConfigService, PrivateCryptoModel } from '../config';
+import { ConfigService, PrivateCryptoModel } from '../config/index';
 
 @Service()
 export class CompressionService {
