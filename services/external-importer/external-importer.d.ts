@@ -15,8 +15,6 @@ export declare class ExternalImporter {
     defaultTypescriptConfigJsonFolder: string;
     importExternalModule(module: string): Observable<any>;
     validateConfig(config: ExternalImporterConfig): void;
-    encryptFile(fileFullPath: string): any;
-    decryptFile(fileFullPath: string): any;
     isWeb(): boolean;
     loadTypescriptConfigJson(): any;
     addNamespaceToTypeRoots(namespace: string): Observable<boolean>;

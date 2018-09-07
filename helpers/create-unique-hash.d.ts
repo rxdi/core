@@ -1,1 +1,1 @@
-export declare function createUniqueHash(key: any): string;
+export declare function createUniqueHash(key: any): any;

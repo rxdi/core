@@ -3,5 +3,5 @@ export declare class MetadataService {
     validateCustomInjectableKeys(keys: Array<'useFactory' | 'provide' | 'useValue' | 'useClass' | 'useDynamic' | string>): void;
     validateCustomInjectable(injectable: any, module: any, original: any): void;
     parseModuleTemplate(moduleName: any, generatedHashData: any, targetCurrentSymbol: any): string;
-    createUniqueHash(string: string): string;
+    createUniqueHash(string: string): any;
 }

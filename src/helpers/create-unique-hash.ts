@@ -1,5 +1,5 @@
-import { createHash } from 'crypto';
-
+import { sha256 } from './sha256';
 export function createUniqueHash(key) {
-    return createHash('md5').update(key).digest('hex');
+    return sha256.hash(key);
 }
+

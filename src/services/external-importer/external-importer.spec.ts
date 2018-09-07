@@ -16,7 +16,6 @@ describe('Service: ExternalImporter', () => {
         }, 'createUniqueHash');
         module.pipe(
             tap((res: { testKey: () => string; }) => {
-                console.log(res);
                 expect(res.testKey.constructor).toBe(Function);
                 expect(res.testKey()).toBe('TestKey');
             }),

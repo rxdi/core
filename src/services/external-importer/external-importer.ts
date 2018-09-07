@@ -9,7 +9,6 @@ import { Injector } from '../../decorators/injector/injector.decorator';
 import { CompressionService } from '../compression/compression.service';
 import { NpmService } from '../npm-service/npm.service';
 import { ConfigService } from '../config';
-import { readFileSync, writeFileSync } from 'fs';
 import { PackagesConfig } from '../../bin/root';
 import SystemJS = require('systemjs');
 
@@ -39,21 +38,21 @@ export class ExternalImporter {
         }
     }
 
-    encryptFile(fileFullPath: string) {
-        if (this.configService.config.experimental.crypto) {
-            return this.compressionService.readGzipFile(fileFullPath, 'dada');
-        } else {
-            return of(null);
-        }
-    }
+    // encryptFile(fileFullPath: string) {
+    //     if (this.configService.config.experimental.crypto) {
+    //         return this.compressionService.readGzipFile(fileFullPath, 'dada');
+    //     } else {
+    //         return of(null);
+    //     }
+    // }
 
-    decryptFile(fileFullPath: string) {
-        if (this.configService.config.experimental.crypto) {
-            return this.compressionService.gZipFile(fileFullPath, 'dada');
-        } else {
-            return of(null);
-        }
-    }
+    // decryptFile(fileFullPath: string) {
+    //     if (this.configService.config.experimental.crypto) {
+    //         return this.compressionService.gZipFile(fileFullPath, 'dada');
+    //     } else {
+    //         return of(null);
+    //     }
+    // }
 
     isWeb() {
         let value = false;

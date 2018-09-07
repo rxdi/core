@@ -9,35 +9,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = require("fs");
-const zlib_1 = require("zlib");
-const rxjs_1 = require("rxjs");
+// import { createReadStream, createWriteStream } from 'fs';
+// import { createGzip, createGunzip } from 'zlib';
+// import { Observable } from 'rxjs';
 const container_1 = require("../../container");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const index_1 = require("../config/index");
 let CompressionService = class CompressionService {
-    gZipFile(input, output, options = { cyperIv: '', algorithm: '', cyperKey: '' }) {
-        const config = this.config.config.experimental.crypto || options;
-        return rxjs_1.Observable.create(observer => {
-            fs_1.createReadStream(input)
-                .pipe(zlib_1.createGzip())
-                // .pipe(createCipheriv(config.algorithm, config.cyperKey, config.cyperIv))
-                .pipe(fs_1.createWriteStream(output))
-                .on('finish', () => observer.next(true))
-                .on('error', (err) => observer.error(err));
-        });
-    }
-    readGzipFile(input, output, options = { cyperIv: '', algorithm: '', cyperKey: '' }) {
-        const config = this.config.config.experimental.crypto || options;
-        return rxjs_1.Observable.create(observer => {
-            fs_1.createReadStream(input)
-                // .pipe(createDecipheriv(config.algorithm, config.cyperKey, config.cyperIv))
-                .pipe(zlib_1.createGunzip())
-                .pipe(fs_1.createWriteStream(output))
-                .on('finish', () => observer.next(true))
-                .on('error', (err) => observer.error(err));
-        });
-    }
+    // public gZipFile(input: string, output: string, options: PrivateCryptoModel = { cyperIv: '', algorithm: '', cyperKey: '' }) {
+    //     const config = this.config.config.experimental.crypto || options;
+    //     return Observable.create(observer => {
+    //         createReadStream(input)
+    //             .pipe(createGzip())
+    //             // .pipe(createCipheriv(config.algorithm, config.cyperKey, config.cyperIv))
+    //             .pipe(createWriteStream(output))
+    //             .on('finish', () => observer.next(true))
+    //             .on('error', (err) => observer.error(err));
+    //     });
+    // }
+    // public readGzipFile(input: string, output: string, options: PrivateCryptoModel = { cyperIv: '', algorithm: '', cyperKey: '' }) {
+    //     const config = this.config.config.experimental.crypto || options;
+    //     return Observable.create(observer => {
+    //         createReadStream(input)
+    //             // .pipe(createDecipheriv(config.algorithm, config.cyperKey, config.cyperIv))
+    //             .pipe(createGunzip())
+    //             .pipe(createWriteStream(output))
+    //             .on('finish', () => observer.next(true))
+    //             .on('error', (err) => observer.error(err));
+    //     });
+    // }
     gZipAll() {
         // var archiver = require('archiver');
         // var output = createWriteStream('./example.tar.gz');

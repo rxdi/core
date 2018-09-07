@@ -44,22 +44,20 @@ let ExternalImporter = class ExternalImporter {
             throw new Error('Bootstrap: missing config');
         }
     }
-    encryptFile(fileFullPath) {
-        if (this.configService.config.experimental.crypto) {
-            return this.compressionService.readGzipFile(fileFullPath, 'dada');
-        }
-        else {
-            return rxjs_1.of(null);
-        }
-    }
-    decryptFile(fileFullPath) {
-        if (this.configService.config.experimental.crypto) {
-            return this.compressionService.gZipFile(fileFullPath, 'dada');
-        }
-        else {
-            return rxjs_1.of(null);
-        }
-    }
+    // encryptFile(fileFullPath: string) {
+    //     if (this.configService.config.experimental.crypto) {
+    //         return this.compressionService.readGzipFile(fileFullPath, 'dada');
+    //     } else {
+    //         return of(null);
+    //     }
+    // }
+    // decryptFile(fileFullPath: string) {
+    //     if (this.configService.config.experimental.crypto) {
+    //         return this.compressionService.gZipFile(fileFullPath, 'dada');
+    //     } else {
+    //         return of(null);
+    //     }
+    // }
     isWeb() {
         let value = false;
         try {
