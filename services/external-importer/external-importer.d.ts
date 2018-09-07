@@ -32,6 +32,7 @@ export declare class ExternalImporter {
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<any[]>;
     downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<any>;
     private combineDependencies;
+    private writeFakeIndexIfMultiModule;
     downloadIpfsModule(config: ExternalImporterIpfsConfig): any;
     downloadTypings(moduleLink: string, folder: any, fileName: any, config: ExternalImporterConfig): Observable<{}>;
     importModule(config: ExternalImporterConfig, token: string): Promise<any>;

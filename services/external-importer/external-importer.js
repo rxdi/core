@@ -195,6 +195,14 @@ let ExternalImporter = class ExternalImporter {
     combineDependencies(dependencies, config) {
         return rxjs_1.combineLatest(dependencies.length ? dependencies.map(d => this.downloadIpfsModule({ provider: config.provider, hash: d })) : rxjs_1.of(''));
     }
+    writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex) {
+        if (nameSpaceFakeIndex.length === 2) {
+            return this.fileService.writeFileAsyncP(`${folder}${this.defaultNamespaceFolder}/${nameSpaceFakeIndex[0]}`, 'index.d.ts', '');
+        }
+        else {
+            return rxjs_1.of(true);
+        }
+    }
     downloadIpfsModule(config) {
         if (!config.provider) {
             throw new Error(`Missing configuration inside ${config.hash}`);
@@ -207,6 +215,7 @@ let ExternalImporter = class ExternalImporter {
         const configLink = config.provider + config.hash;
         let moduleTypings;
         let moduleName;
+        let nameSpaceFakeIndex;
         let originalModuleConfig;
         return this.downloadIpfsModuleConfig(config)
             .pipe(operators_1.tap(res => {
@@ -215,6 +224,7 @@ let ExternalImporter = class ExternalImporter {
             }
         }), operators_1.filter((res) => !!res.module), operators_1.map((externalModule) => {
             moduleName = externalModule.name;
+            nameSpaceFakeIndex = moduleName.split('/');
             folder = `${process.cwd()}/${this.defaultOutputFolder}/`;
             moduleLink = `${config.provider}${externalModule.module}`;
             moduleTypings = `${config.provider}${externalModule.typings}`;
@@ -233,9 +243,7 @@ let ExternalImporter = class ExternalImporter {
             this.logger.logFileService(`\nDownloading... ${configLink} `);
             this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
             return this.requestService.get(moduleLink, config.hash);
-        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)), 
-        // switchMap(() => this.fileService.writeFileAsyncP(`${folder}${this.defaultNamespaceFolder}/${moduleName.split('/')[0]}`, 'index.d.ts', '')),
-        operators_1.switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])), operators_1.map(() => {
+        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)), operators_1.switchMap(() => this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex)), operators_1.switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])), operators_1.map(() => {
             return {
                 provider: config.provider,
                 hash: config.hash,

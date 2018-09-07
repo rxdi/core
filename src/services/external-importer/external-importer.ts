@@ -73,7 +73,7 @@ export class ExternalImporter {
             tsConfig = {
                 compilerOptions: {
                     typeRoots: []
-                } 
+                }
             };
         }
         return tsConfig;
@@ -201,6 +201,14 @@ export class ExternalImporter {
         return combineLatest(dependencies.length ? dependencies.map(d => this.downloadIpfsModule({ provider: config.provider, hash: d })) : of(''));
     }
 
+    private writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex: string[]) {
+        if (nameSpaceFakeIndex.length === 2) {
+            return this.fileService.writeFileAsyncP(`${folder}${this.defaultNamespaceFolder}/${nameSpaceFakeIndex[0]}`, 'index.d.ts', '');
+        } else {
+            return of(true);
+        }
+    }
+
     downloadIpfsModule(config: ExternalImporterIpfsConfig) {
 
         if (!config.provider) {
@@ -215,6 +223,7 @@ export class ExternalImporter {
         const configLink = config.provider + config.hash;
         let moduleTypings;
         let moduleName;
+        let nameSpaceFakeIndex: string[];
         let originalModuleConfig: ExternalModuleConfiguration;
         return this.downloadIpfsModuleConfig(config)
             .pipe(
@@ -226,6 +235,7 @@ export class ExternalImporter {
                 filter((res: ExternalModuleConfiguration) => !!res.module),
                 map((externalModule: ExternalModuleConfiguration) => {
                     moduleName = externalModule.name;
+                    nameSpaceFakeIndex = moduleName.split('/');
                     folder = `${process.cwd()}/${this.defaultOutputFolder}/`;
                     moduleLink = `${config.provider}${externalModule.module}`;
                     moduleTypings = `${config.provider}${externalModule.typings}`;
@@ -251,7 +261,7 @@ export class ExternalImporter {
                 switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)),
                 switchMap(() => this.requestService.get(moduleTypings, config.hash)),
                 switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)),
-                // switchMap(() => this.fileService.writeFileAsyncP(`${folder}${this.defaultNamespaceFolder}/${moduleName.split('/')[0]}`, 'index.d.ts', '')),
+                switchMap(() => this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex)),
                 switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])),
                 map(() => {
                     return {
