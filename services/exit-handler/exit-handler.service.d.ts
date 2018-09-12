@@ -6,5 +6,5 @@ export declare class ExitHandlerService {
     private logger;
     init(): void;
     exitHandler(options: any, err: any): void;
-    onExitApp(events: Array<Signals | NodejsEvents>): Observable<{}>;
+    onExitApp(events: Array<Signals>): Observable<{}>;
 }

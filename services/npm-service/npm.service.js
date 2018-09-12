@@ -18,7 +18,8 @@ let NpmService = class NpmService {
         this.packagesToDownload.next([...this.packagesToDownload.getValue(), ...packages]);
     }
     preparePackages() {
-        this.packages = [...(new Set(this.packagesToDownload.getValue().map((p) => `${p.name}@${p.version}`)))];
+        const arr = this.packagesToDownload.getValue() || [];
+        this.packages = [...(new Set(arr.map((p) => `${p.name}@${p.version}`)))];
     }
     installPackages() {
         this.preparePackages();

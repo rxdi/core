@@ -17,7 +17,7 @@ export class ExitHandlerService {
     errorHandler: Subject<any> = new Subject();
     @Injector(BootstrapLogger) private logger: BootstrapLogger;
 
-    init() {}
+    init() { }
 
     exitHandler(options, err) {
         this.errorHandler.next(err);
@@ -31,10 +31,8 @@ export class ExitHandlerService {
         process.exit(0);
     }
 
-    onExitApp(events: Array<Signals | NodejsEvents>) {
-        return new Observable(o => {
-            process.on(<any>event, () => o.next(true));
-        });
+    onExitApp(events: Array<Signals>) {
+        return new Observable(o => events && events.length && events.forEach(event => process.on(event, (e) => o.next(e))));
     }
 
 }

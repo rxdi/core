@@ -31,9 +31,7 @@ let ExitHandlerService = class ExitHandlerService {
         process.exit(0);
     }
     onExitApp(events) {
-        return new rxjs_1.Observable(o => {
-            process.on(event, () => o.next(true));
-        });
+        return new rxjs_1.Observable(o => events && events.length && events.forEach(event => process.on(event, (e) => o.next(e))));
     }
 };
 __decorate([

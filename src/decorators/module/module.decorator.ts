@@ -51,8 +51,14 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
                 () => bootstrapLogger.log(`Start -> @Module('${original.originalName}')${bootstrapLogger.logHashes(`(${original.name})`)}: loaded!`)
             );
 
+        Object.getOwnPropertyNames(original)
+            .filter(prop => typeof original[prop] === 'function')
+            .map(descriptor => Object.defineProperty(constructorFunction, descriptor, {
+                configurable: true,
+                writable: true,
+                value: original[descriptor]
+            }));
         if (original.forRoot) {
-            constructorFunction.forRoot = original.forRoot;
             const originalForRoot = constructorFunction.forRoot;
             constructorFunction.forRoot = function (args) {
                 const result: ModuleWithServices = originalForRoot(args);
