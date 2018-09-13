@@ -37,7 +37,7 @@ function GenericConstruct(module, original, currentModule) {
             moduleService.setBootstraps(module.bootstrap, original, currentModule);
         }
         bootstrapLogger.log(`Bootstrap -> @Module('${constructor.originalName}')${bootstrapLogger.logHashes(`(${constructor.name})`)}: finished!`);
-        return new constructor();
+        return container_1.Container.get(constructor);
     };
 }
 exports.GenericConstruct = GenericConstruct;

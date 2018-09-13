@@ -50,6 +50,6 @@ export function GenericConstruct(module: any, original, currentModule) {
 
         bootstrapLogger.log(`Bootstrap -> @Module('${constructor.originalName}')${bootstrapLogger.logHashes(`(${constructor.name})`)}: finished!`);
 
-        return new constructor();
+        return Container.get(constructor);
     };
 }
