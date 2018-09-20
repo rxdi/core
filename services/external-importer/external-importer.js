@@ -27,14 +27,22 @@ const injector_decorator_1 = require("../../decorators/injector/injector.decorat
 const compression_service_1 = require("../compression/compression.service");
 const npm_service_1 = require("../npm-service/npm.service");
 const config_1 = require("../config");
+const providers_1 = require("./providers");
 const SystemJS = require("systemjs");
 let ExternalImporter = class ExternalImporter {
     constructor() {
-        this.defaultProvider = 'https://ipfs.io/ipfs/';
+        this.providers = new rxjs_1.BehaviorSubject(providers_1.IPFS_PROVIDERS);
+        this.defaultProvider = this.getProvider('cloudflare');
         this.defaultNamespaceFolder = '@types';
         this.defaultOutputFolder = 'node_modules';
         this.defaultPackageJsonFolder = `${process.cwd()}/package.json`;
         this.defaultTypescriptConfigJsonFolder = `${process.cwd()}/tsconfig.json`;
+    }
+    getProvider(name) {
+        return this.providers.getValue().filter(p => p.name === name)[0].link;
+    }
+    setProviders(...args) {
+        this.providers.next([...this.providers.getValue(), ...args]);
     }
     importExternalModule(module) {
         return rxjs_1.from(SystemJS.import(module));
@@ -236,21 +244,19 @@ let ExternalImporter = class ExternalImporter {
             if (originalModuleConfig.packages.length) {
                 this.npmService.installPackages();
             }
-        }), operators_1.switchMap((res) => {
+        }), operators_1.switchMap(() => {
             this.logger.logFileService(`--------------------${moduleName}--------------------`);
             this.logger.logFileService(`\nDownloading... ${configLink} `);
             this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
             return this.requestService.get(moduleLink, config.hash);
-        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)), operators_1.switchMap(() => this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex)), operators_1.switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])), operators_1.map(() => {
-            return {
-                provider: config.provider,
-                hash: config.hash,
-                version: originalModuleConfig.version,
-                name: originalModuleConfig.name,
-                dependencies: originalModuleConfig.dependencies,
-                packages: originalModuleConfig.packages
-            };
-        }));
+        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)), operators_1.switchMap(() => this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex)), operators_1.switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])), operators_1.map(() => ({
+            provider: config.provider,
+            hash: config.hash,
+            version: originalModuleConfig.version,
+            name: originalModuleConfig.name,
+            dependencies: originalModuleConfig.dependencies,
+            packages: originalModuleConfig.packages
+        })));
     }
     downloadTypings(moduleLink, folder, fileName, config) {
         if (!moduleLink) {
@@ -294,10 +300,7 @@ let ExternalImporter = class ExternalImporter {
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): will be downloaded inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): ${moduleLink} downloading...`);
                 this.requestService.get(moduleLink)
-                    .pipe(operators_1.take(1), operators_1.map((res) => {
-                    this.logger.logImporter(`Done!`);
-                    return res;
-                }), operators_1.switchMap((res) => this.fileService.writeFile(folder, fileName, config.fileName, res)), operators_1.switchMap(() => this.downloadTypings(config.typings, folder, fileName, config)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
+                    .pipe(operators_1.take(1), operators_1.tap(() => this.logger.logImporter(`Done!`)), operators_1.switchMap((res) => this.fileService.writeFile(folder, fileName, config.fileName, res)), operators_1.switchMap(() => this.downloadTypings(config.typings, folder, fileName, config)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
                     .subscribe((m) => observer.next(m), err => observer.error(err));
             }
         }));

@@ -1,6 +1,7 @@
 import { ExternalImporterConfig, ExternalImporterIpfsConfig } from './external-importer-config';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { CompressionService } from '../compression/compression.service';
+import { IPFS_PROVIDERS } from './providers';
 export declare class ExternalImporter {
     private requestService;
     private fileService;
@@ -8,11 +9,20 @@ export declare class ExternalImporter {
     compressionService: CompressionService;
     private configService;
     private npmService;
+    providers: BehaviorSubject<{
+        name: IPFS_PROVIDERS;
+        link: string;
+    }[]>;
     defaultProvider: string;
     defaultNamespaceFolder: string;
     defaultOutputFolder: string;
     defaultPackageJsonFolder: string;
     defaultTypescriptConfigJsonFolder: string;
+    getProvider(name: IPFS_PROVIDERS): string;
+    setProviders(...args: {
+        name: IPFS_PROVIDERS;
+        link: string;
+    }[]): void;
     importExternalModule(module: string): Observable<any>;
     validateConfig(config: ExternalImporterConfig): void;
     isWeb(): boolean;
