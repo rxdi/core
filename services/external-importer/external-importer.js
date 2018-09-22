@@ -223,6 +223,8 @@ let ExternalImporter = class ExternalImporter {
         let moduleName;
         let nameSpaceFakeIndex;
         let originalModuleConfig;
+        let isNamespace;
+        let isRegular;
         return this.downloadIpfsModuleConfig(config)
             .pipe(operators_1.tap(res => {
             if (!res['module']) {
@@ -238,6 +240,8 @@ let ExternalImporter = class ExternalImporter {
             externalModule.packages = externalModule.packages || [];
             originalModuleConfig = externalModule;
             this.npmService.setPackages(externalModule.packages);
+            isNamespace = moduleName.split('/').length === 2;
+            isRegular = isNamespace ? moduleName : moduleName.split('/')[0];
             this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(externalModule)}`);
             return externalModule;
         }), operators_1.switchMap((externalModule) => this.combineDependencies(externalModule.dependencies, config)), operators_1.tap(() => {
@@ -249,9 +253,11 @@ let ExternalImporter = class ExternalImporter {
             this.logger.logFileService(`\nDownloading... ${configLink} `);
             this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
             return this.requestService.get(moduleLink, config.hash);
-        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName.split('/')[0]}`, 'index.d.ts', moduleName, file)), 
-        // switchMap(() => this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex)),
-        operators_1.switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])), operators_1.map(() => ({
+        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${isRegular}`, 'index.d.ts', moduleName, file)), operators_1.tap(() => {
+            if (process.env.WRITE_FAKE_INDEX) {
+                this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex);
+            }
+        }), operators_1.switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])), operators_1.map(() => ({
             provider: config.provider,
             hash: config.hash,
             version: originalModuleConfig.version,

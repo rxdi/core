@@ -231,9 +231,11 @@ export class ExternalImporter {
         let moduleLink;
         const configLink = config.provider + config.hash;
         let moduleTypings;
-        let moduleName;
+        let moduleName: string;
         let nameSpaceFakeIndex: string[];
         let originalModuleConfig: ExternalModuleConfiguration;
+        let isNamespace;
+        let isRegular;
         return this.downloadIpfsModuleConfig(config)
             .pipe(
                 tap(res => {
@@ -252,6 +254,8 @@ export class ExternalImporter {
                     externalModule.packages = externalModule.packages || [];
                     originalModuleConfig = externalModule;
                     this.npmService.setPackages(externalModule.packages);
+                    isNamespace = moduleName.split('/').length === 2;
+                    isRegular = isNamespace ? moduleName : moduleName.split('/')[0];
                     this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(externalModule)}`);
                     return externalModule;
                 }),
@@ -269,8 +273,13 @@ export class ExternalImporter {
                 }),
                 switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)),
                 switchMap(() => this.requestService.get(moduleTypings, config.hash)),
-                switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName.split('/')[0]}`, 'index.d.ts', moduleName, file)),
-                // switchMap(() => this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex)),
+                switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${isRegular}`, 'index.d.ts', moduleName, file)),
+                tap(() => {
+                    if (process.env.WRITE_FAKE_INDEX) {
+                        this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex);
+                    }
+                }
+                ),
                 switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])),
                 map(() => ({
                     provider: config.provider,
