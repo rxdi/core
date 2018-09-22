@@ -269,8 +269,8 @@ export class ExternalImporter {
                 }),
                 switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)),
                 switchMap(() => this.requestService.get(moduleTypings, config.hash)),
-                switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName}`, 'index.d.ts', moduleName, file)),
-                switchMap(() => this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex)),
+                switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${moduleName.split('/')[0]}`, 'index.d.ts', moduleName, file)),
+                // switchMap(() => this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex)),
                 switchMap(() => this.addNamespaceToTypeRoots(moduleName.split('/')[0])),
                 map(() => ({
                     provider: config.provider,
