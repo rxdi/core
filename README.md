@@ -17,7 +17,7 @@ Main repository [@rxdi/core](https://github.com/rxdi/core)
 [Server Side](https://github.com/rxdi/starter-server-side)
 
 More examples for [@rxdi](https://www.npmjs.com/~rxdi) infrastructure you can check inside [@gapi](https://www.npmjs.com/~gapi) namespace.
-
+ 
 ##### @Beta Decentralized node_modules using ipfs network with rxdi infrastructure
 
 > Install `@rxdi/core` global so we will have `rxdi` command available `npm i -g @rxdi/core`
