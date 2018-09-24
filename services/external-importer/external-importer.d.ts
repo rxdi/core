@@ -26,7 +26,11 @@ export declare class ExternalImporter {
     importExternalModule(module: string): Observable<any>;
     validateConfig(config: ExternalImporterConfig): void;
     isWeb(): boolean;
-    loadTypescriptConfigJson(): any;
+    loadTypescriptConfigJson(): {
+        compilerOptions?: {
+            typeRoots?: string[];
+        };
+    };
     addNamespaceToTypeRoots(namespace: string): Observable<boolean>;
     writeTypescriptConfigFile(file: any): void;
     loadPackageJson(): any;

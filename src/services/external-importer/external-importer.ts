@@ -75,25 +75,24 @@ export class ExternalImporter {
     }
 
     loadTypescriptConfigJson() {
-        let tsConfig;
+        let tsConfig: { compilerOptions?: { typeRoots?: string[] } } = {};
         try {
             tsConfig = this.fileService.readFile(this.defaultTypescriptConfigJsonFolder);
-            tsConfig.compilerOptions = tsConfig.compilerOptions || {};
-            tsConfig.compilerOptions.typeRoots = tsConfig.compilerOptions.typeRoots || [];
         } catch (e) {
-            throw new Error(`
+            console.error(`
             Error in loading tsconfig.json in ${this.defaultTypescriptConfigJsonFolder}
-
             Error: ${e}
+            Fallback to creating tsconfig.json
             `);
         }
-
+        tsConfig.compilerOptions = tsConfig.compilerOptions || {};
+        tsConfig.compilerOptions.typeRoots = tsConfig.compilerOptions.typeRoots || [];
         return tsConfig;
     }
 
     addNamespaceToTypeRoots(namespace: string) {
         const defaultNamespace = `./${this.defaultOutputFolder}/@types/${namespace}`;
-        const tsConfig: { compilerOptions: { typeRoots: string[] } } = this.loadTypescriptConfigJson();
+        const tsConfig = this.loadTypescriptConfigJson();
         const foundNamespace = tsConfig.compilerOptions.typeRoots.filter((t) => t === defaultNamespace).length;
         if (!foundNamespace) {
             tsConfig.compilerOptions.typeRoots.push(defaultNamespace);

@@ -77,19 +77,19 @@ let ExternalImporter = class ExternalImporter {
         return value;
     }
     loadTypescriptConfigJson() {
-        let tsConfig;
+        let tsConfig = {};
         try {
             tsConfig = this.fileService.readFile(this.defaultTypescriptConfigJsonFolder);
-            tsConfig.compilerOptions = tsConfig.compilerOptions || {};
-            tsConfig.compilerOptions.typeRoots = tsConfig.compilerOptions.typeRoots || [];
         }
         catch (e) {
-            throw new Error(`
+            console.error(`
             Error in loading tsconfig.json in ${this.defaultTypescriptConfigJsonFolder}
-
             Error: ${e}
+            Fallback to creating tsconfig.json
             `);
         }
+        tsConfig.compilerOptions = tsConfig.compilerOptions || {};
+        tsConfig.compilerOptions.typeRoots = tsConfig.compilerOptions.typeRoots || [];
         return tsConfig;
     }
     addNamespaceToTypeRoots(namespace) {
