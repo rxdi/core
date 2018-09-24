@@ -80,13 +80,15 @@ let ExternalImporter = class ExternalImporter {
         let tsConfig;
         try {
             tsConfig = this.fileService.readFile(this.defaultTypescriptConfigJsonFolder);
+            tsConfig.compilerOptions = tsConfig.compilerOptions || {};
+            tsConfig.compilerOptions.typeRoots = tsConfig.compilerOptions.typeRoots || [];
         }
         catch (e) {
-            tsConfig = {
-                compilerOptions: {
-                    typeRoots: []
-                }
-            };
+            throw new Error(`
+            Error in loading tsconfig.json in ${this.defaultTypescriptConfigJsonFolder}
+
+            Error: ${e}
+            `);
         }
         return tsConfig;
     }
