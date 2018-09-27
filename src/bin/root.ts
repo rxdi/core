@@ -7,8 +7,32 @@ import { ConfigService } from '../services/config/config.service';
 import { Observable, combineLatest } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+const includes = (i: string) => process.argv.toString().includes(i);
 
 const externalImporter = Container.get(ExternalImporter);
+const fileService = Container.get(FileService);
+let p = null;
+
+if (includes('--local-node')) {
+    p = externalImporter.getProvider('local');
+}
+
+if (includes('--cloudflare')) {
+    p = externalImporter.getProvider('cloudflare');
+}
+
+if (includes('--infura')) {
+    p = externalImporter.getProvider('infura');
+}
+
+if (includes('--ipfs')) {
+    p = externalImporter.getProvider('main-ipfs-node');
+}
+
+externalImporter.defaultProvider = p || externalImporter.defaultProvider;
+let provider = externalImporter.defaultProvider;
+let hash = '', modulesToDownload = [], customConfigFile, packageJsonConfigFile, rxdiConfigFile, json: PackagesConfig[], interval;
+
 export interface PackagesConfig {
     dependencies: string[];
     provider: string;
@@ -32,23 +56,13 @@ export const DownloadDependencies = (dependencies: ExternalImporterIpfsConfig[])
     return Container.get(ExternalImporter).downloadIpfsModules(dependencies);
 };
 
-
 if (process.argv.toString().includes('-v') || process.argv.toString().includes('--verbose')) {
     Container.get(ConfigService).setConfig({ logger: { logging: true, hashes: true, date: true, exitHandler: true, fileService: true } });
 }
 
-const fileService = Container.get(FileService);
-
 if (process.argv[2] === 'install' || process.argv[2] === 'i') {
 
-    let provider = externalImporter.defaultProvider;
-    let hash = '';
-    let json: PackagesConfig[];
-    let modulesToDownload = [];
-    let customConfigFile;
-    let packageJsonConfigFile;
-    let rxdiConfigFile;
-    process.argv.forEach(function (val, index, array) {
+    process.argv.forEach((val, index) => {
         if (index === 3) {
             if (val.length === 46) {
                 hash = val;
@@ -66,41 +80,52 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
             } else if (val.includes('-p=')) {
                 provider = val.split('-p=')[1];
             }
-
         }
     });
-    customConfigFile = `${process.cwd() + `/${process.argv[3]}`}`;
-    packageJsonConfigFile = `${process.cwd() + '/package.json'}`;
-    rxdiConfigFile = `${process.cwd() + '/.rxdi.json'}`;
 
-    if (hash) {
-        modulesToDownload = [DownloadDependencies(loadDeps({ provider, dependencies: [hash] }))];
-    }
+    customConfigFile = `${process.cwd()}/${process.argv[3]}`;
+    packageJsonConfigFile = `${process.cwd()}/package.json`;
+    rxdiConfigFile = `${process.cwd()}/reactive.json`;
 
     if (!hash && fileService.isPresent(customConfigFile)) {
         json = require(customConfigFile).ipfs;
+        externalImporter.defaultJsonFolder = customConfigFile;
     }
 
-    if (!hash && fileService.isPresent(packageJsonConfigFile)) {
+    if (fileService.isPresent(packageJsonConfigFile)) {
         json = require(packageJsonConfigFile).ipfs;
+        externalImporter.defaultJsonFolder = packageJsonConfigFile;
     }
 
-    if (!hash && fileService.isPresent(rxdiConfigFile)) {
+    if (fileService.isPresent(rxdiConfigFile)) {
         json = require(rxdiConfigFile).ipfs;
+        externalImporter.defaultJsonFolder = rxdiConfigFile;
     }
-
+    console.log(`Loaded config ${externalImporter.defaultJsonFolder}`);
+    console.log('Reactive ipfs modules installing...');
+    if (hash) {
+        modulesToDownload = [DownloadDependencies(loadDeps({ provider: p || provider, dependencies: [hash] }))];
+    }
     if (!hash) {
         json = json || [];
-        modulesToDownload = [...modulesToDownload, ...json.map(json => DownloadDependencies(loadDeps(json)))];
+        modulesToDownload = [...modulesToDownload, ...json.map(json => {
+            json.provider = p || json.provider;
+            return DownloadDependencies(loadDeps(json));
+        })];
     }
-    console.log('Decentralized rxdi modules installing...');
     combineLatest(modulesToDownload)
         .pipe(
-            tap(() => hash ? Container.get(ExternalImporter).addPackageToJson(hash) : null),
+            tap(() => hash ? externalImporter.addPackageToJson(hash) : null),
             tap(() => externalImporter.filterUniquePackages())
-        )
-        .subscribe((c) => {
-
-            console.log(JSON.stringify(c, null, 2), '\nDecentralized rxdi modules installed!');
-        }, e => console.error(e));
+        ).subscribe(
+            (res) => {
+                console.log('Default ipfs provider: ', p || externalImporter.defaultProvider);
+                console.log(`Inside package.json default provider is ${externalImporter.defaultProvider}`);
+                console.log(JSON.stringify(res, null, 2), '\nReactive ipfs modules installed!');
+                clearInterval(interval);
+            },
+            (e) => {
+                throw new Error(e);
+            }
+        );
 }

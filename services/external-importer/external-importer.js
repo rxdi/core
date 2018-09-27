@@ -26,17 +26,20 @@ const bootstrap_logger_1 = require("../bootstrap-logger/bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const compression_service_1 = require("../compression/compression.service");
 const npm_service_1 = require("../npm-service/npm.service");
-const config_1 = require("../config");
 const providers_1 = require("./providers");
 const SystemJS = require("systemjs");
 let ExternalImporter = class ExternalImporter {
     constructor() {
+        this.defaultJsonFolder = `${process.cwd()}/package.json`;
+        this.defaultTypescriptConfigJsonFolder = `${process.cwd()}/tsconfig.json`;
         this.providers = new rxjs_1.BehaviorSubject(providers_1.IPFS_PROVIDERS);
         this.defaultProvider = this.getProvider('cloudflare');
         this.defaultNamespaceFolder = '@types';
         this.defaultOutputFolder = 'node_modules';
-        this.defaultPackageJsonFolder = `${process.cwd()}/package.json`;
-        this.defaultTypescriptConfigJsonFolder = `${process.cwd()}/tsconfig.json`;
+    }
+    setDefaultProvider(provider) {
+        this.defaultProvider = this.getProvider(provider);
+        ;
     }
     getProvider(name) {
         return this.providers.getValue().filter(p => p.name === name)[0].link;
@@ -108,12 +111,32 @@ let ExternalImporter = class ExternalImporter {
     loadPackageJson() {
         let packageJson;
         try {
-            packageJson = this.fileService.readFile(this.defaultPackageJsonFolder);
+            packageJson = this.fileService.readFile(this.defaultJsonFolder);
         }
         catch (e) {
             packageJson = {};
         }
         return packageJson;
+    }
+    loadNpmPackageJson() {
+        let packageJson;
+        try {
+            packageJson = this.fileService.readFile(`${process.cwd()}/package.json`);
+        }
+        catch (e) {
+            packageJson = {};
+        }
+        return packageJson;
+    }
+    prepareDependencies() {
+        const file = this.loadNpmPackageJson();
+        if (file.dependencies) {
+            return Object.keys(file.dependencies).map(name => ({
+                name,
+                version: file.dependencies[name]
+            }));
+        }
+        return [];
     }
     isModulePresent(hash) {
         const file = this.loadPackageJson();
@@ -163,6 +186,10 @@ let ExternalImporter = class ExternalImporter {
         if (!ipfsConfig) {
             ipfsConfig = this.defaultIpfsConfig();
         }
+        const packages = this.prepareDependencies();
+        if (packages.length) {
+            file.packages = packages;
+        }
         if (this.isModulePresent(hash)) {
             this.logger.log(`Package with hash: ${hash} present and will not be downloaded!`);
         }
@@ -170,7 +197,7 @@ let ExternalImporter = class ExternalImporter {
             ipfsConfig[0].dependencies.push(hash);
             file.ipfs = ipfsConfig;
         }
-        this.fileService.writeFileSync(this.defaultPackageJsonFolder, file);
+        this.fileService.writeFileSync(this.defaultJsonFolder, file);
     }
     downloadIpfsModules(modules) {
         const latest = modules.map(m => this.downloadIpfsModule(m));
@@ -332,10 +359,6 @@ __decorate([
     injector_decorator_1.Injector(compression_service_1.CompressionService),
     __metadata("design:type", compression_service_1.CompressionService)
 ], ExternalImporter.prototype, "compressionService", void 0);
-__decorate([
-    injector_decorator_1.Injector(config_1.ConfigService),
-    __metadata("design:type", config_1.ConfigService)
-], ExternalImporter.prototype, "configService", void 0);
 __decorate([
     injector_decorator_1.Injector(npm_service_1.NpmService),
     __metadata("design:type", npm_service_1.NpmService)

@@ -23,13 +23,13 @@ let NpmService = class NpmService {
     }
     installPackages() {
         this.preparePackages();
-        console.log(`Installing npm packages on child process! ${this.packages.toString()}`);
         if (this.child) {
             this.child.stdout.removeAllListeners('data');
             this.child.stderr.removeAllListeners('data');
             this.child.removeAllListeners('exit');
             this.child.kill();
         }
+        console.log(`Installing npm packages on child process! ${this.packages.toString()}`);
         this.child = childProcess.spawn('npm', ['i', ...this.packages]);
         this.child.stdout.on('data', (data) => process.stdout.write(data));
         this.child.stderr.on('data', (data) => process.stdout.write(data));

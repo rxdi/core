@@ -46,11 +46,11 @@ export class FileService {
     }
 
     writeFileAsyncP(folder, fileName, content) {
-        return Observable.create(o => writeFile(`${folder}/${fileName}`, content, () => o.next(true)));
+        return new Observable(o => writeFile(`${folder}/${fileName}`, content, () => o.next(true)));
     }
 
     mkdirp(folder): Observable<boolean> {
-        return Observable.create(observer => {
+        return new Observable(observer => {
             mkdirp(folder, (err) => {
                 if (err) {
                     console.error(err);

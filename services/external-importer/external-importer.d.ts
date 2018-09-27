@@ -3,11 +3,12 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { CompressionService } from '../compression/compression.service';
 import { IPFS_PROVIDERS } from './providers';
 export declare class ExternalImporter {
+    defaultJsonFolder: string;
+    defaultTypescriptConfigJsonFolder: string;
     private requestService;
     private fileService;
     private logger;
     compressionService: CompressionService;
-    private configService;
     private npmService;
     providers: BehaviorSubject<{
         name: IPFS_PROVIDERS;
@@ -16,8 +17,7 @@ export declare class ExternalImporter {
     defaultProvider: string;
     defaultNamespaceFolder: string;
     defaultOutputFolder: string;
-    defaultPackageJsonFolder: string;
-    defaultTypescriptConfigJsonFolder: string;
+    setDefaultProvider(provider: IPFS_PROVIDERS): void;
     getProvider(name: IPFS_PROVIDERS): string;
     setProviders(...args: {
         name: IPFS_PROVIDERS;
@@ -34,6 +34,11 @@ export declare class ExternalImporter {
     addNamespaceToTypeRoots(namespace: string): Observable<boolean>;
     writeTypescriptConfigFile(file: any): void;
     loadPackageJson(): any;
+    loadNpmPackageJson(): any;
+    prepareDependencies(): {
+        name: string;
+        version: any;
+    }[];
     isModulePresent(hash: any): number;
     filterUniquePackages(): number;
     defaultIpfsConfig(): {

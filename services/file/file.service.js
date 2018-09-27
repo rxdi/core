@@ -41,10 +41,10 @@ let FileService = class FileService {
         return fs_1.existsSync(path);
     }
     writeFileAsyncP(folder, fileName, content) {
-        return rxjs_1.Observable.create(o => fs_1.writeFile(`${folder}/${fileName}`, content, () => o.next(true)));
+        return new rxjs_1.Observable(o => fs_1.writeFile(`${folder}/${fileName}`, content, () => o.next(true)));
     }
     mkdirp(folder) {
-        return rxjs_1.Observable.create(observer => {
+        return new rxjs_1.Observable(observer => {
             dist_1.mkdirp(folder, (err) => {
                 if (err) {
                     console.error(err);

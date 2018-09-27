@@ -1,4 +1,4 @@
-import { Service } from '../../container';
+import { Service, Inject } from '../../container';
 import { ExternalImporterConfig, ExternalImporterIpfsConfig, ExternalModuleConfiguration } from './external-importer-config';
 import { from, Observable, of, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, switchMap, take, filter, tap } from 'rxjs/operators';
@@ -16,20 +16,22 @@ import SystemJS = require('systemjs');
 @Service()
 export class ExternalImporter {
 
+    defaultJsonFolder: string = `${process.cwd()}/package.json`;
+    defaultTypescriptConfigJsonFolder: string = `${process.cwd()}/tsconfig.json`;
+
     @Injector(RequestService) private requestService: RequestService;
     @Injector(FileService) private fileService: FileService;
     @Injector(BootstrapLogger) private logger: BootstrapLogger;
     @Injector(CompressionService) compressionService: CompressionService;
-    @Injector(ConfigService) private configService: ConfigService;
     @Injector(NpmService) private npmService: NpmService;
-    providers: BehaviorSubject<{ name: IPFS_PROVIDERS; link: string }[]> = new BehaviorSubject(IPFS_PROVIDERS);
 
+    providers: BehaviorSubject<{ name: IPFS_PROVIDERS; link: string }[]> = new BehaviorSubject(IPFS_PROVIDERS);
     defaultProvider: string = this.getProvider('cloudflare');
     defaultNamespaceFolder: string = '@types';
     defaultOutputFolder: string = 'node_modules';
-    defaultPackageJsonFolder: string = `${process.cwd()}/package.json`;
-    defaultTypescriptConfigJsonFolder: string = `${process.cwd()}/tsconfig.json`;
-
+    setDefaultProvider(provider: IPFS_PROVIDERS) {
+        this.defaultProvider = this.getProvider(provider);;
+    }
     getProvider(name: IPFS_PROVIDERS) {
         return this.providers.getValue().filter(p => p.name === name)[0].link;
     }
@@ -108,11 +110,32 @@ export class ExternalImporter {
     loadPackageJson() {
         let packageJson;
         try {
-            packageJson = this.fileService.readFile(this.defaultPackageJsonFolder);
+            packageJson = this.fileService.readFile(this.defaultJsonFolder);
         } catch (e) {
             packageJson = {};
         }
         return packageJson;
+    }
+
+    loadNpmPackageJson() {
+        let packageJson;
+        try {
+            packageJson = this.fileService.readFile(`${process.cwd()}/package.json`);
+        } catch (e) {
+            packageJson = {};
+        }
+        return packageJson;
+    }
+
+    prepareDependencies() {
+        const file = this.loadNpmPackageJson();
+        if (file.dependencies) {
+            return Object.keys(file.dependencies).map(name => ({
+                name,
+                version: file.dependencies[name]
+            }))
+        }
+        return [];
     }
 
     isModulePresent(hash) {
@@ -168,13 +191,18 @@ export class ExternalImporter {
         if (!ipfsConfig) {
             ipfsConfig = this.defaultIpfsConfig();
         }
+        const packages = this.prepareDependencies();
+        if (packages.length) {
+            file.packages = packages;
+        }
         if (this.isModulePresent(hash)) {
             this.logger.log(`Package with hash: ${hash} present and will not be downloaded!`);
         } else {
             ipfsConfig[0].dependencies.push(hash);
             file.ipfs = ipfsConfig;
         }
-        this.fileService.writeFileSync(this.defaultPackageJsonFolder, file);
+
+        this.fileService.writeFileSync(this.defaultJsonFolder, file);
     }
 
     downloadIpfsModules(modules: ExternalImporterIpfsConfig[]) {

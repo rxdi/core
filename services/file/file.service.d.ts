@@ -6,7 +6,7 @@ export declare class FileService {
     writeFileSync(folder: any, file: any): any;
     readFile(file: string): any;
     isPresent(path: string): boolean;
-    writeFileAsyncP(folder: any, fileName: any, content: any): any;
+    writeFileAsyncP(folder: any, fileName: any, content: any): Observable<{}>;
     mkdirp(folder: any): Observable<boolean>;
     fileWalker(dir: any): Observable<string[]>;
     private filewalker;
