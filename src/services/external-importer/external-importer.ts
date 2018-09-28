@@ -237,7 +237,7 @@ export class ExternalImporter {
     }
 
     private combineDependencies(dependencies: any[], config: ExternalImporterIpfsConfig) {
-        return combineLatest(dependencies.length ? dependencies.map(d => this.downloadIpfsModule({ provider: config.provider, hash: d })) : of(''));
+        return combineLatest(dependencies.length ? dependencies.map(h => this.downloadIpfsModule({ provider: config.provider, hash: h })) : of(''));
     }
 
     private writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex: string[]) {
@@ -290,11 +290,6 @@ export class ExternalImporter {
                     return externalModule;
                 }),
                 switchMap((externalModule) => this.combineDependencies(externalModule.dependencies, config)),
-                tap(() => {
-                    if (originalModuleConfig.packages.length) {
-                        this.npmService.installPackages();
-                    }
-                }),
                 switchMap(() => {
                     this.logger.logFileService(`--------------------${moduleName}--------------------`);
                     this.logger.logFileService(`\nDownloading... ${configLink} `);
@@ -318,7 +313,12 @@ export class ExternalImporter {
                     name: originalModuleConfig.name,
                     dependencies: originalModuleConfig.dependencies,
                     packages: originalModuleConfig.packages
-                }))
+                })),
+                tap(() => {
+                    if (originalModuleConfig.packages.length) {
+                        this.npmService.installPackages();
+                    }
+                }),
             );
 
     }

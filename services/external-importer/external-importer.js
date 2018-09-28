@@ -228,7 +228,7 @@ let ExternalImporter = class ExternalImporter {
         }));
     }
     combineDependencies(dependencies, config) {
-        return rxjs_1.combineLatest(dependencies.length ? dependencies.map(d => this.downloadIpfsModule({ provider: config.provider, hash: d })) : rxjs_1.of(''));
+        return rxjs_1.combineLatest(dependencies.length ? dependencies.map(h => this.downloadIpfsModule({ provider: config.provider, hash: h })) : rxjs_1.of(''));
     }
     writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex) {
         if (nameSpaceFakeIndex.length === 2) {
@@ -273,11 +273,7 @@ let ExternalImporter = class ExternalImporter {
             isRegular = isNamespace ? moduleName : moduleName.split('/')[0];
             this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(externalModule)}`);
             return externalModule;
-        }), operators_1.switchMap((externalModule) => this.combineDependencies(externalModule.dependencies, config)), operators_1.tap(() => {
-            if (originalModuleConfig.packages.length) {
-                this.npmService.installPackages();
-            }
-        }), operators_1.switchMap(() => {
+        }), operators_1.switchMap((externalModule) => this.combineDependencies(externalModule.dependencies, config)), operators_1.switchMap(() => {
             this.logger.logFileService(`--------------------${moduleName}--------------------`);
             this.logger.logFileService(`\nDownloading... ${configLink} `);
             this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
@@ -293,7 +289,11 @@ let ExternalImporter = class ExternalImporter {
             name: originalModuleConfig.name,
             dependencies: originalModuleConfig.dependencies,
             packages: originalModuleConfig.packages
-        })));
+        })), operators_1.tap(() => {
+            if (originalModuleConfig.packages.length) {
+                this.npmService.installPackages();
+            }
+        }));
     }
     downloadTypings(moduleLink, folder, fileName, config) {
         if (!moduleLink) {
