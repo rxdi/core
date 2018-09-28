@@ -31,7 +31,13 @@ if (includes('--ipfs')) {
 
 externalImporter.defaultProvider = p || externalImporter.defaultProvider;
 let provider = externalImporter.defaultProvider;
-let hash = '', modulesToDownload = [], customConfigFile, packageJsonConfigFile, rxdiConfigFile, json: PackagesConfig[], interval;
+let hash = '';
+let modulesToDownload = [];
+let customConfigFile;
+let packageJsonConfigFile;
+let rxdiConfigFile;
+let json: PackagesConfig[];
+// let interval;
 
 export interface PackagesConfig {
     dependencies: string[];
@@ -122,7 +128,7 @@ if (process.argv[2] === 'install' || process.argv[2] === 'i') {
                 console.log('Default ipfs provider: ', p || externalImporter.defaultProvider);
                 console.log(`Inside package.json default provider is ${externalImporter.defaultProvider}`);
                 console.log(JSON.stringify(res, null, 2), '\nReactive ipfs modules installed!');
-                clearInterval(interval);
+                // clearInterval(interval);
             },
             (e) => {
                 throw new Error(e);

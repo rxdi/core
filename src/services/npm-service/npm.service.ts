@@ -40,7 +40,7 @@ export class NpmService {
                 console.log(`Installing npm packages DONE! ${this.packages.toString()}`);
                 this.child = null;
             });
-        })
+        });
     }
 
 }

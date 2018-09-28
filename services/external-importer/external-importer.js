@@ -39,7 +39,6 @@ let ExternalImporter = class ExternalImporter {
     }
     setDefaultProvider(provider) {
         this.defaultProvider = this.getProvider(provider);
-        ;
     }
     getProvider(name) {
         return this.providers.getValue().filter(p => p.name === name)[0].link;

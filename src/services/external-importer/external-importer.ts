@@ -30,7 +30,7 @@ export class ExternalImporter {
     defaultNamespaceFolder: string = '@types';
     defaultOutputFolder: string = 'node_modules';
     setDefaultProvider(provider: IPFS_PROVIDERS) {
-        this.defaultProvider = this.getProvider(provider);;
+        this.defaultProvider = this.getProvider(provider);
     }
     getProvider(name: IPFS_PROVIDERS) {
         return this.providers.getValue().filter(p => p.name === name)[0].link;
@@ -133,7 +133,7 @@ export class ExternalImporter {
             return Object.keys(file.dependencies).map(name => ({
                 name,
                 version: file.dependencies[name]
-            }))
+            }));
         }
         return [];
     }

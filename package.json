@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@rxdi/dts-merge": "^0.0.306",
-    "@types/jest": "^23.3.1",
+    "@types/jest": "^23.3.2",
     "@types/node": "^10.11.0",
     "@types/systemjs": "^0.20.6",
     "jest": "^23.4.2",
