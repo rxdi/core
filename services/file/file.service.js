@@ -84,12 +84,17 @@ let FileService = class FileService {
                 fs_1.stat(file, (err, stat) => {
                     if (stat && stat.isDirectory()) {
                         results.push(file);
-                        fileWalker(file, (err, res) => {
-                            results = results.concat(res);
-                            if (!--pending) {
-                                done(null, results);
-                            }
-                        });
+                        if (!file.includes('node_modules')) {
+                            fileWalker(file, (err, res) => {
+                                results = results.concat(res);
+                                if (!--pending) {
+                                    done(null, results);
+                                }
+                            });
+                        }
+                        else if (!--pending) {
+                            done(null, results);
+                        }
                     }
                     else {
                         results.push(file);
