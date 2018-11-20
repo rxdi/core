@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/core",
-  "version": "0.0.344",
+  "version": "0.0.345",
   "description": "",
   "main": "index.ts",
   "scripts": {
