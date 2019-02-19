@@ -4,6 +4,8 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./decorators/Service"));
+var Service_1 = require("./decorators/Service");
+exports.Injectable = Service_1.Service;
 __export(require("./decorators/Plugin"));
 __export(require("./decorators/Inject"));
 __export(require("./decorators/InjectMany"));

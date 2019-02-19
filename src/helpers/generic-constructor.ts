@@ -11,13 +11,16 @@ export function GenericConstruct(module: any, original, currentModule) {
             return new constructor();
         }
 
-
         if (module.imports) {
             moduleService.setImports(module.imports, original);
         }
 
         if (module.services) {
             moduleService.setServices(module.services, original, currentModule);
+        }
+
+        if (module.providers) {
+            moduleService.setServices(module.providers, original, currentModule);
         }
 
         if (module.controllers) {

@@ -15,6 +15,9 @@ function GenericConstruct(module, original, currentModule) {
         if (module.services) {
             moduleService.setServices(module.services, original, currentModule);
         }
+        if (module.providers) {
+            moduleService.setServices(module.providers, original, currentModule);
+        }
         if (module.controllers) {
             moduleService.setControllers(module.controllers, original, currentModule);
         }

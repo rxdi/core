@@ -16,6 +16,7 @@ export interface ModuleWithServices {
     module?: Function;
     frameworkImports?: Array<Function | ModuleWithServices>;
     services?: Array<ServiceArguments | Function>;
+    providers?: Array<ServiceArguments | Function>;
     controllers?: Array<Function | ModuleWithServices>;
     effects?: Array<Function>;
     components?: Array<Function>;
@@ -44,6 +45,7 @@ export interface ServiceArgumentsInternal {
 export interface ModuleArguments<T, K> extends Metadata {
     imports?: Array<Function | ModuleWithServices>;
     services?: Array<Function | ServiceArgumentsInternal>;
+    providers?: Array<Function | ServiceArgumentsInternal>;
     controllers?: Array<Function | ModuleWithServices>;
     effects?: Array<Function>;
     components?: Array<Function>;

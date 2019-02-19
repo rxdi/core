@@ -1,4 +1,5 @@
 export * from './decorators/Service';
+export { Service as Injectable } from './decorators/Service';
 export * from './decorators/Plugin';
 export * from './decorators/Inject';
 export * from './decorators/InjectMany';

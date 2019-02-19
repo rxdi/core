@@ -75,6 +75,10 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
                     moduleService.setServices(<any>result.services, original, currentModule);
                 }
 
+                if (result.providers) {
+                    moduleService.setServices(<any>result.providers, original, currentModule);
+                }
+
                 if (result.components) {
                     moduleService.setComponents(<any>result.components, original, currentModule);
                 }
