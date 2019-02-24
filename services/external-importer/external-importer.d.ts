@@ -46,7 +46,7 @@ export declare class ExternalImporter {
         dependencies: any[];
     }[];
     addPackageToJson(hash: string): void;
-    downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<any[]>;
+    downloadIpfsModules(modules: ExternalImporterIpfsConfig[]): Observable<[any]>;
     downloadIpfsModuleConfig(config: ExternalImporterIpfsConfig): Observable<any>;
     private combineDependencies;
     private writeFakeIndexIfMultiModule;
