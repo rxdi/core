@@ -1,5 +1,6 @@
 import { Injector } from './injector.decorator';
 import { Container } from '../../container';
+import 'jest';
 
 describe('Decorators: @Injector', () => {
     it('Should inject value to property "valueExecutor" inside target ClassTestExecutor', (done) => {

@@ -1,6 +1,7 @@
 import { EffectsService } from './effect.service';
 import { Container } from '../../container/Container';
 import { Effect } from '../../decorators/effect/effect.decorator';
+import 'jest';
 
 const effectService = Container.get(EffectsService);
 

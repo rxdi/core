@@ -2,6 +2,7 @@ import { Container } from '../../container/Container';
 import { ExternalImporter } from './external-importer';
 import { tap } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
+import 'jest';
 
 const externalImporterService = Container.get(ExternalImporter);
 describe('Service: ExternalImporter', () => {

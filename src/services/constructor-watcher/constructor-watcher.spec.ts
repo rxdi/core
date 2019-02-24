@@ -3,7 +3,7 @@ import { Container } from '../../container/Container';
 import { Controller } from '../../decorators/controller/controller.decorator';
 import { Service } from '../../container/decorators/Service';
 import { OnInit } from '../../container';
-
+import 'jest';
 
 @Service()
 export class TestService {

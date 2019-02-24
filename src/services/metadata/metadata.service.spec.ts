@@ -2,6 +2,7 @@ import { Container } from '../../container/Container';
 import { MetadataService } from './metadata.service';
 import { Service } from '../../container';
 import { Module } from '../../decorators/module/module.decorator';
+import 'jest';
 
 class Pesho {
 

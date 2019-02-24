@@ -1,6 +1,7 @@
 import { ControllersService } from './controllers.service';
 import { Container } from '../../container/Container';
 import { Controller } from '../../decorators/controller/controller.decorator';
+import 'jest';
 
 const controllersService = Container.get(ControllersService);
 
