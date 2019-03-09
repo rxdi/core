@@ -1,10 +1,10 @@
 import { Container } from '../container';
-import { ModuleService, BootstrapLogger } from '../services';
+import { ModuleService, BootstrapLogger, CacheLayer, CacheLayerItem } from '../services';
 
 const moduleService = Container.get(ModuleService);
 const bootstrapLogger = Container.get(BootstrapLogger);
 
-export function GenericConstruct(module: any, original, currentModule) {
+export function GenericConstruct(module: any, original, currentModule: CacheLayer<CacheLayerItem<Function>>) {
     return function construct(constructor, args) {
 
         if (!module) {
@@ -32,7 +32,7 @@ export function GenericConstruct(module: any, original, currentModule) {
         }
 
         if (module.components) {
-            moduleService.setComponents(<any>module.components, original, currentModule);
+            moduleService.setComponents(module.components, original, currentModule);
         }
 
         if (module.beforePlugins) {

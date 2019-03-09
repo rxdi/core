@@ -1,5 +1,3 @@
-import { Service } from '../../container/decorators/Service';
-
 export class ConstructorWatcherService {
     _constructors: Map<string, Function> = new Map();
 

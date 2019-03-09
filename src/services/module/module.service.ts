@@ -12,6 +12,7 @@ import { EffectsService } from '../effect/effect.service';
 import { ComponentsService } from '../components/components.service';
 import { BootstrapsServices } from '../bootstraps/bootstraps.service';
 import { ServicesService } from '../services/services.service';
+import { CacheLayer, CacheLayerItem } from '../../services/cache/';
 
 @Service()
 export class ModuleService {
@@ -28,7 +29,7 @@ export class ModuleService {
     @Injector(ModuleValidators) private validators: ModuleValidators;
     @Injector(ServicesService) private servicesService: ServicesService;
 
-    setServices(services: ServiceArgumentsInternal[], original: { metadata: Metadata }, currentModule) {
+    setServices(services: ServiceArgumentsInternal[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>) {
         services.forEach(service => {
             this.validators.validateServices(service, original);
 
@@ -47,7 +48,7 @@ export class ModuleService {
             } else if (service.provide && service.useValue) {
                 this.setUseValue(service);
             } else {
-                currentModule.putItem({ data: service, key: service.name });
+                currentModule.putItem({ data: <any>service, key: service.name });
                 this.servicesService.register(service);
             }
 
@@ -92,7 +93,7 @@ export class ModuleService {
         }
     }
 
-    setControllers(controllers: any[], original, currentModule) {
+    setControllers(controllers: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>) {
         controllers.forEach(controller => {
             this.validators.validateController(controller, original);
             currentModule.putItem({
@@ -103,7 +104,7 @@ export class ModuleService {
         });
     }
 
-    setEffects(effects: any[], original, currentModule) {
+    setEffects(effects: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>) {
         effects.forEach(effect => {
             this.validators.validateEffect(effect, original);
             currentModule.putItem({
@@ -114,7 +115,7 @@ export class ModuleService {
         });
     }
 
-    setComponents(components: any[], original, currentModule) {
+    setComponents(components: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>) {
         components.forEach(component => {
             this.validators.validateComponent(component, original);
             currentModule.putItem({
@@ -125,7 +126,7 @@ export class ModuleService {
         });
     }
 
-    setPlugins(plugins, original: { metadata: Metadata }, currentModule) {
+    setPlugins(plugins: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>) {
         plugins.forEach(plugin => {
             this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
@@ -136,7 +137,7 @@ export class ModuleService {
         });
     }
 
-    setBootstraps(bootstraps, original: { metadata: Metadata }, currentModule) {
+    setBootstraps(bootstraps: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>) {
         bootstraps.forEach(bootstrap => {
             this.validators.validateEmpty(bootstrap, original, bootstrap['metadata']['type']);
             currentModule.putItem({
@@ -147,7 +148,7 @@ export class ModuleService {
         });
     }
 
-    setAfterPlugins(plugins, original: { metadata: Metadata }, currentModule) {
+    setAfterPlugins(plugins: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>) {
         plugins.forEach(plugin => {
             this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
@@ -158,7 +159,7 @@ export class ModuleService {
         });
     }
 
-    setBeforePlugins(plugins, original: { metadata: Metadata }, currentModule) {
+    setBeforePlugins(plugins: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>) {
         plugins.forEach(plugin => {
             this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
@@ -169,7 +170,7 @@ export class ModuleService {
         });
     }
 
-    setImports(imports, original: { metadata: Metadata }) {
+    setImports(imports: Function[], original: ServiceArgumentsInternal) {
         imports.forEach((m: any) => {
             this.validators.validateImports(m, original);
             if (!m) {

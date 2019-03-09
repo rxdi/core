@@ -25,11 +25,13 @@ export interface ModuleWithServices {
     afterPlugins?: Array<Function | PluginInterface>;
 }
 export declare type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect' | 'component';
+export declare type SystemIngridientsType = 'plugins' | 'pluginsBefore' | 'pluginsAfter' | 'controllers' | 'services' | 'effects' | 'components';
 export interface Metadata {
     moduleHash?: string;
     moduleName?: string;
     raw?: string;
     type?: DecoratorType;
+    options?: any;
 }
 export interface ServiceArgumentsInternal {
     name?: string;
@@ -41,6 +43,8 @@ export interface ServiceArgumentsInternal {
     useDynamic?: ExternalImporterConfig;
     deps?: Array<Function | string | InjectionToken<any>>;
     lazy?: boolean;
+    originalName?: string;
+    forRoot?: any;
 }
 export interface ModuleArguments<T, K> extends Metadata {
     imports?: Array<Function | ModuleWithServices>;

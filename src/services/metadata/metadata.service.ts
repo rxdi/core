@@ -4,7 +4,7 @@ import { createUniqueHash } from '../../helpers';
 @Service()
 export class MetadataService {
 
-    generateHashData(module, original: Function) {
+    generateHashData(module, original) {
         const services = module.services || [];
         const imports = module.imports || [];
         const fillMetadata = (injectable) => {

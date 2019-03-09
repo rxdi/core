@@ -13,3 +13,19 @@ exports.BootstrapFramework = (app, modules, config) => {
     modules.map(m => container_1.Container.get(m));
     return bootstrapService.start(app, config);
 };
+exports.setup = (options, frameworks = [], bootstrapOptions) => {
+    const Module = require('../decorators/module/module.decorator').Module;
+    return exports.BootstrapFramework(Module({
+        imports: options.imports || [],
+        providers: options.providers || [],
+        services: options.services || [],
+        bootstrap: options.bootstrap || [],
+        components: options.components || [],
+        controllers: options.controllers || [],
+        effects: options.effects || [],
+        plugins: options.plugins || [],
+        afterPlugins: options.afterPlugins || [],
+        beforePlugins: options.beforePlugins || [],
+    })(function () { }), frameworks, bootstrapOptions);
+};
+exports.createTestBed = exports.setup;

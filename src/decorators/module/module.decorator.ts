@@ -3,7 +3,7 @@ import { CacheService } from '../../services/cache/cache-layer.service';
 import { GenericConstruct } from '../../helpers/generic-constructor';
 import { BootstrapLogger } from '../../services/bootstrap-logger/bootstrap-logger';
 import { ResolverService } from '../../services/resolver/resolver.service';
-import { ModuleArguments, ModuleWithServices } from '../module/module.interfaces';
+import { ModuleArguments, ModuleWithServices, ServiceArgumentsInternal } from '../module/module.interfaces';
 import { MetadataService } from '../../services/metadata/metadata.service';
 import { ModuleService } from '../../services/module/module.service';
 
@@ -14,10 +14,9 @@ const metadataService = Container.get(MetadataService);
 const moduleService = Container.get(ModuleService);
 
 export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Function {
-
-    return (target) => {
+    return (target: any) => {
         module = module || {};
-        const original = Object.assign(target);
+        const original: ServiceArgumentsInternal = Object.assign(target);
         const moduleName = target.name || target.constructor.name;
         const generatedHashData = metadataService.generateHashData(module, original);
         const uniqueModuleTemplate = metadataService.parseModuleTemplate(moduleName, generatedHashData, `${target}`);
@@ -29,19 +28,19 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
         Object.defineProperty(original, 'originalName', { value: original.name || original.constructor.name, writable: false });
         Object.defineProperty(original, 'name', { value: uniqueHashForClass, writable: true });
 
-        const currentModule = cacheService.createLayer<boolean>({ name: uniqueHashForClass });
+        const currentModuleLayer = cacheService.createLayer<Function>({ name: uniqueHashForClass });
 
-        original['metadata'] = {
-            moduleName: original['originalName'],
+        original.metadata = {
+            moduleName: original.originalName,
             moduleHash: uniqueHashForClass,
             options: null,
             type: 'module',
             raw: uniqueModuleTemplate
         };
 
-        const constructorFunction: any = function (...args) {
+        const constructorFunction: any = function (...args: any[]) {
             bootstrapLogger.log(`Bootstrap -> @Module('${original.originalName}')${bootstrapLogger.logHashes(`(${original.name})`)}: loading...`);
-            return GenericConstruct(module, original, currentModule)(original, args);
+            return GenericConstruct(module, original, currentModuleLayer)(original, args);
         };
 
         Object.assign(constructorFunction, original);
@@ -60,7 +59,7 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
             }));
         if (original.forRoot) {
             const originalForRoot = constructorFunction.forRoot;
-            constructorFunction.forRoot = function (args) {
+            constructorFunction.forRoot = function (args?: any) {
                 const result: ModuleWithServices = originalForRoot(args);
 
                 if (!result) {
@@ -68,39 +67,39 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
                 }
 
                 if (result.frameworkImports) {
-                    moduleService.setImports(result.frameworkImports, original);
+                    moduleService.setImports(result.frameworkImports as any, original);
                 }
 
                 if (result.services) {
-                    moduleService.setServices(<any>result.services, original, currentModule);
+                    moduleService.setServices(result.services as any, original, currentModuleLayer);
                 }
 
                 if (result.providers) {
-                    moduleService.setServices(<any>result.providers, original, currentModule);
+                    moduleService.setServices(result.providers as any, original, currentModuleLayer);
                 }
 
                 if (result.components) {
-                    moduleService.setComponents(<any>result.components, original, currentModule);
+                    moduleService.setComponents(result.components as any, original, currentModuleLayer);
                 }
 
                 if (result.effects) {
-                    moduleService.setEffects(<any>result.effects, original, currentModule);
+                    moduleService.setEffects(result.effects as any, original, currentModuleLayer);
                 }
 
                 if (result.controllers) {
-                    moduleService.setControllers(<any>result.controllers, original, currentModule);
+                    moduleService.setControllers(result.controllers as any, original, currentModuleLayer);
                 }
 
                 if (result.beforePlugins) {
-                    moduleService.setBeforePlugins(result.beforePlugins, original, currentModule);
+                    moduleService.setBeforePlugins(result.beforePlugins as any, original, currentModuleLayer);
                 }
 
                 if (result.plugins) {
-                    moduleService.setPlugins(result.plugins, original, currentModule);
+                    moduleService.setPlugins(result.plugins as any, original, currentModuleLayer);
                 }
 
                 if (result.afterPlugins) {
-                    moduleService.setAfterPlugins(result.afterPlugins, original, currentModule);
+                    moduleService.setAfterPlugins(result.afterPlugins as any, original, currentModuleLayer);
                 }
 
                 return result.module ? result.module : result;

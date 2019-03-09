@@ -1,6 +1,10 @@
 import 'reflect-metadata';
+import { Container } from '../container';
 import { ConfigModel } from '../services/config/config.model';
 import { Observable } from 'rxjs';
-export declare const Bootstrap: (app: any, config?: ConfigModel) => Observable<any>;
-export declare const BootstrapPromisify: (app: any, config?: ConfigModel) => Promise<any>;
-export declare const BootstrapFramework: (app: any, modules: any[], config?: ConfigModel) => Observable<any>;
+import { ModuleArguments } from '../decorators/module/module.interfaces';
+export declare const Bootstrap: (app: any, config?: ConfigModel) => Observable<Container>;
+export declare const BootstrapPromisify: (app: any, config?: ConfigModel) => Promise<Container>;
+export declare const BootstrapFramework: (app: any, modules: any[], config?: ConfigModel) => Observable<Container>;
+export declare const setup: <T, K>(options: ModuleArguments<T, K>, frameworks?: any[], bootstrapOptions?: ConfigModel) => Observable<Container>;
+export declare const createTestBed: <T, K>(options: ModuleArguments<T, K>, frameworks?: any[], bootstrapOptions?: ConfigModel) => Observable<Container>;

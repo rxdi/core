@@ -41,6 +41,7 @@ export declare class BootstrapService {
     private asyncChainableControllers;
     private asyncChainablePluginsAfterRegister;
     private asyncChainablePluginsBeforeRegister;
+    private genericFilter;
     private registerPlugin;
     private prepareAsyncChainables;
     private validateSystem;

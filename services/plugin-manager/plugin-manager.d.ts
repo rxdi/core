@@ -1,8 +1,8 @@
 import { PluginService } from '../plugin/plugin.service';
-import { PluginInterface } from '../../container/index';
+import { ServiceArgumentsInternal } from '../../decorators/module/module.interfaces';
 export declare class PluginManager {
     private pluginService;
     constructor(pluginService: PluginService);
-    listPlugins(): Array<Function | PluginInterface>;
-    getPlugin(pluginClass: Function): Function | PluginInterface;
+    listPlugins(): Array<ServiceArgumentsInternal>;
+    getPlugin(pluginClass: Function): ServiceArgumentsInternal;
 }

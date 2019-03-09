@@ -1,10 +1,10 @@
 import { Service } from '../../../container';
-import { Metadata, DecoratorType } from '../../../decorators/module/module.interfaces';
+import { Metadata, DecoratorType, ServiceArgumentsInternal } from '../../../decorators/module/module.interfaces';
 
 @Service()
 export class ModuleValidators {
 
-    validateEmpty(m, original: { metadata: Metadata }, type: DecoratorType) {
+    validateEmpty(m, original: ServiceArgumentsInternal, type: DecoratorType) {
         if (!m) {
             const requiredType = type.charAt(0).toUpperCase() + type.slice(1);
             throw new Error(`
@@ -18,7 +18,7 @@ export class ModuleValidators {
         }
     }
 
-    genericWrongPluggableError(m, original: { metadata: Metadata }, type: DecoratorType) {
+    genericWrongPluggableError(m, original: ServiceArgumentsInternal, type: DecoratorType) {
         if (m.metadata.type !== type) {
             const moduleType = m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1);
             const requiredType = type.charAt(0).toUpperCase() + type.slice(1);
@@ -32,7 +32,7 @@ export class ModuleValidators {
         }
     }
 
-    validateImports(m, original: { metadata: Metadata }) {
+    validateImports(m, original: ServiceArgumentsInternal) {
         if (m.metadata.type !== 'module') {
             throw new Error(`
             ${original.metadata.raw}
@@ -44,7 +44,7 @@ export class ModuleValidators {
         }
     }
 
-    validateServices(m, original: { metadata: Metadata }) {
+    validateServices(m, original: ServiceArgumentsInternal) {
         this.validateEmpty(m, original, 'service');
         if (m.provide) {
             return;
@@ -52,7 +52,7 @@ export class ModuleValidators {
         this.genericWrongPluggableError(m, original, 'service');
     }
 
-    validatePlugin(m, original: { metadata: Metadata }) {
+    validatePlugin(m, original: ServiceArgumentsInternal) {
         this.validateEmpty(m, original, 'plugin');
         if (m.provide) {
             return;
@@ -60,7 +60,7 @@ export class ModuleValidators {
         this.genericWrongPluggableError(m, original, 'plugin');
     }
 
-    validateController(m, original: { metadata: Metadata }) {
+    validateController(m, original: ServiceArgumentsInternal) {
         this.validateEmpty(m, original, 'controller');
         if (m.provide) {
             return;
@@ -68,7 +68,7 @@ export class ModuleValidators {
         this.genericWrongPluggableError(m, original, 'controller');
     }
 
-    validateEffect(m, original: { metadata: Metadata }) {
+    validateEffect(m, original: ServiceArgumentsInternal) {
         this.validateEmpty(m, original, 'effect');
         if (m.provide) {
             return;
@@ -76,7 +76,7 @@ export class ModuleValidators {
         this.genericWrongPluggableError(m, original, 'effect');
     }
 
-    validateComponent(m, original: { metadata: Metadata }) {
+    validateComponent(m, original: ServiceArgumentsInternal) {
         this.validateEmpty(m, original, 'component');
         if (m.provide) {
             return;

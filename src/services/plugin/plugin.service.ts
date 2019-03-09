@@ -1,13 +1,14 @@
 import { BehaviorSubject } from 'rxjs';
 // import { PluginBase, PluginNameVersion, PluginPackage } from 'hapi';
-import { Service, PluginInterface } from '../../container/index';
+import { Service } from '../../container/index';
+import { ServiceArgumentsInternal } from '../../decorators/module/module.interfaces';
 
 @Service()
 export class PluginService {
 
-    private plugins: BehaviorSubject<Array<PluginInterface>> = new BehaviorSubject([]);
-    private beforePlugins: BehaviorSubject<Array<Function | PluginInterface>> = new BehaviorSubject([]);
-    private afterPlugins: BehaviorSubject<Array<Function | PluginInterface>> = new BehaviorSubject([]);
+    private plugins: BehaviorSubject<Array<ServiceArgumentsInternal>> = new BehaviorSubject([]);
+    private beforePlugins: BehaviorSubject<Array<ServiceArgumentsInternal>> = new BehaviorSubject([]);
+    private afterPlugins: BehaviorSubject<Array<ServiceArgumentsInternal>> = new BehaviorSubject([]);
 
     register(plugin) {
         this.plugins.next([...this.plugins.getValue(), plugin]);
@@ -21,7 +22,7 @@ export class PluginService {
         this.afterPlugins.next([...this.plugins.getValue(), plugin]);
     }
 
-    getPlugins(): Array<Function | PluginInterface> {
+    getPlugins(): Array<ServiceArgumentsInternal> {
         return this.plugins.getValue();
     }
 

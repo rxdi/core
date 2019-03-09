@@ -24,9 +24,9 @@ function Module(module) {
         // console.log(uniqueModuleTemplate);
         Object.defineProperty(original, 'originalName', { value: original.name || original.constructor.name, writable: false });
         Object.defineProperty(original, 'name', { value: uniqueHashForClass, writable: true });
-        const currentModule = cacheService.createLayer({ name: uniqueHashForClass });
-        original['metadata'] = {
-            moduleName: original['originalName'],
+        const currentModuleLayer = cacheService.createLayer({ name: uniqueHashForClass });
+        original.metadata = {
+            moduleName: original.originalName,
             moduleHash: uniqueHashForClass,
             options: null,
             type: 'module',
@@ -34,7 +34,7 @@ function Module(module) {
         };
         const constructorFunction = function (...args) {
             bootstrapLogger.log(`Bootstrap -> @Module('${original.originalName}')${bootstrapLogger.logHashes(`(${original.name})`)}: loading...`);
-            return generic_constructor_1.GenericConstruct(module, original, currentModule)(original, args);
+            return generic_constructor_1.GenericConstruct(module, original, currentModuleLayer)(original, args);
         };
         Object.assign(constructorFunction, original);
         resolverService.resolveDependencies(uniqueHashForClass, original, moduleName)
@@ -57,28 +57,28 @@ function Module(module) {
                     moduleService.setImports(result.frameworkImports, original);
                 }
                 if (result.services) {
-                    moduleService.setServices(result.services, original, currentModule);
+                    moduleService.setServices(result.services, original, currentModuleLayer);
                 }
                 if (result.providers) {
-                    moduleService.setServices(result.providers, original, currentModule);
+                    moduleService.setServices(result.providers, original, currentModuleLayer);
                 }
                 if (result.components) {
-                    moduleService.setComponents(result.components, original, currentModule);
+                    moduleService.setComponents(result.components, original, currentModuleLayer);
                 }
                 if (result.effects) {
-                    moduleService.setEffects(result.effects, original, currentModule);
+                    moduleService.setEffects(result.effects, original, currentModuleLayer);
                 }
                 if (result.controllers) {
-                    moduleService.setControllers(result.controllers, original, currentModule);
+                    moduleService.setControllers(result.controllers, original, currentModuleLayer);
                 }
                 if (result.beforePlugins) {
-                    moduleService.setBeforePlugins(result.beforePlugins, original, currentModule);
+                    moduleService.setBeforePlugins(result.beforePlugins, original, currentModuleLayer);
                 }
                 if (result.plugins) {
-                    moduleService.setPlugins(result.plugins, original, currentModule);
+                    moduleService.setPlugins(result.plugins, original, currentModuleLayer);
                 }
                 if (result.afterPlugins) {
-                    moduleService.setAfterPlugins(result.afterPlugins, original, currentModule);
+                    moduleService.setAfterPlugins(result.afterPlugins, original, currentModuleLayer);
                 }
                 return result.module ? result.module : result;
             };

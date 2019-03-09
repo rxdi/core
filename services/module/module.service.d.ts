@@ -1,5 +1,6 @@
-import { ServiceArgumentsInternal, Metadata } from '../../decorators/module/module.interfaces';
+import { ServiceArgumentsInternal } from '../../decorators/module/module.interfaces';
 import { ConstructorWatcherService } from '../constructor-watcher/constructor-watcher';
+import { CacheLayer, CacheLayerItem } from '../../services/cache/';
 export declare class ModuleService {
     watcherService: ConstructorWatcherService;
     private lazyFactoryService;
@@ -11,30 +12,18 @@ export declare class ModuleService {
     private externalImporter;
     private validators;
     private servicesService;
-    setServices(services: ServiceArgumentsInternal[], original: {
-        metadata: Metadata;
-    }, currentModule: any): void;
+    setServices(services: ServiceArgumentsInternal[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;
     setInjectedDependencies(service: any): void;
     setUseValue(service: any): void;
     setUseClass(service: any): void;
     setUseDynamic(service: any): void;
     setUseFactory(service: any): void;
-    setControllers(controllers: any[], original: any, currentModule: any): void;
-    setEffects(effects: any[], original: any, currentModule: any): void;
-    setComponents(components: any[], original: any, currentModule: any): void;
-    setPlugins(plugins: any, original: {
-        metadata: Metadata;
-    }, currentModule: any): void;
-    setBootstraps(bootstraps: any, original: {
-        metadata: Metadata;
-    }, currentModule: any): void;
-    setAfterPlugins(plugins: any, original: {
-        metadata: Metadata;
-    }, currentModule: any): void;
-    setBeforePlugins(plugins: any, original: {
-        metadata: Metadata;
-    }, currentModule: any): void;
-    setImports(imports: any, original: {
-        metadata: Metadata;
-    }): void;
+    setControllers(controllers: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;
+    setEffects(effects: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;
+    setComponents(components: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;
+    setPlugins(plugins: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;
+    setBootstraps(bootstraps: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;
+    setAfterPlugins(plugins: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;
+    setBeforePlugins(plugins: Function[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;
+    setImports(imports: Function[], original: ServiceArgumentsInternal): void;
 }

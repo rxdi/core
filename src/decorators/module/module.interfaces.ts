@@ -28,12 +28,14 @@ export interface ModuleWithServices {
 }
 
 export type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect' | 'component';
+export type SystemIngridientsType = 'plugins' | 'pluginsBefore' | 'pluginsAfter' | 'controllers' | 'services' | 'effects' | 'components';
 
 export interface Metadata {
     moduleHash?: string;
     moduleName?: string;
     raw?: string;
     type?: DecoratorType;
+    options?: any;
 }
 
 export interface ServiceArgumentsInternal {
@@ -46,6 +48,8 @@ export interface ServiceArgumentsInternal {
     useDynamic?: ExternalImporterConfig;
     deps?: Array<Function | string | InjectionToken<any>>;
     lazy?: boolean;
+    originalName?: string;
+    forRoot?: any;
 }
 
 export interface ModuleArguments<T, K> extends Metadata {

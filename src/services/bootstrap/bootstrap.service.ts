@@ -17,6 +17,8 @@ import { BootstrapsServices } from '../bootstraps/bootstraps.service';
 import { ServicesService } from '../services/services.service';
 import { PluginManager } from '../plugin-manager/plugin-manager';
 import { AfterStarterService } from '../after-starter/after-starter.service';
+import { ServiceArgumentsInternal, SystemIngridientsType } from '../../decorators/module/module.interfaces';
+
 
 @Service()
 export class BootstrapService {
@@ -47,13 +49,14 @@ export class BootstrapService {
         this.configService.setConfig(config);
         this.globalConfig.putItem({ key: InternalEvents.init, data: config });
         Container.get(app);
-        return of<string[]>(Array.from(this.lazyFactoriesService.lazyFactories.keys()))
+        const lazyFactoryKeys = Array.from(this.lazyFactoriesService.lazyFactories.keys());
+        return of<string[]>(lazyFactoryKeys)
             .pipe(
-                map((i) => i.map(injectable => this.prepareAsyncChainables(injectable))),
-                switchMap((res) => combineLatest(this.asyncChainables)
+                map((factories) => this.prepareAsyncChainables(factories)),
+                switchMap((res) => combineLatest(res)
                     .pipe(
                         take(1),
-                        map((c) => this.attachLazyLoadedChainables(res, c)),
+                        map((c) => this.attachLazyLoadedChainables(lazyFactoryKeys, c)),
                         map(() => this.validateSystem()),
                         switchMap(() => combineLatest(this.asyncChainableControllers())),
                         switchMap(() => combineLatest(this.asyncChainablePluginsBeforeRegister())),
@@ -69,7 +72,7 @@ export class BootstrapService {
             );
     }
 
-    private final(): PluginManager {
+    private final(): Container {
         // opn('https://theft.youvolio.com');
         // const globalConfig = cache.createLayer<{ init: boolean }>({ name: InternalLayers.globalConfig });
         // cache.getLayer('AppModule').putItem({key:InternalEvents.load, data: true});
@@ -77,29 +80,23 @@ export class BootstrapService {
         // console.log('bla bla', plugins);!
         // Bootstrapping finished!
         this.afterStarterService.appStarted.next(true);
-        return this.pluginManager;
+        return Container;
     }
 
     private asyncChainablePluginsRegister() {
-        const filter = (c) => this.configService.config.initOptions.plugins
-            || c['metadata']['options'] && c['metadata']['options']['init']
-            || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins()
-                .filter(filter)
+            .filter((c) => this.genericFilter(c, 'plugins'))
                 .map(async c => this.registerPlugin(c))
         ];
     }
 
     private asyncChainableComponents() {
-        const filter = (c) => this.configService.config.initOptions.components
-            || c['metadata']['options'] && c['metadata']['options']['init']
-            || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.componentsService.getComponents()
-                .filter(filter)
+                .filter((c) => this.genericFilter(c, 'components'))
                 .map(async c => await Container.get(c))
         ];
     }
@@ -113,80 +110,76 @@ export class BootstrapService {
     }
 
     private asyncChainableEffects() {
-        const filter = (c) => this.configService.config.initOptions.effects
-            || c['metadata']['options'] && c['metadata']['options']['init']
-            || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.effectsService.getEffects()
-                .filter(filter)
+                .filter((c) => this.genericFilter(c, 'effects'))
                 .map(async c => await Container.get(c))
         ];
     }
 
     private asyncChainableServices() {
-        const filter = (c) => this.configService.config.initOptions.services
-            || c['metadata']['options'] && c['metadata']['options']['init']
-            || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.servicesService.getServices()
-                .filter(filter)
+                .filter((c) => this.genericFilter(c, 'services'))
                 .map(async c => await Container.get(c))
         ];
     }
 
     private asyncChainableControllers() {
-        const filter = (c) => this.configService.config.initOptions.controllers
-            || c['metadata']['options'] && c['metadata']['options']['init']
-            || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.controllersService.getControllers()
-                .filter(filter)
+                .filter((c) => this.genericFilter(c, 'controllers'))
                 .map(async c => await Container.get(c))
         ];
     }
 
+
+
     private asyncChainablePluginsAfterRegister() {
-        const filter = (c) => this.configService.config.initOptions.pluginsAfter
-            || c['metadata']['options'] && c['metadata']['options']['init']
-            || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.pluginService.getAfterPlugins()
-                .filter(filter)
+                .filter((c) => this.genericFilter(c, 'pluginsAfter'))
                 .map(async c => await this.registerPlugin(c))
         ];
     }
 
     private asyncChainablePluginsBeforeRegister() {
-        const filter = (c) => this.configService.config.initOptions.pluginsBefore
-            || c['metadata']['options'] && c['metadata']['options']['init']
-            || this.configService.config.init;
         return [
             this.chainableObservable,
             ...this.pluginService.getBeforePlugins()
-                .filter(filter)
+                .filter((c) => this.genericFilter(c, 'pluginsBefore'))
                 .map(async c => this.registerPlugin(c))
         ];
     }
 
-    private async registerPlugin(pluggable: Function | PluginInterface) {
+    private genericFilter(c: ServiceArgumentsInternal, name: SystemIngridientsType) {
+        return this.configService.config.initOptions[name]
+            || c.metadata.options && c.metadata.options['init']
+            || this.configService.config.init;
+    }
+
+
+    private async registerPlugin(pluggable: ServiceArgumentsInternal) {
         const plugin = Container.get<PluginInterface>(pluggable);
         await plugin.register();
         return plugin;
     }
 
-    private prepareAsyncChainables(injectable: any) {
-        this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading...`);
-        const somethingAsync = from(<Promise<any> | Observable<any>>this.lazyFactoriesService.getLazyFactory(injectable));
-        this.asyncChainables.push(somethingAsync);
+    private prepareAsyncChainables(injectables: any[]) {
+        const asynChainables = [this.chainableObservable];
+        injectables.map(injectable => {
+            this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading...`);
+            asynChainables.push(from(<Promise<any> | Observable<any>>this.lazyFactoriesService.getLazyFactory(injectable)));
+        });
         // somethingAsync
         //     .subscribe(
         //         () => this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading finished! ${new Date().toLocaleTimeString()}`)
         //     );
-        return injectable;
+        return asynChainables;
     }
 
     private validateSystem() {
