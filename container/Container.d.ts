@@ -1,9 +1,9 @@
-import { ServiceMetadata } from './types/ServiceMetadata';
-import { ObjectType } from './types/ObjectType';
-import { Handler } from './types/Handler';
-import { Token } from './Token';
-import { ServiceIdentifier } from './types/ServiceIdentifier';
 import { ContainerInstance } from './ContainerInstance';
+import { Token } from './Token';
+import { Handler } from './types/Handler';
+import { ObjectType } from './types/ObjectType';
+import { ServiceIdentifier } from './types/ServiceIdentifier';
+import { ServiceMetadata } from './types/ServiceMetadata';
 /**
  * Service container.
  */
@@ -54,6 +54,13 @@ export declare class Container {
      * Optionally, parameters can be passed in case if instance is initialized in the container for the first time.
      */
     static get<T>(id: Token<T>): T;
+    /**
+     * Retrieves the service with given name or type from the service container.
+     * Optionally, parameters can be passed in case if instance is initialized in the container for the first time.
+     */
+    static get<T>(service: {
+        service: T;
+    }): T;
     /**
      * Gets all instances registered in the container of the given service identifier.
      * Used when service defined with multiple: true flag.

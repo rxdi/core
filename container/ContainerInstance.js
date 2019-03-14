@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Token_1 = require("./Token");
-const ServiceNotFoundError_1 = require("./error/ServiceNotFoundError");
-const MissingProvidedServiceTypeError_1 = require("./error/MissingProvidedServiceTypeError");
 const Container_1 = require("./Container");
+const MissingProvidedServiceTypeError_1 = require("./error/MissingProvidedServiceTypeError");
+const ServiceNotFoundError_1 = require("./error/ServiceNotFoundError");
+const Token_1 = require("./Token");
 const constructor_watcher_1 = require("../services/constructor-watcher");
-// import { controllerHooks } from '../services/controller-service/controller-hooks';
-// import { effectHooks } from '../services/effect-hook/effect-hooks';
 /**
  * TypeDI can have multiple containers.
  * One container is ContainerInstance.
@@ -71,6 +69,9 @@ class ContainerInstance {
         if (typeof identifierOrServiceMetadata === 'string' || identifierOrServiceMetadata instanceof Token_1.Token) {
             return this.set({ id: identifierOrServiceMetadata, value: value });
         }
+        if (typeof identifierOrServiceMetadata === 'object' && identifierOrServiceMetadata.service) {
+            return this.set({ id: identifierOrServiceMetadata.service, value: value });
+        }
         if (identifierOrServiceMetadata instanceof Function) {
             return this.set({ type: identifierOrServiceMetadata, id: identifierOrServiceMetadata, value: value });
         }
@@ -123,10 +124,16 @@ class ContainerInstance {
      */
     findService(identifier) {
         return this.services.find(service => {
-            if (service.id)
+            if (service.id) {
+                if (identifier instanceof Object &&
+                    service.id instanceof Token_1.Token &&
+                    identifier.service instanceof Token_1.Token) {
+                    return service.id === identifier.service;
+                }
                 return service.id === identifier;
+            }
             if (service.type && identifier instanceof Function)
-                return service.type === identifier; // || identifier.prototype instanceof service.type;
+                return service.type === identifier; // todo: not sure why it was here || identifier.prototype instanceof service.type;
             return false;
         });
     }
@@ -135,7 +142,7 @@ class ContainerInstance {
      */
     getServiceValue(identifier, service) {
         // find if instance of this object already initialized in the container and return it if it is
-        if (service && service.value !== null && service.value !== undefined)
+        if (service && service.value !== undefined)
             return service.value;
         // if named service was requested and its instance was not found plus there is not type to know what to initialize,
         // this means service was not pre-registered and we throw an exception
@@ -153,6 +160,8 @@ class ContainerInstance {
         }
         else if (identifier instanceof Function) {
             type = identifier;
+            // } else if (identifier instanceof Object && (identifier as { service: Token<any> }).service instanceof Token) {
+            //     type = (identifier as { service: Token<any> }).service;
         }
         // if service was not found then create a new one and register it
         if (!service) {
@@ -177,7 +186,7 @@ class ContainerInstance {
                 value = this.get(service.factory[0])[service.factory[1]](...params);
             }
             else { // regular factory function
-                value = service.factory(...params);
+                value = service.factory(...params, this);
             }
         }
         else { // otherwise simply create a new object instance

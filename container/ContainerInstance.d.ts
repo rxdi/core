@@ -1,7 +1,7 @@
-import { ServiceMetadata } from './types/ServiceMetadata';
-import { ObjectType } from './types/ObjectType';
 import { Token } from './Token';
+import { ObjectType } from './types/ObjectType';
 import { ServiceIdentifier } from './types/ServiceIdentifier';
+import { ServiceMetadata } from './types/ServiceMetadata';
 /**
  * TypeDI can have multiple containers.
  * One container is ContainerInstance.
@@ -46,6 +46,13 @@ export declare class ContainerInstance {
      * Optionally, parameters can be passed in case if instance is initialized in the container for the first time.
      */
     get<T>(id: Token<T>): T;
+    /**
+     * Retrieves the service with given name or type from the service container.
+     * Optionally, parameters can be passed in case if instance is initialized in the container for the first time.
+     */
+    get<T>(id: {
+        service: T;
+    }): T;
     /**
      * Gets all instances registered in the container of the given service identifier.
      * Used when service defined with multiple: true flag.

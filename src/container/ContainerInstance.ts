@@ -1,13 +1,11 @@
-import { ServiceMetadata } from './types/ServiceMetadata';
-import { ObjectType } from './types/ObjectType';
-import { Token } from './Token';
-import { ServiceIdentifier } from './types/ServiceIdentifier';
-import { ServiceNotFoundError } from './error/ServiceNotFoundError';
-import { MissingProvidedServiceTypeError } from './error/MissingProvidedServiceTypeError';
 import { Container } from './Container';
+import { MissingProvidedServiceTypeError } from './error/MissingProvidedServiceTypeError';
+import { ServiceNotFoundError } from './error/ServiceNotFoundError';
+import { Token } from './Token';
+import { ObjectType } from './types/ObjectType';
+import { ServiceIdentifier } from './types/ServiceIdentifier';
+import { ServiceMetadata } from './types/ServiceMetadata';
 import { constructorWatcherService } from '../services/constructor-watcher';
-// import { controllerHooks } from '../services/controller-service/controller-hooks';
-// import { effectHooks } from '../services/effect-hook/effect-hooks';
 
 /**
  * TypeDI can have multiple containers.
@@ -93,7 +91,13 @@ export class ContainerInstance {
      * Retrieves the service with given name or type from the service container.
      * Optionally, parameters can be passed in case if instance is initialized in the container for the first time.
      */
-    get<T>(identifier: ServiceIdentifier): T {
+    get<T>(id: { service: T }): T;
+
+    /**
+     * Retrieves the service with given name or type from the service container.
+     * Optionally, parameters can be passed in case if instance is initialized in the container for the first time.
+     */
+    get<T>(identifier: ServiceIdentifier<T>): T {
 
         const globalContainer = Container.of(undefined);
         const service = globalContainer.findService(identifier);
@@ -155,6 +159,7 @@ export class ContainerInstance {
      * Sets a value for the given type or service name in the container.
      */
     set(token: Token<any>, value: any): this;
+
     /**
      * Sets a value for the given type or service name in the container.
      */
@@ -176,12 +181,15 @@ export class ContainerInstance {
         if (typeof identifierOrServiceMetadata === 'string' || identifierOrServiceMetadata instanceof Token) {
             return this.set({ id: identifierOrServiceMetadata, value: value });
         }
+        if (typeof identifierOrServiceMetadata === 'object' && (identifierOrServiceMetadata as { service: Token<any> }).service) {
+            return this.set({ id: (identifierOrServiceMetadata as { service: Token<any> }).service, value: value });
+        }
         if (identifierOrServiceMetadata instanceof Function) {
             return this.set({ type: identifierOrServiceMetadata, id: identifierOrServiceMetadata, value: value });
         }
 
         // const newService: ServiceMetadata<any, any> = arguments.length === 1 && typeof identifierOrServiceMetadata === 'object'  && !(identifierOrServiceMetadata instanceof Token) ? identifierOrServiceMetadata : undefined;
-        const newService: ServiceMetadata<any, any> = identifierOrServiceMetadata;
+        const newService: ServiceMetadata<any, any> = identifierOrServiceMetadata as any;
         const service = this.findService(newService.id);
         if (service && service.multiple !== true) {
             Object.assign(service, newService);
@@ -236,11 +244,18 @@ export class ContainerInstance {
      */
     private findService(identifier: ServiceIdentifier): ServiceMetadata<any, any> | undefined {
         return this.services.find(service => {
-            if (service.id)
+            if (service.id) {
+                if (identifier instanceof Object &&
+                    service.id instanceof Token &&
+                    (identifier as any).service instanceof Token) {
+                    return service.id === (identifier as any).service;
+                }
+
                 return service.id === identifier;
+            }
 
             if (service.type && identifier instanceof Function)
-                return service.type === identifier; // || identifier.prototype instanceof service.type;
+                return service.type === identifier; // todo: not sure why it was here || identifier.prototype instanceof service.type;
 
             return false;
         });
@@ -252,7 +267,7 @@ export class ContainerInstance {
     private getServiceValue(identifier: ServiceIdentifier, service: ServiceMetadata<any, any> | undefined): any {
 
         // find if instance of this object already initialized in the container and return it if it is
-        if (service && service.value !== null && service.value !== undefined)
+        if (service && service.value !== undefined)
             return service.value;
 
         // if named service was requested and its instance was not found plus there is not type to know what to initialize,
@@ -272,6 +287,9 @@ export class ContainerInstance {
 
         } else if (identifier instanceof Function) {
             type = identifier;
+
+            // } else if (identifier instanceof Object && (identifier as { service: Token<any> }).service instanceof Token) {
+            //     type = (identifier as { service: Token<any> }).service;
         }
 
         // if service was not found then create a new one and register it
@@ -302,7 +320,7 @@ export class ContainerInstance {
                 value = (this.get(service.factory[0]) as any)[service.factory[1]](...params);
 
             } else { // regular factory function
-                value = service.factory(...params);
+                value = service.factory(...params, this);
             }
 
         } else {  // otherwise simply create a new object instance
