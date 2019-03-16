@@ -57,7 +57,7 @@ let CacheService = CacheService_1 = class CacheService {
             // console.log(key, currentModule.map.keys());
             const currentModuleDependencies = Array.from(currentModule.map.keys());
             currentModuleDependencies.forEach(key => {
-                if (key === events_1.InternalEvents.load || key === events_1.InternalEvents.config || key === events_1.InternalEvents.init) {
+                if (this.isExcludedEvent(key)) {
                     return;
                 }
                 currentModuleDependenciesKeys.push(key);
@@ -94,6 +94,9 @@ let CacheService = CacheService_1 = class CacheService {
         }
         return duplicates;
     }
+    isExcludedEvent(i) {
+        return i === events_1.InternalEvents.config || i === events_1.InternalEvents.load;
+    }
     searchForItem(classItem) {
         let itemFound;
         const library = Array.from(this.map.keys());
@@ -102,7 +105,7 @@ let CacheService = CacheService_1 = class CacheService {
             const currentModule = this.getLayer(module);
             const currentModuleDependencies = Array.from(currentModule.map.keys());
             const found = currentModuleDependencies.filter((i => {
-                if (i === events_1.InternalEvents.config || i === events_1.InternalEvents.load || i === events_1.InternalEvents.init) {
+                if (this.isExcludedEvent(i)) {
                     return;
                 }
                 else {
@@ -122,7 +125,7 @@ let CacheService = CacheService_1 = class CacheService {
             const currentModule = this.getLayer(module);
             const currentModuleDependencies = Array.from(currentModule.map.keys());
             const found = currentModuleDependencies.filter((i => {
-                if (i === events_1.InternalEvents.config || i === events_1.InternalEvents.load || i === events_1.InternalEvents.init) {
+                if (this.isExcludedEvent(i)) {
                     return;
                 }
                 return i === key;

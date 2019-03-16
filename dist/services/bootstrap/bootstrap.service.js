@@ -53,7 +53,7 @@ let BootstrapService = class BootstrapService {
     }
     start(app, config) {
         this.configService.setConfig(config);
-        this.globalConfig.putItem({ key: events_1.InternalEvents.init, data: config });
+        this.globalConfig.putItem({ key: events_1.InternalEvents.config, data: config });
         container_1.Container.get(app);
         const lazyFactoryKeys = Array.from(this.lazyFactoriesService.lazyFactories.keys());
         return rxjs_1.of(lazyFactoryKeys)
@@ -68,6 +68,9 @@ let BootstrapService = class BootstrapService {
         // console.log('bla bla', plugins);!
         // Bootstrapping finished!
         this.afterStarterService.appStarted.next(true);
+        if (!this.configService.config.init) {
+            this.logger.log('Bootstrap -> press start!');
+        }
         return container_1.Container;
     }
     asyncChainablePluginsRegister() {
@@ -168,7 +171,6 @@ let BootstrapService = class BootstrapService {
         return true;
     }
     loadApplication() {
-        this.logger.log('Bootstrap -> press start!');
         Array.from(this.cacheService.getLayer(events_1.InternalLayers.modules).map.keys())
             .forEach(m => this.cacheService.getLayer(m)
             .putItem({ key: events_1.InternalEvents.load, data: this.configService.config.init }));

@@ -1,6 +1,5 @@
 export declare const InternalEvents: {
     load: "load";
-    init: "init";
     config: "config";
 };
 export declare type InternalEvents = keyof typeof InternalEvents;

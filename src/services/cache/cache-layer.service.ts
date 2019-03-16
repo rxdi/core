@@ -57,7 +57,7 @@ export class CacheService {
       // console.log(key, currentModule.map.keys());
       const currentModuleDependencies = Array.from(currentModule.map.keys());
       currentModuleDependencies.forEach(key => {
-        if (key === InternalEvents.load || key === InternalEvents.config || key === InternalEvents.init) {
+        if (this.isExcludedEvent(key)) {
           return;
         }
         currentModuleDependenciesKeys.push(key);
@@ -80,7 +80,7 @@ export class CacheService {
     const duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1);
     if (duplicates.length) {
       const dups = this.searchForDuplicatesByHash(duplicates[0]);
-      const moduleType = dups[0].class['metadata']['type'].charAt(0).toUpperCase() +  dups[0].class['metadata']['type'].slice(1);
+      const moduleType = dups[0].class['metadata']['type'].charAt(0).toUpperCase() + dups[0].class['metadata']['type'].slice(1);
       throw new Error(`
                 ${dups[0].class['metadata'].raw}
                 ${moduleType}: '${dups[0].originalName}' found multiple times!
@@ -95,6 +95,10 @@ export class CacheService {
     return duplicates;
   }
 
+  private isExcludedEvent(i: any) {
+    return i === InternalEvents.config || i === InternalEvents.load;
+  }
+
   public searchForItem(classItem) {
     let itemFound;
     const library = Array.from(this.map.keys());
@@ -103,7 +107,7 @@ export class CacheService {
         const currentModule = this.getLayer(module);
         const currentModuleDependencies = Array.from(currentModule.map.keys());
         const found = currentModuleDependencies.filter((i => {
-          if (i === InternalEvents.config || i === InternalEvents.load || i === InternalEvents.init) {
+          if (this.isExcludedEvent(i)) {
             return;
           } else {
             return i === classItem.name;
@@ -125,7 +129,7 @@ export class CacheService {
       const currentModule = this.getLayer<any>(module);
       const currentModuleDependencies = Array.from(currentModule.map.keys());
       const found = currentModuleDependencies.filter((i => {
-        if (i === InternalEvents.config || i === InternalEvents.load || i === InternalEvents.init) {
+        if (this.isExcludedEvent(i)) {
           return;
         }
         return i === key;

@@ -1,5 +1,5 @@
 
-import { of, combineLatest, from, Observable, forkJoin } from 'rxjs';
+import { of, combineLatest, from, Observable } from 'rxjs';
 import { Container, Service, PluginInterface } from '../../container';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { CacheService } from '../cache/cache-layer.service';
@@ -26,7 +26,6 @@ export class BootstrapService {
     globalConfig: CacheLayer<CacheLayerItem<ConfigModel>>;
     chainableObservable = of(true);
     asyncChainables: Observable<any>[] = [this.chainableObservable];
-    config: ConfigModel;
 
     constructor(
         private logger: BootstrapLogger,
@@ -47,7 +46,7 @@ export class BootstrapService {
 
     public start(app, config?: ConfigModel) {
         this.configService.setConfig(config);
-        this.globalConfig.putItem({ key: InternalEvents.init, data: config });
+        this.globalConfig.putItem({ key: InternalEvents.config, data: config });
         Container.get(app);
         const lazyFactoryKeys = Array.from(this.lazyFactoriesService.lazyFactories.keys());
         return of<string[]>(lazyFactoryKeys)
@@ -80,6 +79,9 @@ export class BootstrapService {
         // console.log('bla bla', plugins);!
         // Bootstrapping finished!
         this.afterStarterService.appStarted.next(true);
+        if (!this.configService.config.init) {
+            this.logger.log('Bootstrap -> press start!');
+        }
         return Container;
     }
 
@@ -87,7 +89,7 @@ export class BootstrapService {
         return [
             this.chainableObservable,
             ...this.pluginService.getPlugins()
-            .filter((c) => this.genericFilter(c, 'plugins'))
+                .filter((c) => this.genericFilter(c, 'plugins'))
                 .map(async c => this.registerPlugin(c))
         ];
     }
@@ -195,7 +197,6 @@ export class BootstrapService {
     }
 
     loadApplication() {
-        this.logger.log('Bootstrap -> press start!');
         Array.from(this.cacheService.getLayer<Function>(InternalLayers.modules).map.keys())
             .forEach(m => this.cacheService.getLayer(m)
                 .putItem({ key: InternalEvents.load, data: this.configService.config.init }));

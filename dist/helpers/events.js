@@ -6,5 +6,5 @@ function strEnum(o) {
         return res;
     }, Object.create(null));
 }
-exports.InternalEvents = strEnum(['load', 'init', 'config']);
+exports.InternalEvents = strEnum(['load', 'config']);
 exports.InternalLayers = strEnum(['globalConfig', 'modules']);

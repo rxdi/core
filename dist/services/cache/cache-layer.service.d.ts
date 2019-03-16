@@ -12,6 +12,7 @@ export declare class CacheService {
     getLayer<T>(name: string): CacheLayer<CacheLayerItem<T>>;
     getLayersByName<T>(name: string): CacheLayer<CacheLayerItem<T>>[];
     searchForDuplicateDependenciesInsideApp(): string[];
+    private isExcludedEvent;
     searchForItem(classItem: any): any;
     searchForDuplicatesByHash(key: string): Duplicates[];
     createLayer<T>(layer: CacheLayerInterface): CacheLayer<CacheLayerItem<T>>;

@@ -29,7 +29,6 @@ export declare class BootstrapService {
     globalConfig: CacheLayer<CacheLayerItem<ConfigModel>>;
     chainableObservable: Observable<boolean>;
     asyncChainables: Observable<any>[];
-    config: ConfigModel;
     constructor(logger: BootstrapLogger, cacheService: CacheService, lazyFactoriesService: LazyFactory, configService: ConfigService, controllersService: ControllersService, effectsService: EffectsService, pluginService: PluginService, componentsService: ComponentsService, bootstrapsService: BootstrapsServices, servicesService: ServicesService, pluginManager: PluginManager, afterStarterService: AfterStarterService);
     start(app: any, config?: ConfigModel): Observable<{}>;
     private final;
