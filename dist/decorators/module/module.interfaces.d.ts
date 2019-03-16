@@ -1,7 +1,6 @@
 import { PluginInterface } from '../../container/decorators/Plugin';
 import { ExternalImporterConfig } from '../../services/external-importer/external-importer-config';
 import { InjectionToken } from '../../container/Token';
-
 export interface ServiceArguments {
     name?: string;
     provide: string | InjectionToken<any> | Function;
@@ -13,7 +12,6 @@ export interface ServiceArguments {
     deps?: Array<Function | InjectionToken<any>>;
     lazy?: boolean;
 }
-
 export interface ModuleWithServices {
     module?: Function;
     frameworkImports?: Array<Function | ModuleWithServices>;
@@ -25,16 +23,13 @@ export interface ModuleWithServices {
     beforePlugins?: Array<Function | PluginInterface>;
     plugins?: Array<Function | PluginInterface>;
     afterPlugins?: Array<Function | PluginInterface>;
-
     /** @angular module compatability */
     ngModule?: Function;
 }
-
-export interface ModuleWithProviders extends ModuleWithServices { }
-
-export type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect' | 'component';
-export type SystemIngridientsType = 'plugins' | 'pluginsBefore' | 'pluginsAfter' | 'controllers' | 'services' | 'effects' | 'components';
-
+export interface ModuleWithProviders extends ModuleWithServices {
+}
+export declare type DecoratorType = 'module' | 'service' | 'plugin' | 'controller' | 'effect' | 'component';
+export declare type SystemIngridientsType = 'plugins' | 'pluginsBefore' | 'pluginsAfter' | 'controllers' | 'services' | 'effects' | 'components';
 export interface Metadata {
     moduleHash?: string;
     moduleName?: string;
@@ -42,7 +37,6 @@ export interface Metadata {
     type?: DecoratorType;
     options?: any;
 }
-
 export interface ServiceArgumentsInternal {
     name?: string;
     provide: Function | string | InjectionToken<any>;
@@ -56,7 +50,6 @@ export interface ServiceArgumentsInternal {
     originalName?: string;
     forRoot?: any;
 }
-
 export interface ModuleArguments<T, K> extends Metadata {
     imports?: Array<Function | ModuleWithServices>;
     services?: Array<Function | ServiceArgumentsInternal>;

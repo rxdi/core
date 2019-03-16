@@ -102,6 +102,11 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
                     moduleService.setAfterPlugins(result.afterPlugins as any, original, currentModuleLayer);
                 }
 
+                /** @angular compatability */
+                if (result.ngModule) {
+                    return result.ngModule;
+                }
+
                 return result.module ? result.module : result;
             };
         }
@@ -114,3 +119,6 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
         return constructorFunction;
     };
 }
+
+/** @angular module compatability */
+export const NgModule = Module;

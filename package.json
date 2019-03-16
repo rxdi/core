@@ -2,7 +2,13 @@
   "name": "@rxdi/core",
   "version": "0.0.389",
   "description": "",
-  "main": "index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "postpublish": "git push -f ssh://git@gitlab.youvolio.com:522/rxdi/core.git && git push --tags && git push ssh://git@gitlab.youvolio.com:522/rxdi/core.git --tags",
     "start": "gapi start --local --path=./src/testing-app/main.ts",
@@ -13,7 +19,7 @@
     "test": "gapi testing node"
   },
   "bin": {
-    "rxdi": "./bin/root.js"
+    "rxdi": "./dist/bin/root.js"
   },
   "repository": {
     "type": "git",
@@ -26,9 +32,9 @@
   },
   "homepage": "https://github.com/rxdi/core/blob/master/README.md",
   "dependencies": {
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.4.0",
-    "systemjs": "^0.21.4"
+    "reflect-metadata": "0.1.13",
+    "rxjs": "6.4.0",
+    "systemjs": "0.21.4"
   },
   "devDependencies": {
     "@rxdi/dts-merge": "^0.0.388",
