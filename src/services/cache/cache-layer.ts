@@ -1,6 +1,7 @@
 import { CacheLayerInterface, CacheServiceConfigInterface } from './cache-layer.interfaces';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { forEach } from '../../services/module/helpers/forEach';
 
 export class CacheLayer<T> {
 
@@ -26,7 +27,7 @@ export class CacheLayer<T> {
   }
 
   private onExpireAll(layer) {
-    layer.items.forEach(item => this.onExpire(item['key']));
+    forEach(layer.items, item => this.onExpire(item['key']));
   }
 
   private putItemHook(layerItem): void {
@@ -78,7 +79,7 @@ export class CacheLayer<T> {
     return this.items.asObservable()
       .pipe(
         map(items => {
-          items.forEach(i => this.removeItem(i['key']));
+          forEach(items, i => this.removeItem(i['key']));
           return true;
         })
       );

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ContainerInstance_1 = require("./ContainerInstance");
+const forEach_1 = require("../services/module/helpers/forEach");
 /**
  * Service container.
  */
@@ -69,7 +70,7 @@ class Container {
         }
         else {
             this.globalInstance.reset();
-            this.instances.forEach(instance => instance.reset());
+            forEach_1.forEach(this.instances, instance => instance.reset());
         }
         return this;
     }

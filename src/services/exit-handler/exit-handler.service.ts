@@ -2,6 +2,7 @@ import { Service } from '../../container';
 import { BootstrapLogger } from '../bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { Observable, Subject } from 'rxjs';
+import { forEach } from '../../services/module/helpers/forEach';
 
 export type NodejsEvents = 'beforeExit' | 'disconnect' | 'exit' | 'rejectionHandled' |
     'uncaughtException' | 'unhandledRejection' | 'warning' | 'message' | 'newListener' | 'removeListener';
@@ -32,7 +33,7 @@ export class ExitHandlerService {
     }
 
     onExitApp(events: Array<Signals>) {
-        return new Observable(o => events && events.length && events.forEach(event => process.on(event, (e) => o.next(e))));
+        return new Observable(o => events && events.length && forEach(events, event => process.on(event, (e) => o.next(e))));
     }
 
 }

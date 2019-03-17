@@ -38,7 +38,7 @@ export const setup = <T, K>(
         plugins: options.plugins || [],
         afterPlugins: options.afterPlugins || [],
         beforePlugins: options.beforePlugins || [],
-    })(function() {}), frameworks, bootstrapOptions);
+    })(function () { }), frameworks, bootstrapOptions);
 };
 
 export const createTestBed = setup;

@@ -4,6 +4,7 @@ import { Handler } from './types/Handler';
 import { ObjectType } from './types/ObjectType';
 import { ServiceIdentifier } from './types/ServiceIdentifier';
 import { ServiceMetadata } from './types/ServiceMetadata';
+import { forEach } from '../services/module/helpers/forEach';
 
 /**
  * Service container.
@@ -181,7 +182,7 @@ export class Container {
 
         } else {
             this.globalInstance.reset();
-            this.instances.forEach(instance => instance.reset());
+            forEach(this.instances, instance => instance.reset());
         }
         return this;
     }

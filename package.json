@@ -12,7 +12,7 @@
   "scripts": {
     "postpublish": "git push -f ssh://git@gitlab.youvolio.com:522/rxdi/core.git && git push --tags && git push ssh://git@gitlab.youvolio.com:522/rxdi/core.git --tags",
     "start": "gapi start --local --path=./src/testing-app/main.ts",
-    "build": "gapi build core",
+    "build": "tsc && tsc -d --emitDeclarationOnly --allowJs false",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
     "test-browser": "gapi testing browser",

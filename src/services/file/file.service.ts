@@ -6,6 +6,7 @@ import { BootstrapLogger } from '../bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { resolve } from 'path';
 import { mkdirp } from './dist';
+import { forEach } from '../../services/module/helpers/forEach';
 
 @Service()
 export class FileService {
@@ -34,7 +35,7 @@ export class FileService {
     }
 
     writeFileSync(folder, file) {
-        return writeFileSync.bind(null)(folder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' }, );
+        return writeFileSync.bind(null)(folder, JSON.stringify(file, null, 2) + '\n', { encoding: 'utf-8' });
     }
 
     readFile(file: string) {
@@ -89,7 +90,7 @@ export class FileService {
             if (!pending) {
                 return done(null, results);
             }
-            list.forEach((file) => {
+            forEach(list, (file) => {
                 file = resolve(dir, file);
                 stat(file, (err, stat) => {
                     if (stat && stat.isDirectory()) {

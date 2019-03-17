@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
+const forEach_1 = require("../../services/module/helpers/forEach");
 class CacheLayer {
     constructor(layer) {
         this.items = new rxjs_1.BehaviorSubject([]);
@@ -19,7 +20,7 @@ class CacheLayer {
         }
     }
     onExpireAll(layer) {
-        layer.items.forEach(item => this.onExpire(item['key']));
+        forEach_1.forEach(layer.items, item => this.onExpire(item['key']));
     }
     putItemHook(layerItem) {
         if (this.config.maxAge) {
@@ -61,7 +62,7 @@ class CacheLayer {
     flushCache() {
         return this.items.asObservable()
             .pipe(operators_1.map(items => {
-            items.forEach(i => this.removeItem(i['key']));
+            forEach_1.forEach(items, i => this.removeItem(i['key']));
             return true;
         }));
     }

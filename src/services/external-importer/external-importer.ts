@@ -12,6 +12,7 @@ import { ConfigService } from '../config';
 import { PackagesConfig } from '../../bin/root';
 import { IPFS_PROVIDERS } from './providers';
 import SystemJS = require('systemjs');
+import { forEach } from '../../services/module/helpers/forEach';
 
 @Service()
 export class ExternalImporter {
@@ -145,7 +146,7 @@ export class ExternalImporter {
         if (!ipfsConfig) {
             ipfsConfig = this.defaultIpfsConfig();
         }
-        ipfsConfig.forEach(c => {
+        forEach(ipfsConfig, c => {
             const present = c.dependencies.filter(dep => dep === hash);
             if (present.length) {
                 found.push(present[0]);
@@ -161,7 +162,7 @@ export class ExternalImporter {
         if (!ipfsConfig) {
             ipfsConfig = this.defaultIpfsConfig();
         }
-        ipfsConfig.forEach(c => {
+        forEach(ipfsConfig, c => {
             const uniq = c.dependencies
                 .map((name) => {
                     return { count: 1, name: name };

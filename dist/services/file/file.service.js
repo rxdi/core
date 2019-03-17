@@ -17,6 +17,7 @@ const bootstrap_logger_1 = require("../bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const path_1 = require("path");
 const dist_1 = require("./dist");
+const forEach_1 = require("../../services/module/helpers/forEach");
 let FileService = class FileService {
     writeFile(folder, fileName, moduleName, file) {
         return this.mkdirp(folder)
@@ -79,7 +80,7 @@ let FileService = class FileService {
             if (!pending) {
                 return done(null, results);
             }
-            list.forEach((file) => {
+            forEach_1.forEach(list, (file) => {
                 file = path_1.resolve(dir, file);
                 fs_1.stat(file, (err, stat) => {
                     if (stat && stat.isDirectory()) {

@@ -6,6 +6,7 @@ import { InternalEvents, InternalLayers } from '../../helpers/events';
 import { Service } from '../../container';
 import { Metadata } from '../../decorators/module/module.interfaces';
 import { BootstrapLogger } from '../bootstrap-logger/index';
+import { forEach } from '../../services/module/helpers/forEach';
 
 const FRIENDLY_ERROR_MESSAGES = {
   TRY_TO_UNSUBSCRIBE: 'Someone try to unsubscribe from collection directly... agghhh.. read docs! Blame: '
@@ -37,7 +38,7 @@ export class CacheService {
   public getLayersByName<T>(name: string): CacheLayer<CacheLayerItem<T>>[] {
     const allLayers = Array.from(this.map.keys());
     const foundLayers = [];
-    allLayers.forEach(item => {
+    forEach(allLayers, item => {
       if (item !== InternalLayers.modules && item !== InternalLayers.globalConfig) {
         const config = this.getLayer<{ moduleName: string, moduleHash: string }>(item).getItem(InternalEvents.config);
         // console.log(config);
@@ -51,12 +52,12 @@ export class CacheService {
 
   public searchForDuplicateDependenciesInsideApp() {
     const currentModuleDependenciesKeys = [];
-    Array.from(this.map.keys()).forEach(key => {
+    forEach(Array.from(this.map.keys()), key => {
 
       const currentModule = this.getLayer(key);
       // console.log(key, currentModule.map.keys());
       const currentModuleDependencies = Array.from(currentModule.map.keys());
-      currentModuleDependencies.forEach(key => {
+      forEach(currentModuleDependencies, key => {
         if (this.isExcludedEvent(key)) {
           return;
         }
@@ -67,7 +68,7 @@ export class CacheService {
       if (config) {
         const realNames = [];
         const filteredDependencies = currentModuleDependencies.filter(i => !!i).filter(i => i.length >= 32);
-        filteredDependencies.forEach(dep => realNames.push(layer.getItem(dep).data.metadata.moduleName));
+        forEach(filteredDependencies, dep => realNames.push(layer.getItem(dep).data.metadata.moduleName));
         // this.logger.log(`@gapi(Start) -> module name: '${config.data.moduleName}' dependencies ->\n${JSON.stringify(realNames, null, 2)}`);
       }
     });
@@ -102,22 +103,21 @@ export class CacheService {
   public searchForItem(classItem) {
     let itemFound;
     const library = Array.from(this.map.keys());
-    library
-      .forEach(module => {
-        const currentModule = this.getLayer(module);
-        const currentModuleDependencies = Array.from(currentModule.map.keys());
-        const found = currentModuleDependencies.filter((i => {
-          if (this.isExcludedEvent(i)) {
-            return;
-          } else {
-            return i === classItem.name;
-          }
-        }));
-
-        if (found.length) {
-          itemFound = currentModule.getItem(found[0]).data;
+    forEach(library, module => {
+      const currentModule = this.getLayer(module);
+      const currentModuleDependencies = Array.from(currentModule.map.keys());
+      const found = currentModuleDependencies.filter((i => {
+        if (this.isExcludedEvent(i)) {
+          return;
+        } else {
+          return i === classItem.name;
         }
-      });
+      }));
+
+      if (found.length) {
+        itemFound = currentModule.getItem(found[0]).data;
+      }
+    });
     return itemFound;
   }
 
@@ -125,7 +125,7 @@ export class CacheService {
 
     let itemFound: Duplicates[] = [];
     const library = Array.from(this.map.keys());
-    library.forEach(module => {
+    forEach(library, module => {
       const currentModule = this.getLayer<any>(module);
       const currentModuleDependencies = Array.from(currentModule.map.keys());
       const found = currentModuleDependencies.filter((i => {
@@ -196,9 +196,9 @@ export class CacheService {
   public transferItems(name: string, newCacheLayers: CacheLayerInterface[]): CacheLayer<CacheLayerItem<any>>[] {
     const oldLayer = this.getLayer(name);
     const newLayers = [];
-    newCacheLayers.forEach(layerName => {
+    forEach(newCacheLayers, layerName => {
       const newLayer = this.createLayer(layerName);
-      oldLayer.items.getValue().forEach(item => newLayer.putItem(item));
+      forEach(oldLayer.items.getValue(), item => newLayer.putItem(item));
       newLayers.push(newLayer);
     });
     return newLayers;
@@ -211,8 +211,8 @@ export class CacheService {
         take(1),
         map((layers: any[]) => {
           oldLayersNames = layers.map(l => l.name);
-          layers.forEach(layer => this.removeLayer(layer));
-          oldLayersNames.forEach((l) => this.createLayer({ name: l }));
+          forEach(layers, layer => this.removeLayer(layer));
+          forEach(oldLayersNames, (l) => this.createLayer({ name: l }));
           return true;
         })
       );

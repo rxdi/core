@@ -6,6 +6,7 @@ import { ObjectType } from './types/ObjectType';
 import { ServiceIdentifier } from './types/ServiceIdentifier';
 import { ServiceMetadata } from './types/ServiceMetadata';
 import { constructorWatcherService } from '../services/constructor-watcher';
+import { forEach } from '../services/module/helpers/forEach';
 
 /**
  * TypeDI can have multiple containers.
@@ -175,7 +176,7 @@ export class ContainerInstance {
      */
     set(identifierOrServiceMetadata: ServiceIdentifier | ServiceMetadata<any, any> | (ServiceMetadata<any, any>[]), value?: any): this {
         if (identifierOrServiceMetadata instanceof Array) {
-            identifierOrServiceMetadata.forEach((v: any) => this.set(v));
+            forEach(identifierOrServiceMetadata, (v: any) => this.set(v));
             return this;
         }
         if (typeof identifierOrServiceMetadata === 'string' || identifierOrServiceMetadata instanceof Token) {
@@ -204,8 +205,8 @@ export class ContainerInstance {
      * Removes services with a given service identifiers (tokens or types).
      */
     remove(...ids: ServiceIdentifier[]): this {
-        ids.forEach(id => {
-            this.filterServices(id).forEach(service => {
+        forEach(ids, id => {
+            forEach(this.filterServices(id), service => {
                 this.services.splice(this.services.indexOf(service), 1);
             });
         });
@@ -391,7 +392,7 @@ export class ContainerInstance {
      * Applies all registered handlers on a given target class.
      */
     private applyPropertyHandlers(target: Function, instance: { [key: string]: any }) {
-        Container.handlers.forEach(handler => {
+        forEach(Container.handlers, handler => {
             if (typeof handler.index === 'number') return;
             if (handler.object.constructor !== target && !(target.prototype instanceof handler.object.constructor))
                 return;

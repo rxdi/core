@@ -13,6 +13,7 @@ const container_1 = require("../../container");
 const bootstrap_logger_1 = require("../bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const rxjs_1 = require("rxjs");
+const forEach_1 = require("../../services/module/helpers/forEach");
 let ExitHandlerService = class ExitHandlerService {
     constructor() {
         this.errorHandler = new rxjs_1.Subject();
@@ -31,7 +32,7 @@ let ExitHandlerService = class ExitHandlerService {
         process.exit(0);
     }
     onExitApp(events) {
-        return new rxjs_1.Observable(o => events && events.length && events.forEach(event => process.on(event, (e) => o.next(e))));
+        return new rxjs_1.Observable(o => events && events.length && forEach_1.forEach(events, event => process.on(event, (e) => o.next(e))));
     }
 };
 __decorate([

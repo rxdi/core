@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { NpmPackageConfig } from '../external-importer/index';
 import { BehaviorSubject } from 'rxjs';
 import childProcess = require('child_process');

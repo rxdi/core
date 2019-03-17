@@ -28,6 +28,7 @@ const compression_service_1 = require("../compression/compression.service");
 const npm_service_1 = require("../npm-service/npm.service");
 const providers_1 = require("./providers");
 const SystemJS = require("systemjs");
+const forEach_1 = require("../../services/module/helpers/forEach");
 let ExternalImporter = class ExternalImporter {
     constructor() {
         this.defaultJsonFolder = `${process.cwd()}/package.json`;
@@ -144,7 +145,7 @@ let ExternalImporter = class ExternalImporter {
         if (!ipfsConfig) {
             ipfsConfig = this.defaultIpfsConfig();
         }
-        ipfsConfig.forEach(c => {
+        forEach_1.forEach(ipfsConfig, c => {
             const present = c.dependencies.filter(dep => dep === hash);
             if (present.length) {
                 found.push(present[0]);
@@ -159,7 +160,7 @@ let ExternalImporter = class ExternalImporter {
         if (!ipfsConfig) {
             ipfsConfig = this.defaultIpfsConfig();
         }
-        ipfsConfig.forEach(c => {
+        forEach_1.forEach(ipfsConfig, c => {
             const uniq = c.dependencies
                 .map((name) => {
                 return { count: 1, name: name };

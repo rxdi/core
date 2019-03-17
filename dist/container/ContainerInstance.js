@@ -5,6 +5,7 @@ const MissingProvidedServiceTypeError_1 = require("./error/MissingProvidedServic
 const ServiceNotFoundError_1 = require("./error/ServiceNotFoundError");
 const Token_1 = require("./Token");
 const constructor_watcher_1 = require("../services/constructor-watcher");
+const forEach_1 = require("../services/module/helpers/forEach");
 /**
  * TypeDI can have multiple containers.
  * One container is ContainerInstance.
@@ -63,7 +64,7 @@ class ContainerInstance {
      */
     set(identifierOrServiceMetadata, value) {
         if (identifierOrServiceMetadata instanceof Array) {
-            identifierOrServiceMetadata.forEach((v) => this.set(v));
+            forEach_1.forEach(identifierOrServiceMetadata, (v) => this.set(v));
             return this;
         }
         if (typeof identifierOrServiceMetadata === 'string' || identifierOrServiceMetadata instanceof Token_1.Token) {
@@ -90,8 +91,8 @@ class ContainerInstance {
      * Removes services with a given service identifiers (tokens or types).
      */
     remove(...ids) {
-        ids.forEach(id => {
-            this.filterServices(id).forEach(service => {
+        forEach_1.forEach(ids, id => {
+            forEach_1.forEach(this.filterServices(id), service => {
                 this.services.splice(this.services.indexOf(service), 1);
             });
         });
@@ -245,7 +246,7 @@ class ContainerInstance {
      * Applies all registered handlers on a given target class.
      */
     applyPropertyHandlers(target, instance) {
-        Container_1.Container.handlers.forEach(handler => {
+        forEach_1.forEach(Container_1.Container.handlers, handler => {
             if (typeof handler.index === 'number')
                 return;
             if (handler.object.constructor !== target && !(target.prototype instanceof handler.object.constructor))

@@ -6,5 +6,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./bootstrap"));
 __export(require("./create-unique-hash"));
 __export(require("./generic-constructor"));
-__export(require("./sha256"));
-// export * from './testing';

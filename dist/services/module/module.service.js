@@ -22,12 +22,13 @@ const effect_service_1 = require("../effect/effect.service");
 const components_service_1 = require("../components/components.service");
 const bootstraps_service_1 = require("../bootstraps/bootstraps.service");
 const services_service_1 = require("../services/services.service");
+const forEach_1 = require("./helpers/forEach");
 let ModuleService = class ModuleService {
     constructor() {
         this.watcherService = constructor_watcher_1.constructorWatcherService;
     }
     setServices(services, original, currentModule) {
-        services.forEach(service => {
+        forEach_1.forEach(services, service => {
             this.validators.validateServices(service, original);
             this.setInjectedDependencies(service);
             if (service.provide && service.provide.constructor === Function) {
@@ -86,7 +87,7 @@ let ModuleService = class ModuleService {
         }
     }
     setControllers(controllers, original, currentModule) {
-        controllers.forEach(controller => {
+        forEach_1.forEach(controllers, controller => {
             this.validators.validateController(controller, original);
             currentModule.putItem({
                 data: controller,
@@ -96,7 +97,7 @@ let ModuleService = class ModuleService {
         });
     }
     setEffects(effects, original, currentModule) {
-        effects.forEach(effect => {
+        forEach_1.forEach(effects, effect => {
             this.validators.validateEffect(effect, original);
             currentModule.putItem({
                 data: effect,
@@ -106,7 +107,7 @@ let ModuleService = class ModuleService {
         });
     }
     setComponents(components, original, currentModule) {
-        components.forEach(component => {
+        forEach_1.forEach(components, component => {
             this.validators.validateComponent(component, original);
             currentModule.putItem({
                 data: component,
@@ -116,7 +117,7 @@ let ModuleService = class ModuleService {
         });
     }
     setPlugins(plugins, original, currentModule) {
-        plugins.forEach(plugin => {
+        forEach_1.forEach(plugins, plugin => {
             this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
@@ -126,7 +127,7 @@ let ModuleService = class ModuleService {
         });
     }
     setBootstraps(bootstraps, original, currentModule) {
-        bootstraps.forEach(bootstrap => {
+        forEach_1.forEach(bootstraps, bootstrap => {
             this.validators.validateEmpty(bootstrap, original, bootstrap['metadata']['type']);
             currentModule.putItem({
                 data: bootstrap,
@@ -136,7 +137,7 @@ let ModuleService = class ModuleService {
         });
     }
     setAfterPlugins(plugins, original, currentModule) {
-        plugins.forEach(plugin => {
+        forEach_1.forEach(plugins, plugin => {
             this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
@@ -146,7 +147,7 @@ let ModuleService = class ModuleService {
         });
     }
     setBeforePlugins(plugins, original, currentModule) {
-        plugins.forEach(plugin => {
+        forEach_1.forEach(plugins, plugin => {
             this.validators.validatePlugin(plugin, original);
             currentModule.putItem({
                 data: plugin,
@@ -156,7 +157,7 @@ let ModuleService = class ModuleService {
         });
     }
     setImports(imports, original) {
-        imports.forEach((m) => {
+        forEach_1.forEach(imports, (m) => {
             this.validators.validateImports(m, original);
             if (!m) {
                 throw new Error('Missing import module');

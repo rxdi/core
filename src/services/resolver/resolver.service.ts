@@ -5,6 +5,7 @@ import { switchMap, filter, map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
+import { forEach } from '../../services/module/helpers/forEach';
 
 @Service()
 export class ResolverService {
@@ -31,7 +32,7 @@ export class ResolverService {
 
     private resolveContainerDependencies(target, moduleName: string) {
         return (res) => {
-            res.forEach((i) => {
+            forEach(res, (i) => {
                 if (i.key === InternalEvents.load || i.key === InternalEvents.config) {
                     return;
                 }
@@ -40,7 +41,7 @@ export class ResolverService {
                     if (found.provide) {
                         return found;
                     }
-                    const moduleType = found.metadata.type.charAt(0).toUpperCase() +  found.metadata.type.slice(1);
+                    const moduleType = found.metadata.type.charAt(0).toUpperCase() + found.metadata.type.slice(1);
                     this.bootstrapLogger.log(`Start -> @Module('${moduleName}')${this.bootstrapLogger.logHashes(`(${target.name})`)}: @${moduleType}('${found.originalName}')${this.bootstrapLogger.logHashes(`(${found.name})`)}` + ' initialized!');
                     return Container.get(found);
                 } else {

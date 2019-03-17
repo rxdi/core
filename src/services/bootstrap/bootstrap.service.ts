@@ -18,6 +18,7 @@ import { ServicesService } from '../services/services.service';
 import { PluginManager } from '../plugin-manager/plugin-manager';
 import { AfterStarterService } from '../after-starter/after-starter.service';
 import { ServiceArgumentsInternal, SystemIngridientsType } from '../../decorators/module/module.interfaces';
+import { forEach } from '../../services/module/helpers/forEach';
 
 
 @Service()
@@ -197,9 +198,9 @@ export class BootstrapService {
     }
 
     loadApplication() {
-        Array.from(this.cacheService.getLayer<Function>(InternalLayers.modules).map.keys())
-            .forEach(m => this.cacheService.getLayer(m)
-                .putItem({ key: InternalEvents.load, data: this.configService.config.init }));
+        const array = Array.from(this.cacheService.getLayer<Function>(InternalLayers.modules).map.keys());
+        forEach(array, m => this.cacheService.getLayer(m)
+            .putItem({ key: InternalEvents.load, data: this.configService.config.init }));
         return true;
     }
 

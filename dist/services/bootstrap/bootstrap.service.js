@@ -33,6 +33,7 @@ const bootstraps_service_1 = require("../bootstraps/bootstraps.service");
 const services_service_1 = require("../services/services.service");
 const plugin_manager_1 = require("../plugin-manager/plugin-manager");
 const after_starter_service_1 = require("../after-starter/after-starter.service");
+const forEach_1 = require("../../services/module/helpers/forEach");
 let BootstrapService = class BootstrapService {
     constructor(logger, cacheService, lazyFactoriesService, configService, controllersService, effectsService, pluginService, componentsService, bootstrapsService, servicesService, pluginManager, afterStarterService) {
         this.logger = logger;
@@ -171,8 +172,8 @@ let BootstrapService = class BootstrapService {
         return true;
     }
     loadApplication() {
-        Array.from(this.cacheService.getLayer(events_1.InternalLayers.modules).map.keys())
-            .forEach(m => this.cacheService.getLayer(m)
+        const array = Array.from(this.cacheService.getLayer(events_1.InternalLayers.modules).map.keys());
+        forEach_1.forEach(array, m => this.cacheService.getLayer(m)
             .putItem({ key: events_1.InternalEvents.load, data: this.configService.config.init }));
         return true;
     }

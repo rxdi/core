@@ -1,5 +1,5 @@
-import { sha256 } from './sha256';
-export function createUniqueHash(key) {
-    return sha256.hash(key);
-}
+const XXH = require('./sha256');
 
+export function createUniqueHash(key) {
+    return XXH.h32(key, 0xABCD).toString(16);
+}

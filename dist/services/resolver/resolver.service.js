@@ -16,6 +16,7 @@ const operators_1 = require("rxjs/operators");
 const rxjs_1 = require("rxjs");
 const bootstrap_logger_1 = require("../bootstrap-logger/bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
+const forEach_1 = require("../../services/module/helpers/forEach");
 let ResolverService = class ResolverService {
     resolveDependencies(hash, target, moduleName) {
         this.cacheService.getLayer(events_1.InternalLayers.modules).putItem({ key: hash, data: target });
@@ -31,7 +32,7 @@ let ResolverService = class ResolverService {
     }
     resolveContainerDependencies(target, moduleName) {
         return (res) => {
-            res.forEach((i) => {
+            forEach_1.forEach(res, (i) => {
                 if (i.key === events_1.InternalEvents.load || i.key === events_1.InternalEvents.config) {
                     return;
                 }
