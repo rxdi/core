@@ -40,7 +40,7 @@ describe('Service: Metadata', () => {
         expect(generatedHashData[1][0]['hash']).toBe(PeshoModule['metadata']['moduleHash']);
         expect(generatedHashData[1][0]['moduleName']).toBe(PeshoModule['metadata']['moduleName']);
         expect(uniqueHashForClass).toBeTruthy();
-        expect(uniqueHashForClass.length).toBe(64);
+        expect(uniqueHashForClass.length).toBe(8);
         done();
     });
 });
