@@ -31,10 +31,10 @@ const controllers_service_1 = require("../controllers/controllers.service");
 const components_service_1 = require("../components/components.service");
 const bootstraps_service_1 = require("../bootstraps/bootstraps.service");
 const services_service_1 = require("../services/services.service");
-const plugin_manager_1 = require("../plugin-manager/plugin-manager");
 const after_starter_service_1 = require("../after-starter/after-starter.service");
+const log_1 = require("../../helpers/log");
 let BootstrapService = class BootstrapService {
-    constructor(logger, cacheService, lazyFactoriesService, configService, controllersService, effectsService, pluginService, componentsService, bootstrapsService, servicesService, pluginManager, afterStarterService) {
+    constructor(logger, cacheService, lazyFactoriesService, configService, controllersService, effectsService, pluginService, componentsService, bootstrapsService, servicesService, afterStarterService) {
         this.logger = logger;
         this.cacheService = cacheService;
         this.lazyFactoriesService = lazyFactoriesService;
@@ -45,28 +45,20 @@ let BootstrapService = class BootstrapService {
         this.componentsService = componentsService;
         this.bootstrapsService = bootstrapsService;
         this.servicesService = servicesService;
-        this.pluginManager = pluginManager;
         this.afterStarterService = afterStarterService;
         this.chainableObservable = rxjs_1.of(true);
-        this.asyncChainables = [this.chainableObservable];
-        this.globalConfig = this.cacheService.createLayer({ name: events_1.InternalLayers.globalConfig });
+        this.globalConfig = this.cacheService.createLayer({
+            name: events_1.InternalLayers.globalConfig
+        });
     }
     start(app, config) {
         this.configService.setConfig(config);
         this.globalConfig.putItem({ key: events_1.InternalEvents.config, data: config });
         container_1.Container.get(app);
         const lazyFactoryKeys = Array.from(this.lazyFactoriesService.lazyFactories.keys());
-        return rxjs_1.of(lazyFactoryKeys)
-            .pipe(operators_1.map((factories) => this.prepareAsyncChainables(factories)), operators_1.switchMap((res) => rxjs_1.combineLatest(res)
-            .pipe(operators_1.take(1), operators_1.map((c) => this.attachLazyLoadedChainables(lazyFactoryKeys, c)), operators_1.map(() => this.validateSystem()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableControllers())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsBeforeRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsAfterRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableServices())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableEffects())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableComponents())), operators_1.map(() => this.loadApplication()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableBootstraps())), operators_1.map(() => this.final()))));
+        return rxjs_1.of(lazyFactoryKeys).pipe(operators_1.map(factories => this.prepareAsyncChainables(factories)), operators_1.switchMap(res => rxjs_1.combineLatest(res).pipe(operators_1.take(1), operators_1.map(c => this.attachLazyLoadedChainables(lazyFactoryKeys, c)), operators_1.map(() => this.validateSystem()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableControllers())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsBeforeRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainablePluginsAfterRegister())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableServices())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableEffects())), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableComponents())), operators_1.map(() => this.loadApplication()), operators_1.switchMap(() => rxjs_1.combineLatest(this.asyncChainableBootstraps())), operators_1.map(() => this.final()))));
     }
     final() {
-        // opn('https://theft.youvolio.com');
-        // const globalConfig = cache.createLayer<{ init: boolean }>({ name: InternalLayers.globalConfig });
-        // cache.getLayer('AppModule').putItem({key:InternalEvents.load, data: true});
-        // cache.getLayer('UserModule').putItem({ key: InternalEvents.load, data: true });
-        // console.log('bla bla', plugins);!
-        // Bootstrapping finished!
         this.afterStarterService.appStarted.next(true);
         if (!this.configService.config.init) {
             this.logger.log('Bootstrap -> press start!');
@@ -76,70 +68,78 @@ let BootstrapService = class BootstrapService {
     asyncChainablePluginsRegister() {
         return [
             this.chainableObservable,
-            ...this.pluginService.getPlugins()
-                .filter((c) => this.genericFilter(c, 'plugins'))
+            ...this.pluginService
+                .getPlugins()
+                .filter(c => this.genericFilter(c, 'plugins'))
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
         ];
     }
     asyncChainableComponents() {
         return [
             this.chainableObservable,
-            ...this.componentsService.getComponents()
-                .filter((c) => this.genericFilter(c, 'components'))
+            ...this.componentsService
+                .getComponents()
+                .filter(c => this.genericFilter(c, 'components'))
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
     asyncChainableBootstraps() {
         return [
             this.chainableObservable,
-            ...this.bootstrapsService.getBootstraps()
+            ...this.bootstrapsService
+                .getBootstraps()
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
     asyncChainableEffects() {
         return [
             this.chainableObservable,
-            ...this.effectsService.getEffects()
-                .filter((c) => this.genericFilter(c, 'effects'))
+            ...this.effectsService
+                .getEffects()
+                .filter(c => this.genericFilter(c, 'effects'))
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
     asyncChainableServices() {
         return [
             this.chainableObservable,
-            ...this.servicesService.getServices()
-                .filter((c) => this.genericFilter(c, 'services'))
+            ...this.servicesService
+                .getServices()
+                .filter(c => this.genericFilter(c, 'services'))
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
     asyncChainableControllers() {
         return [
             this.chainableObservable,
-            ...this.controllersService.getControllers()
-                .filter((c) => this.genericFilter(c, 'controllers'))
+            ...this.controllersService
+                .getControllers()
+                .filter(c => this.genericFilter(c, 'controllers'))
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
     asyncChainablePluginsAfterRegister() {
         return [
             this.chainableObservable,
-            ...this.pluginService.getAfterPlugins()
-                .filter((c) => this.genericFilter(c, 'pluginsAfter'))
+            ...this.pluginService
+                .getAfterPlugins()
+                .filter(c => this.genericFilter(c, 'pluginsAfter'))
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield this.registerPlugin(c); }))
         ];
     }
     asyncChainablePluginsBeforeRegister() {
         return [
             this.chainableObservable,
-            ...this.pluginService.getBeforePlugins()
-                .filter((c) => this.genericFilter(c, 'pluginsBefore'))
+            ...this.pluginService
+                .getBeforePlugins()
+                .filter(c => this.genericFilter(c, 'pluginsBefore'))
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
         ];
     }
     genericFilter(c, name) {
-        return this.configService.config.initOptions[name]
-            || c.metadata.options && c.metadata.options['init']
-            || this.configService.config.init;
+        return (this.configService.config.initOptions[name] ||
+            (c.metadata.options && c.metadata.options['init']) ||
+            this.configService.config.init);
     }
     registerPlugin(pluggable) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -152,12 +152,11 @@ let BootstrapService = class BootstrapService {
         const asynChainables = [this.chainableObservable];
         injectables.map(injectable => {
             this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading...`);
-            asynChainables.push(rxjs_1.from(this.lazyFactoriesService.getLazyFactory(injectable)));
+            const somethingAsync = rxjs_1.from((this.lazyFactoriesService.getLazyFactory(injectable))).pipe(operators_1.shareReplay(1));
+            asynChainables.push(somethingAsync);
+            somethingAsync.subscribe(() => this.logger.log(`Bootstrap -> @Service('${injectable.name ||
+                injectable}'): loading finished! ${new Date().toLocaleTimeString()}`));
         });
-        // somethingAsync
-        //     .subscribe(
-        //         () => this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading finished! ${new Date().toLocaleTimeString()}`)
-        //     );
         return asynChainables;
     }
     validateSystem() {
@@ -167,13 +166,17 @@ let BootstrapService = class BootstrapService {
         // Remove first chainable unused observable
         chainables.splice(0, 1);
         let count = 0;
-        res.map(name => container_1.Container.set(name, chainables[count++]));
+        res.map(name => {
+            log_1.logExtendedInjectables(name, this.configService.config.experimental.logExtendedInjectables);
+            container_1.Container.set(name, chainables[count++]);
+        });
         return true;
     }
     loadApplication() {
-        Array.from(this.cacheService.getLayer(events_1.InternalLayers.modules).map.keys())
-            .forEach(m => this.cacheService.getLayer(m)
-            .putItem({ key: events_1.InternalEvents.load, data: this.configService.config.init }));
+        Array.from(this.cacheService.getLayer(events_1.InternalLayers.modules).map.keys()).forEach(m => this.cacheService.getLayer(m).putItem({
+            key: events_1.InternalEvents.load,
+            data: this.configService.config.init
+        }));
         return true;
     }
 };
@@ -189,7 +192,6 @@ BootstrapService = __decorate([
         components_service_1.ComponentsService,
         bootstraps_service_1.BootstrapsServices,
         services_service_1.ServicesService,
-        plugin_manager_1.PluginManager,
         after_starter_service_1.AfterStarterService])
 ], BootstrapService);
 exports.BootstrapService = BootstrapService;

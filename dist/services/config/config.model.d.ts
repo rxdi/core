@@ -11,7 +11,7 @@ export declare class PrivateCryptoModel {
     cyperKey?: string;
 }
 export declare class ExperimentalFeatures {
-    crypto?: PrivateCryptoModel;
+    logExtendedInjectables?: boolean;
 }
 export declare class InitOptionsConfig {
     services?: boolean;

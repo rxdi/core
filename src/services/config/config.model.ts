@@ -13,7 +13,8 @@ export class PrivateCryptoModel {
 }
 
 export class ExperimentalFeatures {
-    crypto?: PrivateCryptoModel;
+    // crypto?: PrivateCryptoModel;
+    logExtendedInjectables?: boolean;
 }
 
 export class InitOptionsConfig {
