@@ -43,10 +43,8 @@ class CacheLayer {
         return layerItem;
     }
     onExpire(key) {
-        rxjs_1.Observable
-            .create(observer => observer.next())
-            .timeoutWith(this.config.maxAge, rxjs_1.of(1))
-            .skip(1)
+        return new rxjs_1.Observable(observer => observer.next())
+            .pipe(operators_1.timeoutWith(this.config.maxAge, rxjs_1.of(1)), operators_1.skip(1), operators_1.take(1))
             .subscribe(() => this.removeItem(key));
     }
     removeItem(key) {

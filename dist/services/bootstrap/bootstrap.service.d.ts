@@ -24,16 +24,15 @@ export declare class BootstrapService {
     private servicesService;
     private afterStarterService;
     private globalConfig;
-    private chainableObservable;
     constructor(logger: BootstrapLogger, cacheService: CacheService, lazyFactoriesService: LazyFactory, configService: ConfigService, controllersService: ControllersService, effectsService: EffectsService, pluginService: PluginService, componentsService: ComponentsService, bootstrapsService: BootstrapsServices, servicesService: ServicesService, afterStarterService: AfterStarterService);
     start(app: any, config?: ConfigModel): Observable<{}>;
     private final;
-    private asyncChainablePluginsRegister;
     private asyncChainableComponents;
     private asyncChainableBootstraps;
     private asyncChainableEffects;
     private asyncChainableServices;
     private asyncChainableControllers;
+    private asyncChainablePluginsRegister;
     private asyncChainablePluginsAfterRegister;
     private asyncChainablePluginsBeforeRegister;
     private genericFilter;

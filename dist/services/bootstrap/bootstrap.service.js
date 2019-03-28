@@ -46,7 +46,6 @@ let BootstrapService = class BootstrapService {
         this.bootstrapsService = bootstrapsService;
         this.servicesService = servicesService;
         this.afterStarterService = afterStarterService;
-        this.chainableObservable = rxjs_1.of(true);
         this.globalConfig = this.cacheService.createLayer({
             name: events_1.InternalLayers.globalConfig
         });
@@ -65,18 +64,9 @@ let BootstrapService = class BootstrapService {
         }
         return container_1.Container;
     }
-    asyncChainablePluginsRegister() {
-        return [
-            this.chainableObservable,
-            ...this.pluginService
-                .getPlugins()
-                .filter(c => this.genericFilter(c, 'plugins'))
-                .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
-        ];
-    }
     asyncChainableComponents() {
         return [
-            this.chainableObservable,
+            rxjs_1.of(true),
             ...this.componentsService
                 .getComponents()
                 .filter(c => this.genericFilter(c, 'components'))
@@ -85,7 +75,7 @@ let BootstrapService = class BootstrapService {
     }
     asyncChainableBootstraps() {
         return [
-            this.chainableObservable,
+            rxjs_1.of(true),
             ...this.bootstrapsService
                 .getBootstraps()
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
@@ -93,7 +83,7 @@ let BootstrapService = class BootstrapService {
     }
     asyncChainableEffects() {
         return [
-            this.chainableObservable,
+            rxjs_1.of(true),
             ...this.effectsService
                 .getEffects()
                 .filter(c => this.genericFilter(c, 'effects'))
@@ -102,7 +92,7 @@ let BootstrapService = class BootstrapService {
     }
     asyncChainableServices() {
         return [
-            this.chainableObservable,
+            rxjs_1.of(true),
             ...this.servicesService
                 .getServices()
                 .filter(c => this.genericFilter(c, 'services'))
@@ -111,16 +101,25 @@ let BootstrapService = class BootstrapService {
     }
     asyncChainableControllers() {
         return [
-            this.chainableObservable,
+            rxjs_1.of(true),
             ...this.controllersService
                 .getControllers()
                 .filter(c => this.genericFilter(c, 'controllers'))
                 .map((c) => __awaiter(this, void 0, void 0, function* () { return yield container_1.Container.get(c); }))
         ];
     }
+    asyncChainablePluginsRegister() {
+        return [
+            rxjs_1.of(true),
+            ...this.pluginService
+                .getPlugins()
+                .filter(c => this.genericFilter(c, 'plugins'))
+                .map((c) => __awaiter(this, void 0, void 0, function* () { return yield this.registerPlugin(c); }))
+        ];
+    }
     asyncChainablePluginsAfterRegister() {
         return [
-            this.chainableObservable,
+            rxjs_1.of(true),
             ...this.pluginService
                 .getAfterPlugins()
                 .filter(c => this.genericFilter(c, 'pluginsAfter'))
@@ -129,11 +128,11 @@ let BootstrapService = class BootstrapService {
     }
     asyncChainablePluginsBeforeRegister() {
         return [
-            this.chainableObservable,
+            rxjs_1.of(true),
             ...this.pluginService
                 .getBeforePlugins()
                 .filter(c => this.genericFilter(c, 'pluginsBefore'))
-                .map((c) => __awaiter(this, void 0, void 0, function* () { return this.registerPlugin(c); }))
+                .map((c) => __awaiter(this, void 0, void 0, function* () { return yield this.registerPlugin(c); }))
         ];
     }
     genericFilter(c, name) {
@@ -149,13 +148,23 @@ let BootstrapService = class BootstrapService {
         });
     }
     prepareAsyncChainables(injectables) {
-        const asynChainables = [this.chainableObservable];
-        injectables.map(injectable => {
-            this.logger.log(`Bootstrap -> @Service('${injectable.name || injectable}'): loading...`);
-            const somethingAsync = rxjs_1.from((this.lazyFactoriesService.getLazyFactory(injectable))).pipe(operators_1.shareReplay(1));
+        const asynChainables = [rxjs_1.of(true)];
+        const injectableLog = {};
+        const getName = n => n.name || n;
+        injectables.map(i => {
+            const date = Date.now();
+            injectableLog[getName(i)] = {
+                started: date,
+                end: null
+            };
+            this.logger.log(`Bootstrap -> @Service('${getName(i)}'): loading...`);
+            const somethingAsync = rxjs_1.from((this.lazyFactoriesService.getLazyFactory(i))).pipe(operators_1.shareReplay(1));
             asynChainables.push(somethingAsync);
-            somethingAsync.subscribe(() => this.logger.log(`Bootstrap -> @Service('${injectable.name ||
-                injectable}'): loading finished! ${new Date().toLocaleTimeString()}`));
+            somethingAsync.subscribe(() => {
+                this.logger.log(`Bootstrap -> @Service('${getName(i)}'): loading finished after ${Date.now() -
+                    injectableLog[getName(i)].started}ms !`);
+                delete injectableLog[getName(i)];
+            });
         });
         return asynChainables;
     }
@@ -166,7 +175,7 @@ let BootstrapService = class BootstrapService {
         // Remove first chainable unused observable
         chainables.splice(0, 1);
         let count = 0;
-        res.map(name => {
+        res.map((name) => {
             log_1.logExtendedInjectables(name, this.configService.config.experimental.logExtendedInjectables);
             container_1.Container.set(name, chainables[count++]);
         });

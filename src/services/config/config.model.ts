@@ -15,6 +15,7 @@ export class PrivateCryptoModel {
 export class ExperimentalFeatures {
     // crypto?: PrivateCryptoModel;
     logExtendedInjectables?: boolean;
+    showModuleWithDependencies?: boolean;
 }
 
 export class InitOptionsConfig {

@@ -12,6 +12,7 @@ export declare class PrivateCryptoModel {
 }
 export declare class ExperimentalFeatures {
     logExtendedInjectables?: boolean;
+    showModuleWithDependencies?: boolean;
 }
 export declare class InitOptionsConfig {
     services?: boolean;

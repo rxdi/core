@@ -24,7 +24,6 @@ import { logExtendedInjectables } from '../../helpers/log';
 @Service()
 export class BootstrapService {
   private globalConfig: CacheLayer<CacheLayerItem<ConfigModel>>;
-  private chainableObservable = of(true);
 
   constructor(
     private logger: BootstrapLogger,
@@ -85,19 +84,9 @@ export class BootstrapService {
     return Container;
   }
 
-  private asyncChainablePluginsRegister() {
-    return [
-      this.chainableObservable,
-      ...this.pluginService
-        .getPlugins()
-        .filter(c => this.genericFilter(c, 'plugins'))
-        .map(async c => this.registerPlugin(c))
-    ];
-  }
-
   private asyncChainableComponents() {
     return [
-      this.chainableObservable,
+      of(true),
       ...this.componentsService
         .getComponents()
         .filter(c => this.genericFilter(c, 'components'))
@@ -107,7 +96,7 @@ export class BootstrapService {
 
   private asyncChainableBootstraps() {
     return [
-      this.chainableObservable,
+      of(true),
       ...this.bootstrapsService
         .getBootstraps()
         .map(async c => await Container.get(c))
@@ -116,7 +105,7 @@ export class BootstrapService {
 
   private asyncChainableEffects() {
     return [
-      this.chainableObservable,
+      of(true),
       ...this.effectsService
         .getEffects()
         .filter(c => this.genericFilter(c, 'effects'))
@@ -126,7 +115,7 @@ export class BootstrapService {
 
   private asyncChainableServices() {
     return [
-      this.chainableObservable,
+      of(true),
       ...this.servicesService
         .getServices()
         .filter(c => this.genericFilter(c, 'services'))
@@ -136,7 +125,7 @@ export class BootstrapService {
 
   private asyncChainableControllers() {
     return [
-      this.chainableObservable,
+      of(true),
       ...this.controllersService
         .getControllers()
         .filter(c => this.genericFilter(c, 'controllers'))
@@ -144,9 +133,19 @@ export class BootstrapService {
     ];
   }
 
+  private asyncChainablePluginsRegister() {
+    return [
+      of(true),
+      ...this.pluginService
+        .getPlugins()
+        .filter(c => this.genericFilter(c, 'plugins'))
+        .map(async c => await this.registerPlugin(c))
+    ];
+  }
+
   private asyncChainablePluginsAfterRegister() {
     return [
-      this.chainableObservable,
+      of(true),
       ...this.pluginService
         .getAfterPlugins()
         .filter(c => this.genericFilter(c, 'pluginsAfter'))
@@ -156,11 +155,11 @@ export class BootstrapService {
 
   private asyncChainablePluginsBeforeRegister() {
     return [
-      this.chainableObservable,
+      of(true),
       ...this.pluginService
         .getBeforePlugins()
         .filter(c => this.genericFilter(c, 'pluginsBefore'))
-        .map(async c => this.registerPlugin(c))
+        .map(async c => await this.registerPlugin(c))
     ];
   }
 
@@ -182,23 +181,32 @@ export class BootstrapService {
   }
 
   private prepareAsyncChainables(injectables: any[]) {
-    const asynChainables = [this.chainableObservable];
-    injectables.map(injectable => {
-      this.logger.log(
-        `Bootstrap -> @Service('${injectable.name || injectable}'): loading...`
-      );
+    const asynChainables = [of(true)];
+    const injectableLog: {
+      [key: string]: { started: number; end: number };
+    } = {} as any;
+    const getName = n => n.name || n;
+    injectables.map(i => {
+      const date = Date.now();
+      injectableLog[getName(i)] = {
+        started: date,
+        end: null
+      };
+      this.logger.log(`Bootstrap -> @Service('${getName(i)}'): loading...`);
       const somethingAsync = from(<Promise<any> | Observable<any>>(
-        this.lazyFactoriesService.getLazyFactory(injectable)
+        this.lazyFactoriesService.getLazyFactory(i)
       )).pipe(shareReplay(1));
       asynChainables.push(somethingAsync);
-      somethingAsync.subscribe(() =>
+      somethingAsync.subscribe(() => {
         this.logger.log(
-          `Bootstrap -> @Service('${injectable.name ||
-            injectable}'): loading finished! ${new Date().toLocaleTimeString()}`
-        )
-      );
+          `Bootstrap -> @Service('${getName(
+            i
+          )}'): loading finished after ${Date.now() -
+            injectableLog[getName(i)].started}ms !`
+        );
+        delete injectableLog[getName(i)];
+      });
     });
-
     return asynChainables;
   }
 
@@ -210,7 +218,7 @@ export class BootstrapService {
     // Remove first chainable unused observable
     chainables.splice(0, 1);
     let count = 0;
-    res.map(name => {
+    res.map((name) => {
       logExtendedInjectables(
         name,
         this.configService.config.experimental.logExtendedInjectables

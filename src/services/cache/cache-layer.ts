@@ -1,6 +1,6 @@
 import { CacheLayerInterface, CacheServiceConfigInterface } from './cache-layer.interfaces';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, timeoutWith, skip, take } from 'rxjs/operators';
 
 export class CacheLayer<T> {
 
@@ -52,11 +52,13 @@ export class CacheLayer<T> {
     return layerItem;
   }
 
-  private onExpire(key: string): void {
-    Observable
-      .create(observer => observer.next())
-      .timeoutWith(this.config.maxAge, of(1))
-      .skip(1)
+  private onExpire(key: string) {
+    return new Observable(observer => observer.next())
+      .pipe(
+        timeoutWith(this.config.maxAge, of(1)),
+        skip(1),
+        take(1)
+      )
       .subscribe(() => this.removeItem(key));
   }
 
