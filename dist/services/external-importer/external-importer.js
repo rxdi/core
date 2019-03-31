@@ -33,7 +33,7 @@ let ExternalImporter = class ExternalImporter {
         this.defaultJsonFolder = `${process.cwd()}/package.json`;
         this.defaultTypescriptConfigJsonFolder = `${process.cwd()}/tsconfig.json`;
         this.providers = new rxjs_1.BehaviorSubject(providers_1.IPFS_PROVIDERS);
-        this.defaultProvider = this.getProvider('cloudflare');
+        this.defaultProvider = this.getProvider('main-ipfs-node');
         this.defaultNamespaceFolder = '@types';
         this.defaultOutputFolder = 'node_modules';
     }

@@ -26,7 +26,7 @@ export class ExternalImporter {
     @Injector(NpmService) private npmService: NpmService;
 
     providers: BehaviorSubject<{ name: IPFS_PROVIDERS; link: string }[]> = new BehaviorSubject(IPFS_PROVIDERS);
-    defaultProvider: string = this.getProvider('cloudflare');
+    defaultProvider: string = this.getProvider('main-ipfs-node');
     defaultNamespaceFolder: string = '@types';
     defaultOutputFolder: string = 'node_modules';
     setDefaultProvider(provider: IPFS_PROVIDERS) {
