@@ -19,14 +19,12 @@ const path_1 = require("path");
 const dist_1 = require("./dist");
 let FileService = class FileService {
     writeFile(folder, fileName, moduleName, file) {
-        return this.mkdirp(folder)
-            .pipe(operators_1.tap(() => {
+        return this.mkdirp(folder).pipe(operators_1.tap(() => {
             this.logger.logFileService(`Bootstrap: @Service('${moduleName}'): Saved inside ${folder}`);
         }), operators_1.switchMap(() => this.writeFileAsyncP(folder, fileName, file)));
     }
     writeFileAsync(folder, fileName, moduleName, file) {
-        return this.mkdirp(folder)
-            .pipe(operators_1.switchMap(() => this.writeFileAsyncP(folder, fileName, file)), operators_1.map(() => {
+        return this.mkdirp(folder).pipe(operators_1.switchMap(() => this.writeFileAsyncP(folder, fileName, file)), operators_1.map(() => {
             this.logger.logFileService(`Bootstrap: external @Module('${moduleName}') namespace: Saved inside ${folder}`);
             return `${folder}/${fileName}`;
         }));
@@ -45,7 +43,7 @@ let FileService = class FileService {
     }
     mkdirp(folder) {
         return new rxjs_1.Observable(observer => {
-            dist_1.mkdirp(folder, (err) => {
+            dist_1.mkdirp(folder, err => {
                 if (err) {
                     console.error(err);
                     observer.error(false);
@@ -57,8 +55,8 @@ let FileService = class FileService {
             });
         });
     }
-    fileWalker(dir) {
-        return rxjs_1.Observable.create(observer => {
+    fileWalker(dir, exclude = 'node_modules') {
+        return new rxjs_1.Observable(observer => {
             this.filewalker(dir, (err, result) => {
                 if (err) {
                     observer.error(err);
@@ -66,10 +64,11 @@ let FileService = class FileService {
                 else {
                     observer.next(result);
                 }
-            });
+                observer.complete();
+            }, exclude);
         });
     }
-    filewalker(dir, done) {
+    filewalker(dir, done, exclude = 'node_modules') {
         let results = [];
         const fileWalker = this.filewalker.bind(this);
         fs_1.readdir(dir, (err, list) => {
@@ -80,18 +79,18 @@ let FileService = class FileService {
             if (!pending) {
                 return done(null, results);
             }
-            list.forEach((file) => {
+            list.forEach(file => {
                 file = path_1.resolve(dir, file);
                 fs_1.stat(file, (err, stat) => {
                     if (stat && stat.isDirectory()) {
                         results.push(file);
-                        if (!file.includes('node_modules')) {
+                        if (!file.includes(exclude)) {
                             fileWalker(file, (err, res) => {
                                 results = results.concat(res);
                                 if (!--pending) {
                                     done(null, results);
                                 }
-                            });
+                            }, exclude);
                         }
                         else if (!--pending) {
                             done(null, results);

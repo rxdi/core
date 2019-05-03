@@ -8,14 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const container_1 = require("../../container");
 const rxjs_1 = require("rxjs");
@@ -91,13 +83,14 @@ let ExternalImporter = class ExternalImporter {
             `);
         }
         tsConfig.compilerOptions = tsConfig.compilerOptions || {};
-        tsConfig.compilerOptions.typeRoots = tsConfig.compilerOptions.typeRoots || [];
+        tsConfig.compilerOptions.typeRoots =
+            tsConfig.compilerOptions.typeRoots || [];
         return tsConfig;
     }
     addNamespaceToTypeRoots(namespace) {
         const defaultNamespace = `./${this.defaultOutputFolder}/@types/${namespace}`;
         const tsConfig = this.loadTypescriptConfigJson();
-        const foundNamespace = tsConfig.compilerOptions.typeRoots.filter((t) => t === defaultNamespace).length;
+        const foundNamespace = tsConfig.compilerOptions.typeRoots.filter(t => t === defaultNamespace).length;
         if (!foundNamespace) {
             tsConfig.compilerOptions.typeRoots.push(defaultNamespace);
             this.writeTypescriptConfigFile(tsConfig);
@@ -161,14 +154,14 @@ let ExternalImporter = class ExternalImporter {
         }
         ipfsConfig.forEach(c => {
             const uniq = c.dependencies
-                .map((name) => {
+                .map(name => {
                 return { count: 1, name: name };
             })
                 .reduce((a, b) => {
                 a[b.name] = (a[b.name] || 0) + b.count;
                 return a;
             }, {});
-            const duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1);
+            const duplicates = Object.keys(uniq).filter(a => uniq[a] > 1);
             dups = [...dups, ...duplicates];
         });
         if (dups.length) {
@@ -203,10 +196,13 @@ let ExternalImporter = class ExternalImporter {
         return rxjs_1.combineLatest(latest.length ? latest : rxjs_1.of());
     }
     downloadIpfsModuleConfig(config) {
-        return this.requestService.get(config.provider + config.hash, config.hash)
-            .pipe(operators_1.map((r) => {
+        return this.requestService
+            .get(config.provider + config.hash, config.hash)
+            .pipe(operators_1.map(r => {
             if (!r) {
-                throw new Error('Recieved undefined from provided address' + config.provider + config.hash);
+                throw new Error('Recieved undefined from provided address' +
+                    config.provider +
+                    config.hash);
             }
             let res = r;
             const metaString = '<!--meta-rxdi-ipfs-module-->';
@@ -217,7 +213,7 @@ let ExternalImporter = class ExternalImporter {
                 catch (e) { }
             }
             return res;
-        }), operators_1.map((r) => {
+        }), operators_1.map(r => {
             let res = r;
             try {
                 res = JSON.parse(r);
@@ -227,7 +223,9 @@ let ExternalImporter = class ExternalImporter {
         }));
     }
     combineDependencies(dependencies, config) {
-        return rxjs_1.combineLatest(dependencies.length ? dependencies.map(h => this.downloadIpfsModule({ provider: config.provider, hash: h })) : rxjs_1.of(''));
+        return rxjs_1.combineLatest(dependencies.length
+            ? dependencies.map(h => this.downloadIpfsModule({ provider: config.provider, hash: h }))
+            : rxjs_1.of(''));
     }
     writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex) {
         if (nameSpaceFakeIndex.length === 2) {
@@ -253,8 +251,7 @@ let ExternalImporter = class ExternalImporter {
         let originalModuleConfig;
         let isNamespace;
         let isRegular;
-        return this.downloadIpfsModuleConfig(config)
-            .pipe(operators_1.tap(res => {
+        return this.downloadIpfsModuleConfig(config).pipe(operators_1.tap(res => {
             if (!res['module']) {
                 console.log('Todo: create logic to load module which is not from rxdi infrastructure for now can be used useDynamic which will do the same job!');
             }
@@ -272,12 +269,12 @@ let ExternalImporter = class ExternalImporter {
             isRegular = isNamespace ? moduleName : moduleName.split('/')[0];
             this.logger.logFileService(`Package config for module ${moduleName} downloaded! ${JSON.stringify(externalModule)}`);
             return externalModule;
-        }), operators_1.switchMap((externalModule) => this.combineDependencies(externalModule.dependencies, config)), operators_1.switchMap(() => {
+        }), operators_1.switchMap(externalModule => this.combineDependencies(externalModule.dependencies, config)), operators_1.switchMap(() => {
             this.logger.logFileService(`--------------------${moduleName}--------------------`);
             this.logger.logFileService(`\nDownloading... ${configLink} `);
             this.logger.logFileService(`Config: ${JSON.stringify(originalModuleConfig, null, 2)} \n`);
             return this.requestService.get(moduleLink, config.hash);
-        }), operators_1.switchMap((file) => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap((file) => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${isRegular}`, 'index.d.ts', moduleName, file)), operators_1.tap(() => {
+        }), operators_1.switchMap(file => this.fileService.writeFile(folder + moduleName, 'index.js', moduleName, file)), operators_1.switchMap(() => this.requestService.get(moduleTypings, config.hash)), operators_1.switchMap(file => this.fileService.writeFile(folder + `${this.defaultNamespaceFolder}/${isRegular}`, 'index.d.ts', moduleName, file)), operators_1.tap(() => {
             if (process.env.WRITE_FAKE_INDEX) {
                 this.writeFakeIndexIfMultiModule(folder, nameSpaceFakeIndex);
             }
@@ -298,13 +295,13 @@ let ExternalImporter = class ExternalImporter {
         if (!moduleLink) {
             return rxjs_1.of(true);
         }
-        return this.requestService.get(moduleLink)
-            .pipe(operators_1.take(1), operators_1.map((res) => {
+        return this.requestService.get(moduleLink).pipe(operators_1.take(1), operators_1.map(res => {
             this.logger.logFileService(`Done!`);
             return res;
-        }), operators_1.switchMap((res) => this.fileService.writeFile(folder, fileName, config.typingsFileName, res)));
+        }), operators_1.switchMap(res => this.fileService.writeFile(folder, fileName, config.typingsFileName, res)));
     }
-    importModule(config, token) {
+    importModule(config, token, { folderOverride, waitUntil } = {}) {
+        const timer$ = rxjs_1.timer(waitUntil || 20 * 1000);
         this.validateConfig(config);
         if (this.isWeb()) {
             SystemJS.config(Object.assign({
@@ -314,32 +311,51 @@ let ExternalImporter = class ExternalImporter {
             }, config.SystemJsConfig));
             return SystemJS.import(config.link);
         }
-        return rxjs_1.Observable.create((observer) => __awaiter(this, void 0, void 0, function* () {
+        return new rxjs_1.Observable(observer => {
             const moduleName = config.fileName;
             const moduleNamespace = config.namespace;
             const moduleLink = config.link;
             const moduleExtension = config.extension;
             const moduleSystemJsConfig = config.SystemJsConfig || {};
             const modulesFolder = config.outputFolder || `/${this.defaultOutputFolder}/`;
-            const fileFullPath = `${process.cwd()}${modulesFolder}/${moduleNamespace}/${moduleName}.${moduleExtension}`;
-            const folder = `${process.cwd()}${modulesFolder}${moduleNamespace}`;
+            const fileFullPath = `${folderOverride ||
+                process.cwd()}${modulesFolder}/${moduleNamespace}/${moduleName}.${moduleExtension}`;
+            const folder = `${folderOverride ||
+                process.cwd()}${modulesFolder}${moduleNamespace}`;
             const fileName = `${moduleName}.${moduleExtension}`;
-            Object.assign(moduleSystemJsConfig, { paths: Object.assign({ [moduleName]: fileFullPath }, moduleSystemJsConfig.paths) });
+            Object.assign(moduleSystemJsConfig, {
+                paths: Object.assign({ [moduleName]: fileFullPath }, moduleSystemJsConfig.paths)
+            });
             SystemJS.config(moduleSystemJsConfig);
             if (this.fileService.isPresent(fileFullPath)) {
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): present inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
                 this.importExternalModule(moduleName)
                     .pipe(operators_1.take(1))
-                    .subscribe(m => observer.next(m), err => observer.error(err));
+                    .subscribe(m => {
+                    observer.next(m);
+                    observer.complete();
+                }, err => {
+                    observer.error(err);
+                    observer.complete();
+                });
             }
             else {
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): will be downloaded inside .${modulesFolder}${moduleNamespace}/${moduleName}.${moduleExtension} folder and loaded from there`);
                 this.logger.logImporter(`Bootstrap -> @Service('${moduleName}'): ${moduleLink} downloading...`);
-                this.requestService.get(moduleLink)
-                    .pipe(operators_1.take(1), operators_1.tap(() => this.logger.logImporter(`Done!`)), operators_1.switchMap((res) => this.fileService.writeFile(folder, fileName, config.fileName, res)), operators_1.switchMap(() => this.downloadTypings(config.typings, folder, fileName, config)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
-                    .subscribe((m) => observer.next(m), err => observer.error(err));
+                this.requestService
+                    .get(moduleLink)
+                    .pipe(operators_1.take(1), operators_1.tap(() => this.logger.logImporter(`Done!`)), operators_1.switchMap(res => this.fileService.writeFile(folder, fileName, config.fileName, res)), operators_1.switchMap(() => this.downloadTypings(config.typings, folder, fileName, config)), operators_1.switchMap(() => this.importExternalModule(moduleName)))
+                    .subscribe(m => {
+                    observer.next(m);
+                    observer.complete();
+                }, err => {
+                    observer.error(err);
+                    observer.complete();
+                });
             }
-        }));
+        })
+            .pipe(operators_1.takeUntil(timer$))
+            .toPromise();
     }
 };
 __decorate([
