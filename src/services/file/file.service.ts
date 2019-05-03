@@ -59,6 +59,7 @@ export class FileService {
                 else {
                     observer.next(true);
                 }
+                observer.complete();
             });
         });
     }

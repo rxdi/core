@@ -53,6 +53,7 @@ let FileService = class FileService {
                 else {
                     observer.next(true);
                 }
+                observer.complete();
             });
         });
     }
