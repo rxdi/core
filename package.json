@@ -33,7 +33,7 @@
   "homepage": "https://github.com/rxdi/core/blob/master/README.md",
   "dependencies": {
     "reflect-metadata": "0.1.13",
-    "rxjs": "6.4.0",
+    "rxjs": "6.5.1",
     "systemjs": "0.21.4"
   },
   "devDependencies": {
@@ -47,7 +47,7 @@
     "ts-jest": "^23.0.1",
     "tslint": "^5.11.0",
     "tslint-language-service": "^0.9.9",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.4.5"
   },
   "jest": {
     "testEnvironment": "node",
