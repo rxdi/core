@@ -48,8 +48,8 @@ function Module(module) {
         }));
         if (original.forRoot) {
             const originalForRoot = constructorFunction.forRoot;
-            constructorFunction.forRoot = function (args) {
-                const result = originalForRoot(args);
+            constructorFunction.forRoot = function (...args) {
+                const result = originalForRoot(...args);
                 if (!result) {
                     throw new Error(`forRoot configuration inside ${constructorFunction.name} is returning undefined or null`);
                 }

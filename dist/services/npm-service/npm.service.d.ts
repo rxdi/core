@@ -8,5 +8,5 @@ export declare class NpmService {
     child: childProcess.ChildProcess;
     setPackages(packages: NpmPackageConfig[]): void;
     preparePackages(): void;
-    installPackages(): Promise<{}>;
+    installPackages(): Promise<unknown>;
 }
