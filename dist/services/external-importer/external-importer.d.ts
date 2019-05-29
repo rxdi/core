@@ -51,6 +51,6 @@ export declare class ExternalImporter {
     private combineDependencies;
     private writeFakeIndexIfMultiModule;
     downloadIpfsModule(config: ExternalImporterIpfsConfig): any;
-    downloadTypings(moduleLink: string, folder: string, fileName: string, config: ExternalImporterConfig): Observable<{}>;
+    downloadTypings(moduleLink: string, folder: string, fileName: string, config: ExternalImporterConfig): Observable<unknown>;
     importModule(config: ExternalImporterConfig, token: string, { folderOverride, waitUntil }?: any): Promise<any>;
 }

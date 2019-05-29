@@ -59,8 +59,8 @@ export function Module<T, K extends keyof T>(module?: ModuleArguments<T, K>): Fu
             }));
         if (original.forRoot) {
             const originalForRoot = constructorFunction.forRoot;
-            constructorFunction.forRoot = function (args?: any) {
-                const result: ModuleWithServices = originalForRoot(args);
+            constructorFunction.forRoot = function (...args: any) {
+                const result: ModuleWithServices = originalForRoot(...args);
 
                 if (!result) {
                     throw new Error(`forRoot configuration inside ${constructorFunction.name} is returning undefined or null`);
