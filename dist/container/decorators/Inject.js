@@ -4,12 +4,13 @@ const Container_1 = require("../Container");
 const Token_1 = require("../Token");
 const CannotInjectError_1 = require("../error/CannotInjectError");
 const isServer = () => typeof module !== 'undefined' && module.exports;
+const isClient = () => typeof module !== 'undefined' && module.exports && module['hot'];
 /**
  * Injects a service into a class property or constructor parameter.
  */
 function Inject(typeOrName) {
     return function (target, propertyName, index) {
-        if (!isServer() && typeOrName && typeof typeOrName === 'function') {
+        if (isClient() && typeOrName && typeof typeOrName === 'function') {
             Object.defineProperty(target, propertyName, {
                 get: () => Container_1.Container.get(typeOrName)
             });

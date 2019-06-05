@@ -3,6 +3,7 @@ import { Token } from '../Token';
 import { CannotInjectError } from '../error/CannotInjectError';
 
 const isServer = () => typeof module !== 'undefined' && module.exports;
+const isClient = () => typeof module !== 'undefined' && module.exports && module['hot'];
 
 /**
  * Injects a service into a class property or constructor parameter.
@@ -27,7 +28,7 @@ export function Inject(fn: Function): Function;
  */
 export function Inject(typeOrName?: ((type?: any) => Function) | string | Token<any>): Function {
     return function (target: Object, propertyName: string, index?: number) {
-        if (!isServer() && typeOrName && typeof typeOrName === 'function') {
+        if (isClient() && typeOrName && typeof typeOrName === 'function') {
             Object.defineProperty(target, propertyName, {
                 get: () => Container.get(typeOrName as Function)
             });
