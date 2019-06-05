@@ -226,7 +226,7 @@ class ContainerInstance {
      */
     initializeParams(type, paramTypes) {
         return paramTypes.map((paramType, index) => {
-            const paramHandler = Container_1.Container.handlers.find(handler => handler.object === type && handler.index === index);
+            const paramHandler = Array.from(Container_1.Container.handlers.values()).find(handler => handler.object === type && handler.index === index);
             if (paramHandler)
                 return paramHandler.value(this);
             if (paramType && paramType.name && !this.isTypePrimitive(paramType.name)) {

@@ -368,7 +368,7 @@ export class ContainerInstance {
      */
     private initializeParams(type: Function, paramTypes: any[]): any[] {
         return paramTypes.map((paramType, index) => {
-            const paramHandler = Container.handlers.find(handler => handler.object === type && handler.index === index);
+            const paramHandler = Array.from(Container.handlers.values()).find(handler => handler.object === type && handler.index === index);
             if (paramHandler)
                 return paramHandler.value(this);
 

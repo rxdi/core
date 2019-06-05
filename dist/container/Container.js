@@ -77,7 +77,7 @@ class Container {
      * Registers a new handler.
      */
     static registerHandler(handler) {
-        this.handlers.push(handler);
+        this.handlers.set(handler, handler);
         return this;
     }
     /**
@@ -101,5 +101,5 @@ Container.instances = new Map();
 /**
  * All registered handlers.
  */
-Container.handlers = [];
+Container.handlers = new Map();
 exports.Container = Container;

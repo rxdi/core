@@ -19,7 +19,7 @@ export declare class Container {
     /**
      * All registered handlers.
      */
-    static readonly handlers: Handler[];
+    static readonly handlers: Map<Handler, Handler>;
     /**
      * Gets a separate container instance for the given instance id.
      */
