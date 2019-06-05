@@ -14,10 +14,10 @@ class Container {
     static of(instanceId) {
         if (instanceId === undefined)
             return this.globalInstance;
-        let container = this.instances.find(instance => instance.id === instanceId);
+        let container = this.instances.get(instanceId);
         if (!container) {
             container = new ContainerInstance_1.ContainerInstance(instanceId);
-            this.instances.push(container);
+            this.instances.set(instanceId, container);
         }
         return container;
     }
@@ -61,15 +61,15 @@ class Container {
      */
     static reset(containerId) {
         if (containerId) {
-            const instance = this.instances.find(instance => instance.id === containerId);
+            const instance = this.instances.get(containerId);
             if (instance) {
                 instance.reset();
-                this.instances.splice(this.instances.indexOf(instance), 1);
+                this.instances.delete(containerId);
             }
         }
         else {
             this.globalInstance.reset();
-            this.instances.forEach(instance => instance.reset());
+            Array.from(this.instances.values()).forEach(i => i.reset());
         }
         return this;
     }
@@ -97,7 +97,7 @@ Container.globalInstance = new ContainerInstance_1.ContainerInstance(undefined);
 /**
  * Other containers created using Container.of method.
  */
-Container.instances = [];
+Container.instances = new Map();
 /**
  * All registered handlers.
  */

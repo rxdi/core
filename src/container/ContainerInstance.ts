@@ -29,7 +29,7 @@ export class ContainerInstance {
     /**
      * All registered services.
      */
-    private services: ServiceMetadata<any, any>[] = [];
+    private services: Map<ServiceMetadata<any, any>, ServiceMetadata<any, any>> = new Map();
 
     // -------------------------------------------------------------------------
     // Constructor
@@ -190,11 +190,11 @@ export class ContainerInstance {
 
         // const newService: ServiceMetadata<any, any> = arguments.length === 1 && typeof identifierOrServiceMetadata === 'object'  && !(identifierOrServiceMetadata instanceof Token) ? identifierOrServiceMetadata : undefined;
         const newService: ServiceMetadata<any, any> = identifierOrServiceMetadata as any;
-        const service = this.findService(newService.id);
+        const service = this.services.get(newService);
         if (service && service.multiple !== true) {
             Object.assign(service, newService);
         } else {
-            this.services.push(newService);
+            this.services.set(newService, newService);
         }
 
         return this;
@@ -206,7 +206,7 @@ export class ContainerInstance {
     remove(...ids: ServiceIdentifier[]): this {
         ids.forEach(id => {
             this.filterServices(id).forEach(service => {
-                this.services.splice(this.services.indexOf(service), 1);
+                this.services.delete(service);
             });
         });
         return this;
@@ -216,7 +216,7 @@ export class ContainerInstance {
      * Completely resets the container by removing all previously registered services from it.
      */
     reset(): this {
-        this.services = [];
+        this.services.clear();
         return this;
     }
 
@@ -228,7 +228,7 @@ export class ContainerInstance {
      * Filters registered service in the with a given service identifier.
      */
     private filterServices(identifier: ServiceIdentifier): ServiceMetadata<any, any>[] {
-        return this.services.filter(service => {
+        return Array.from(this.services.values()).filter(service => {
             if (service.id)
                 return service.id === identifier;
 
@@ -243,7 +243,7 @@ export class ContainerInstance {
      * Finds registered service in the with a given service identifier.
      */
     private findService(identifier: ServiceIdentifier): ServiceMetadata<any, any> | undefined {
-        return this.services.find(service => {
+        return Array.from(this.services.values()).find(service => {
             if (service.id) {
                 if (identifier instanceof Object &&
                     service.id instanceof Token &&
@@ -298,7 +298,7 @@ export class ContainerInstance {
                 throw new MissingProvidedServiceTypeError(identifier);
 
             service = { type: type };
-            this.services.push(service);
+            this.services.set(service, service);
         }
 
         // setup constructor parameters for a newly initialized service

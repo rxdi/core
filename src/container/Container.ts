@@ -22,7 +22,7 @@ export class Container {
     /**
      * Other containers created using Container.of method.
      */
-    private static readonly instances: ContainerInstance[] = [];
+    private static readonly instances: Map<string, ContainerInstance> = new Map();
 
     /**
      * All registered handlers.
@@ -40,10 +40,10 @@ export class Container {
         if (instanceId === undefined)
             return this.globalInstance;
 
-        let container = this.instances.find(instance => instance.id === instanceId);
+        let container = this.instances.get(instanceId);
         if (!container) {
             container = new ContainerInstance(instanceId);
-            this.instances.push(container);
+            this.instances.set(instanceId, container);
         }
 
         return container;
@@ -173,15 +173,15 @@ export class Container {
      */
     static reset(containerId?: any): Container {
         if (containerId) {
-            const instance = this.instances.find(instance => instance.id === containerId);
+            const instance = this.instances.get(containerId);
             if (instance) {
                 instance.reset();
-                this.instances.splice(this.instances.indexOf(instance), 1);
+                this.instances.delete(containerId);
             }
 
         } else {
             this.globalInstance.reset();
-            this.instances.forEach(instance => instance.reset());
+            Array.from(this.instances.values()).forEach(i => i.reset());
         }
         return this;
     }

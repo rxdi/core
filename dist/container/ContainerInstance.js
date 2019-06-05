@@ -20,7 +20,7 @@ class ContainerInstance {
         /**
          * All registered services.
          */
-        this.services = [];
+        this.services = new Map();
         this.id = id;
     }
     /**
@@ -77,12 +77,12 @@ class ContainerInstance {
         }
         // const newService: ServiceMetadata<any, any> = arguments.length === 1 && typeof identifierOrServiceMetadata === 'object'  && !(identifierOrServiceMetadata instanceof Token) ? identifierOrServiceMetadata : undefined;
         const newService = identifierOrServiceMetadata;
-        const service = this.findService(newService.id);
+        const service = this.services.get(newService);
         if (service && service.multiple !== true) {
             Object.assign(service, newService);
         }
         else {
-            this.services.push(newService);
+            this.services.set(newService, newService);
         }
         return this;
     }
@@ -92,7 +92,7 @@ class ContainerInstance {
     remove(...ids) {
         ids.forEach(id => {
             this.filterServices(id).forEach(service => {
-                this.services.splice(this.services.indexOf(service), 1);
+                this.services.delete(service);
             });
         });
         return this;
@@ -101,7 +101,7 @@ class ContainerInstance {
      * Completely resets the container by removing all previously registered services from it.
      */
     reset() {
-        this.services = [];
+        this.services.clear();
         return this;
     }
     // -------------------------------------------------------------------------
@@ -111,7 +111,7 @@ class ContainerInstance {
      * Filters registered service in the with a given service identifier.
      */
     filterServices(identifier) {
-        return this.services.filter(service => {
+        return Array.from(this.services.values()).filter(service => {
             if (service.id)
                 return service.id === identifier;
             if (service.type && identifier instanceof Function)
@@ -123,7 +123,7 @@ class ContainerInstance {
      * Finds registered service in the with a given service identifier.
      */
     findService(identifier) {
-        return this.services.find(service => {
+        return Array.from(this.services.values()).find(service => {
             if (service.id) {
                 if (identifier instanceof Object &&
                     service.id instanceof Token_1.Token &&
@@ -168,7 +168,7 @@ class ContainerInstance {
             if (!type)
                 throw new MissingProvidedServiceTypeError_1.MissingProvidedServiceTypeError(identifier);
             service = { type: type };
-            this.services.push(service);
+            this.services.set(service, service);
         }
         // setup constructor parameters for a newly initialized service
         const paramTypes = type && Reflect && Reflect.getMetadata ? Reflect.getMetadata('design:paramtypes', type) : undefined;
