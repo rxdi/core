@@ -1,9 +1,7 @@
 import { Container } from '../Container';
 import { Token } from '../Token';
-import { CannotInjectError } from '../error/CannotInjectError';
-
-const isServer = () => typeof module !== 'undefined' && module.exports;
-const isClient = () => typeof module !== 'undefined' && module.exports && module['hot'];
+import { getIdentifier, isClient } from '../../helpers/get-identifier';
+import { TypeOrName } from '../types/type-or-name';
 
 /**
  * Injects a service into a class property or constructor parameter.
@@ -26,7 +24,7 @@ export function Inject(fn: Function): Function;
 /**
  * Injects a service into a class property or constructor parameter.
  */
-export function Inject(typeOrName?: ((type?: any) => Function) | string | Token<any>): Function {
+export function Inject(typeOrName?: TypeOrName): Function {
     return function (target: Object, propertyName: string, index?: number) {
         if (isClient() && typeOrName && typeof typeOrName === 'function') {
             Object.defineProperty(target, propertyName, {
@@ -41,22 +39,7 @@ export function Inject(typeOrName?: ((type?: any) => Function) | string | Token<
             object: target,
             propertyName: propertyName,
             index: index,
-            value: containerInstance => {
-                let identifier: any;
-                if (typeof typeOrName === 'string') {
-                    identifier = typeOrName;
-
-                } else if (typeOrName instanceof Token) {
-                    identifier = typeOrName;
-
-                } else {
-                    identifier = typeOrName();
-                }
-
-                if (identifier === Object)
-                    throw new CannotInjectError(target, propertyName);
-                return containerInstance.get<any>(identifier);
-            }
+            value: instance => instance.get(getIdentifier(typeOrName, target, propertyName))
         });
     };
 }

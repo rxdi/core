@@ -1,7 +1,7 @@
 // import { Module } from '../decorators/module/module.decorator';
-import { ConfigModel } from '../services/config/config.model';
-import { BootstrapFramework } from './bootstrap';
-import { ModuleArguments } from '../decorators/module/module.interfaces';
+// import { ConfigModel } from '../services/config/config.model';
+// import { BootstrapFramework } from './bootstrap';
+// import { ModuleArguments } from '../decorators/module/module.interfaces';
 // import { map, switchMap, switchMapTo } from 'rxjs/operators';
 // import { of } from 'rxjs';
 // import { Container, Injectable } from '../container';
@@ -53,6 +53,23 @@ import { ModuleArguments } from '../decorators/module/module.interfaces';
 //     switchMapTo(setup({ providers: [{ provide: 'value3', lazy: true, useFactory: () => of(3) }] })),
 //     switchMapTo(setup({ providers: [{ provide: 'value4', lazy: true, useFactory: () => of(4) }] })),
 //     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(7) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(5) }] })),
+//     switchMapTo(setup({ providers: [{ provide: 'value5', lazy: true, useFactory: () => of(0) }] })),
+
 // ).subscribe((a) => {
 //     console.log(Container.get('value1'), Container.get('value2'), Container.get('value3'), Container.get('value4'), Container.get('value5'));
-// });
+// }, console.error.bind(console));

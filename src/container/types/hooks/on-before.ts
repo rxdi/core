@@ -1,3 +1,3 @@
 export interface OnBefore {
-    OnBefore(): void;
+  OnBefore(): void;
 }

@@ -6,8 +6,6 @@ const Container_1 = require("../Container");
 const create_unique_hash_1 = require("../../helpers/create-unique-hash");
 function Plugin(optionsOrServiceName) {
     return function (target) {
-        const original = target;
-        original.prototype._plugin = true;
         const uniqueHashForClass = create_unique_hash_1.createUniqueHash(`${target}`);
         Object.defineProperty(target, 'originalName', { value: target.name || target.constructor.name, writable: false });
         Object.defineProperty(target, 'name', { value: uniqueHashForClass, writable: true });
@@ -21,7 +19,7 @@ function Plugin(optionsOrServiceName) {
             type: 'plugin',
         };
         const service = {
-            type: original
+            type: target
         };
         if (typeof optionsOrServiceName === 'string' || optionsOrServiceName instanceof Token_1.Token) {
             service.multiple = optionsOrServiceName.multiple;

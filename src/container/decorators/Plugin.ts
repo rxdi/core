@@ -12,9 +12,7 @@ export interface PluginInterface {
     handler?(request, h);
 }
 export function Plugin<T, K extends keyof T>(optionsOrServiceName?: ServiceOptions<T, K> | Token<any> | string): Function {
-    return function (target) {
-        const original = target;
-        original.prototype._plugin = true;
+    return function (target: Function) {
 
         const uniqueHashForClass = createUniqueHash(`${target}`);
         Object.defineProperty(target, 'originalName', { value: target.name || target.constructor.name, writable: false });
@@ -31,7 +29,7 @@ export function Plugin<T, K extends keyof T>(optionsOrServiceName?: ServiceOptio
         };
 
         const service: ServiceMetadata<T, K> = {
-            type: original
+            type: target
         };
 
         if (typeof optionsOrServiceName === 'string' || optionsOrServiceName instanceof Token) {

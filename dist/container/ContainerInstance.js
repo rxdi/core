@@ -38,10 +38,12 @@ class ContainerInstance {
         const globalContainer = Container_1.Container.of(undefined);
         const service = globalContainer.findService(identifier);
         const scopedService = this.findService(identifier);
-        if (service && service.global === true)
+        if (service && service.global === true) {
             return this.getServiceValue(identifier, service);
-        if (scopedService)
+        }
+        if (scopedService) {
             return this.getServiceValue(identifier, scopedService);
+        }
         if (service && this !== globalContainer) {
             const clonedService = Object.assign({}, service);
             clonedService.value = undefined;
@@ -66,14 +68,23 @@ class ContainerInstance {
             identifierOrServiceMetadata.forEach((v) => this.set(v));
             return this;
         }
-        if (typeof identifierOrServiceMetadata === 'string' || identifierOrServiceMetadata instanceof Token_1.Token) {
+        if (typeof identifierOrServiceMetadata === 'string' ||
+            identifierOrServiceMetadata instanceof Token_1.Token) {
             return this.set({ id: identifierOrServiceMetadata, value: value });
         }
-        if (typeof identifierOrServiceMetadata === 'object' && identifierOrServiceMetadata.service) {
-            return this.set({ id: identifierOrServiceMetadata.service, value: value });
+        if (typeof identifierOrServiceMetadata === 'object' &&
+            identifierOrServiceMetadata.service) {
+            return this.set({
+                id: identifierOrServiceMetadata.service,
+                value: value
+            });
         }
         if (identifierOrServiceMetadata instanceof Function) {
-            return this.set({ type: identifierOrServiceMetadata, id: identifierOrServiceMetadata, value: value });
+            return this.set({
+                type: identifierOrServiceMetadata,
+                id: identifierOrServiceMetadata,
+                value: value
+            });
         }
         // const newService: ServiceMetadata<any, any> = arguments.length === 1 && typeof identifierOrServiceMetadata === 'object'  && !(identifierOrServiceMetadata instanceof Token) ? identifierOrServiceMetadata : undefined;
         const newService = identifierOrServiceMetadata;
@@ -112,10 +123,13 @@ class ContainerInstance {
      */
     filterServices(identifier) {
         return Array.from(this.services.values()).filter(service => {
-            if (service.id)
+            if (service.id) {
                 return service.id === identifier;
-            if (service.type && identifier instanceof Function)
-                return service.type === identifier || identifier.prototype instanceof service.type;
+            }
+            if (service.type && identifier instanceof Function) {
+                return (service.type === identifier ||
+                    identifier.prototype instanceof service.type);
+            }
             return false;
         });
     }
@@ -132,8 +146,9 @@ class ContainerInstance {
                 }
                 return service.id === identifier;
             }
-            if (service.type && identifier instanceof Function)
+            if (service.type && identifier instanceof Function) {
                 return service.type === identifier; // todo: not sure why it was here || identifier.prototype instanceof service.type;
+            }
             return false;
         });
     }
@@ -142,14 +157,16 @@ class ContainerInstance {
      */
     getServiceValue(identifier, service) {
         // find if instance of this object already initialized in the container and return it if it is
-        if (service && service.value !== undefined)
+        if (service && service.value !== undefined) {
             return service.value;
+        }
         // if named service was requested and its instance was not found plus there is not type to know what to initialize,
         // this means service was not pre-registered and we throw an exception
         if ((!service || !service.type) &&
             (!service || !service.factory) &&
-            (typeof identifier === 'string' || identifier instanceof Token_1.Token))
+            (typeof identifier === 'string' || identifier instanceof Token_1.Token)) {
             throw new ServiceNotFoundError_1.ServiceNotFoundError(identifier);
+        }
         // at this point we either have type in service registered, either identifier is a target type
         let type = undefined;
         if (service && service.type) {
@@ -165,14 +182,19 @@ class ContainerInstance {
         }
         // if service was not found then create a new one and register it
         if (!service) {
-            if (!type)
+            if (!type) {
                 throw new MissingProvidedServiceTypeError_1.MissingProvidedServiceTypeError(identifier);
+            }
             service = { type: type };
             this.services.set(service, service);
         }
         // setup constructor parameters for a newly initialized service
-        const paramTypes = type && Reflect && Reflect.getMetadata ? Reflect.getMetadata('design:paramtypes', type) : undefined;
-        let params = paramTypes ? this.initializeParams(type, paramTypes) : [];
+        const paramTypes = type && Reflect && Reflect.getMetadata
+            ? Reflect.getMetadata('design:paramtypes', type)
+            : undefined;
+        let params = paramTypes
+            ? this.initializeParams(type, paramTypes)
+            : [];
         // if factory is set then use it to create service instance
         let value;
         if (service.factory) {
@@ -185,13 +207,16 @@ class ContainerInstance {
                 // in this case Type instance will be obtained from Container and its method 'create' will be called
                 value = this.get(service.factory[0])[service.factory[1]](...params);
             }
-            else { // regular factory function
+            else {
+                // regular factory function
                 value = service.factory(...params, this);
             }
         }
-        else { // otherwise simply create a new object instance
-            if (!type)
+        else {
+            // otherwise simply create a new object instance
+            if (!type) {
                 throw new MissingProvidedServiceTypeError_1.MissingProvidedServiceTypeError(identifier);
+            }
             params.unshift(null);
             // 'extra feature' - always pass container instance as the last argument to the service function
             // this allows us to support javascript where we don't have decorators and emitted metadata about dependencies
@@ -201,7 +226,10 @@ class ContainerInstance {
                 type.prototype.OnBefore.bind(type)();
             }
             value = new (type.bind.apply(type, params))();
-            constructor_watcher_1.constructorWatcherService.createConstructor(type['name'], { type, value });
+            constructor_watcher_1.constructorWatcherService.createConstructor(type['name'], {
+                type,
+                value
+            });
             // if (value.render) {
             //     debugger
             // //    const test = new value['__proto__'].constructor()
@@ -215,10 +243,12 @@ class ContainerInstance {
                 value.OnInit.bind(value)();
             }
         }
-        if (service && !service.transient && value)
+        if (service && !service.transient && value) {
             service.value = value;
-        if (type)
+        }
+        if (type) {
             this.applyPropertyHandlers(type, value);
+        }
         return value;
     }
     /**
@@ -227,9 +257,12 @@ class ContainerInstance {
     initializeParams(type, paramTypes) {
         return paramTypes.map((paramType, index) => {
             const paramHandler = Array.from(Container_1.Container.handlers.values()).find(handler => handler.object === type && handler.index === index);
-            if (paramHandler)
+            if (paramHandler) {
                 return paramHandler.value(this);
-            if (paramType && paramType.name && !this.isTypePrimitive(paramType.name)) {
+            }
+            if (paramType &&
+                paramType.name &&
+                !this.isTypePrimitive(paramType.name)) {
                 return this.get(paramType);
             }
             return undefined;
@@ -239,17 +272,20 @@ class ContainerInstance {
      * Checks if given type is primitive (e.g. string, boolean, number, object).
      */
     isTypePrimitive(param) {
-        return ['string', 'boolean', 'number', 'object'].indexOf(param.toLowerCase()) !== -1;
+        return (['string', 'boolean', 'number', 'object'].indexOf(param.toLowerCase()) !== -1);
     }
     /**
      * Applies all registered handlers on a given target class.
      */
     applyPropertyHandlers(target, instance) {
         Container_1.Container.handlers.forEach(handler => {
-            if (typeof handler.index === 'number')
+            if (typeof handler.index === 'number') {
                 return;
-            if (handler.object.constructor !== target && !(target.prototype instanceof handler.object.constructor))
+            }
+            if (handler.object.constructor !== target &&
+                !(target.prototype instanceof handler.object.constructor)) {
                 return;
+            }
             instance[handler.propertyName] = handler.value(this);
         });
     }

@@ -25,7 +25,7 @@ exports.setup = (options, frameworks = [], bootstrapOptions) => {
         effects: options.effects || [],
         plugins: options.plugins || [],
         afterPlugins: options.afterPlugins || [],
-        beforePlugins: options.beforePlugins || [],
+        beforePlugins: options.beforePlugins || []
     })(function () { }), frameworks, bootstrapOptions);
 };
 exports.createTestBed = exports.setup;
