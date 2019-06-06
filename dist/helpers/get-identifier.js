@@ -18,4 +18,4 @@ exports.getIdentifier = (typeOrName, target, propertyName) => {
     }
     return identifier;
 };
-exports.isClient = () => typeof module !== 'undefined' && module.exports && module['hot'];
+exports.isClient = () => typeof window !== 'undefined' && typeof window.document !== 'undefined';

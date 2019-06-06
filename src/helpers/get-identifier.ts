@@ -21,5 +21,4 @@ export const getIdentifier = (
   return identifier;
 };
 
-export const isClient = () =>
-  typeof module !== 'undefined' && module.exports && module['hot'];
+export const isClient = () => typeof window !== 'undefined' && typeof window.document !== 'undefined';
