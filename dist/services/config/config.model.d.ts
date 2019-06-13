@@ -28,4 +28,5 @@ export declare class ConfigModel {
     initOptions?: InitOptionsConfig;
     experimental?: ExperimentalFeatures;
     logger?: LoggerConfig;
+    strict?: boolean;
 }

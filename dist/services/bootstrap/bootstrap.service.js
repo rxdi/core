@@ -169,7 +169,9 @@ let BootstrapService = class BootstrapService {
         return asynChainables;
     }
     validateSystem() {
-        this.cacheService.searchForDuplicateDependenciesInsideApp();
+        if (this.configService.config.strict) {
+            this.cacheService.searchForDuplicateDependenciesInsideApp();
+        }
     }
     attachLazyLoadedChainables(res, chainables) {
         // Remove first chainable unused observable

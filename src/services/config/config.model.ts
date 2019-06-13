@@ -33,4 +33,5 @@ export class ConfigModel {
     initOptions?: InitOptionsConfig = new InitOptionsConfig();
     experimental?: ExperimentalFeatures = new ExperimentalFeatures();
     logger?: LoggerConfig = new LoggerConfig();
+    strict?: boolean;
 }

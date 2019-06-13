@@ -211,7 +211,9 @@ export class BootstrapService {
   }
 
   private validateSystem() {
-    this.cacheService.searchForDuplicateDependenciesInsideApp();
+    if (this.configService.config.strict) {
+      this.cacheService.searchForDuplicateDependenciesInsideApp();
+    }
   }
 
   private attachLazyLoadedChainables(res, chainables) {
