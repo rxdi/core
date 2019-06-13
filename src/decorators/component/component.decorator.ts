@@ -5,7 +5,7 @@ import { Container } from '../../container/Container';
 export function Component<T, K extends keyof T>(options?: {init?: boolean}): Function {
     return function (target: Function) {
 
-        const uniqueHashForClass = createUniqueHash(`${target}`);
+        const uniqueHashForClass = createUniqueHash(`${target}${JSON.stringify(options, null, 4)}`);
         Object.defineProperty(target, 'originalName', { value: target.name || target.constructor.name, writable: false });
         Object.defineProperty(target, 'name', { value: uniqueHashForClass, writable: true });
 
@@ -16,7 +16,7 @@ export function Component<T, K extends keyof T>(options?: {init?: boolean}): Fun
             type: 'component',
             raw: `
             ---- @Component '${target.name}' metadata----
-            @Component()
+            @Component(${JSON.stringify(options, null, 4)})
             ${target['originalName']}
             `
         };
