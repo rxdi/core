@@ -9,9 +9,9 @@ const effectService = Container.get(EffectsService);
 class TestEffect {}
 
 describe('Service: EffectsService', () => {
-    it('Should register appropriate effect inside effects observable', (done) => {
-        effectService.register(TestEffect);
-        expect(effectService.getEffects().length).toBe(1);
-        done();
-    });
+  it('Should register appropriate effect inside effects observable', done => {
+    effectService.register(TestEffect);
+    expect(effectService.getEffects().length).toBe(1);
+    done();
+  });
 });

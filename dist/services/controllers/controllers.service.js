@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Service_1 = require("../../container/decorators/Service");
+const Service_1 = require("../../decorators/service/Service");
 const rxjs_1 = require("rxjs");
 let ControllersService = class ControllersService {
     constructor() {

@@ -1,5 +1,5 @@
 import { of, combineLatest, from, Observable } from 'rxjs';
-import { Container, Service, PluginInterface } from '../../container';
+import { Container } from '../../container';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { CacheService } from '../cache/cache-layer.service';
 import { InternalLayers, InternalEvents } from '../../helpers/events';
@@ -20,6 +20,8 @@ import {
   SystemIngridientsType
 } from '../../decorators/module/module.interfaces';
 import { logExtendedInjectables } from '../../helpers/log';
+import { Service } from '../../decorators/service/Service';
+import { PluginInterface } from '../../decorators';
 
 @Service()
 export class BootstrapService {
@@ -220,7 +222,7 @@ export class BootstrapService {
     // Remove first chainable unused observable
     chainables.splice(0, 1);
     let count = 0;
-    res.map((name) => {
+    res.map(name => {
       logExtendedInjectables(
         name,
         this.configService.config.experimental.logExtendedInjectables

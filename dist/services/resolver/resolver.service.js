@@ -16,22 +16,27 @@ const operators_1 = require("rxjs/operators");
 const rxjs_1 = require("rxjs");
 const bootstrap_logger_1 = require("../bootstrap-logger/bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
+const Service_1 = require("../../decorators/service/Service");
 let ResolverService = class ResolverService {
     resolveDependencies(hash, target, moduleName) {
-        this.cacheService.getLayer(events_1.InternalLayers.modules).putItem({ key: hash, data: target });
+        this.cacheService
+            .getLayer(events_1.InternalLayers.modules)
+            .putItem({ key: hash, data: target });
         const currentModule = this.cacheService.getLayer(hash);
-        currentModule.putItem({ key: events_1.InternalEvents.config, data: { moduleName, moduleHash: hash } });
-        return currentModule.getItemObservable(events_1.InternalEvents.load)
-            .pipe(operators_1.switchMap((config) => {
+        currentModule.putItem({
+            key: events_1.InternalEvents.config,
+            data: { moduleName, moduleHash: hash }
+        });
+        return currentModule.getItemObservable(events_1.InternalEvents.load).pipe(operators_1.switchMap(config => {
             if (!config.data) {
                 return rxjs_1.of(null);
             }
             return currentModule.items.asObservable();
-        }), operators_1.filter((res) => res && res.length), operators_1.map(this.resolveContainerDependencies(target, moduleName)));
+        }), operators_1.filter(res => res && res.length), operators_1.map(this.resolveContainerDependencies(target, moduleName)));
     }
     resolveContainerDependencies(target, moduleName) {
-        return (res) => {
-            res.forEach((i) => {
+        return res => {
+            res.forEach(i => {
                 if (i.key === events_1.InternalEvents.load || i.key === events_1.InternalEvents.config) {
                     return;
                 }
@@ -40,8 +45,10 @@ let ResolverService = class ResolverService {
                     if (found.provide) {
                         return found;
                     }
-                    const moduleType = found.metadata.type.charAt(0).toUpperCase() + found.metadata.type.slice(1);
-                    this.bootstrapLogger.log(`Start -> @Module('${moduleName}')${this.bootstrapLogger.logHashes(`(${target.name})`)}: @${moduleType}('${found.originalName}')${this.bootstrapLogger.logHashes(`(${found.name})`)}` + ' initialized!');
+                    const moduleType = found.metadata.type.charAt(0).toUpperCase() +
+                        found.metadata.type.slice(1);
+                    this.bootstrapLogger.log(`Start -> @Module('${moduleName}')${this.bootstrapLogger.logHashes(`(${target.name})`)}: @${moduleType}('${found.originalName}')${this.bootstrapLogger.logHashes(`(${found.name})`)}` +
+                        ' initialized!');
                     return container_1.Container.get(found);
                 }
                 else {
@@ -61,6 +68,6 @@ __decorate([
     __metadata("design:type", cache_layer_service_1.CacheService)
 ], ResolverService.prototype, "cacheService", void 0);
 ResolverService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], ResolverService);
 exports.ResolverService = ResolverService;

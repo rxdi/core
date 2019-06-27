@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const rxjs_1 = require("rxjs");
 let AfterStarterService = class AfterStarterService {
     constructor() {
@@ -14,6 +14,6 @@ let AfterStarterService = class AfterStarterService {
     }
 };
 AfterStarterService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], AfterStarterService);
 exports.AfterStarterService = AfterStarterService;

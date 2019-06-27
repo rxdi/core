@@ -1,4 +1,4 @@
-import { PluginInterface } from '../../container/decorators/Plugin';
+import { PluginInterface } from '../plugin/Plugin';
 import { ExternalImporterConfig } from '../../services/external-importer/external-importer-config';
 import { InjectionToken } from '../../container/Token';
 export interface ServiceArguments {

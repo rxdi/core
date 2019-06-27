@@ -7,8 +7,11 @@ import {
   Duplicates
 } from './cache-layer.interfaces';
 import { InternalEvents, InternalLayers } from '../../helpers/events';
-import { Service, InjectionToken } from '../../container';
-import { Metadata, ServiceArgumentsInternal } from '../../decorators/module/module.interfaces';
+import { Service } from '../../decorators/service/Service';
+import {
+  Metadata,
+  ServiceArgumentsInternal
+} from '../../decorators/module/module.interfaces';
 import { BootstrapLogger } from '../bootstrap-logger/index';
 
 const FRIENDLY_ERROR_MESSAGES = {
@@ -103,47 +106,51 @@ export class CacheService {
   }
 
   public searchForItem(classItem: Function): ServiceArgumentsInternal {
-    return Array.from(this.map.keys()).map(module => {
-      const currentModule = this.getLayer(module);
-      const currentModuleDependencies = Array.from(currentModule.map.keys());
-      const found = currentModuleDependencies.filter(i => {
-        if (this.isExcludedEvent(i)) {
-          return;
-        } else {
-          return i === classItem.name;
+    return Array.from(this.map.keys())
+      .map(module => {
+        const currentModule = this.getLayer(module);
+        const currentModuleDependencies = Array.from(currentModule.map.keys());
+        const found = currentModuleDependencies.filter(i => {
+          if (this.isExcludedEvent(i)) {
+            return;
+          } else {
+            return i === classItem.name;
+          }
+        });
+        if (found.length) {
+          return currentModule.getItem(found[0]).data;
         }
-      });
-      if (found.length) {
-        return currentModule.getItem(found[0]).data;
-      }
-    }).filter(i => !!i)[0] as ServiceArgumentsInternal;
+      })
+      .filter(i => !!i)[0] as ServiceArgumentsInternal;
   }
 
   public searchForDuplicatesByHash(key: string): Duplicates[] {
-    return Array.from(this.map.keys()).map(module => {
-      const currentModule = this.getLayer<any>(module);
-      const found = Array.from(currentModule.map.keys()).filter(i => {
-        if (this.isExcludedEvent(i)) {
-          return;
-        }
-        return i === key;
-      });
+    return Array.from(this.map.keys())
+      .map(module => {
+        const currentModule = this.getLayer<any>(module);
+        const found = Array.from(currentModule.map.keys()).filter(i => {
+          if (this.isExcludedEvent(i)) {
+            return;
+          }
+          return i === key;
+        });
 
-      if (found.length) {
-        const currentFoundItem = currentModule.getItem(found[0]);
-        const currentModuleName = this.getLayer<Metadata>(module).getItem(
-          InternalEvents.config
-        );
-        return {
-          moduleName: currentModuleName.data.moduleName,
-          moduleHash: currentModuleName.data.moduleHash,
-          originalName: currentFoundItem.data.originalName,
-          dupeName: currentFoundItem.key,
-          raw: currentModuleName.data.raw,
-          class: currentFoundItem.data
-        };
-      }
-    }).filter(i => !!i) as any;
+        if (found.length) {
+          const currentFoundItem = currentModule.getItem(found[0]);
+          const currentModuleName = this.getLayer<Metadata>(module).getItem(
+            InternalEvents.config
+          );
+          return {
+            moduleName: currentModuleName.data.moduleName,
+            moduleHash: currentModuleName.data.moduleHash,
+            originalName: currentFoundItem.data.originalName,
+            dupeName: currentFoundItem.key,
+            raw: currentModuleName.data.raw,
+            class: currentFoundItem.data
+          };
+        }
+      })
+      .filter(i => !!i) as any;
   }
 
   public createLayer<T>(
@@ -186,15 +193,15 @@ export class CacheService {
 
   private OnExpire<T>(layerInstance: CacheLayer<CacheLayerItem<T>>) {
     return new Observable(observer => observer.next())
-    .pipe(
-      timeoutWith(
-        layerInstance.config.cacheFlushInterval ||
-          this.config.cacheFlushInterval,
-        of(1)
-      ),
-      skip(1),
-      take(1)
-    )
+      .pipe(
+        timeoutWith(
+          layerInstance.config.cacheFlushInterval ||
+            this.config.cacheFlushInterval,
+          of(1)
+        ),
+        skip(1),
+        take(1)
+      )
       .subscribe(() => this.removeLayer(layerInstance));
   }
 

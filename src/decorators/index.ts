@@ -1,6 +1,11 @@
 export * from './module/index';
 export * from './injector/index';
 export * from './inject-soft/index';
+export * from './inject/Inject';
 export * from './controller/index';
 export * from './effect/index';
+export * from './plugin/Plugin';
+export * from './service/Service';
 export * from './component/index';
+export * from './inject-many/InjectMany';
+export { Service as Injectable } from './service/Service';

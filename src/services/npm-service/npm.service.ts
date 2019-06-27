@@ -1,4 +1,4 @@
-import { Service } from '../../container';
+import { Service } from '../../decorators/service/Service';
 import { NpmPackageConfig } from '../external-importer/index';
 import { BehaviorSubject } from 'rxjs';
 import childProcess = require('child_process');

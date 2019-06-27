@@ -1,4 +1,4 @@
-import { Service } from '../../container';
+import { Service } from '../../decorators/service/Service';
 import {
   ExternalImporterConfig,
   ExternalImporterIpfsConfig,

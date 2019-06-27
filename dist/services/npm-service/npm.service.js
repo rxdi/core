@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const rxjs_1 = require("rxjs");
 const childProcess = require("child_process");
 let NpmService = class NpmService {
@@ -49,6 +49,6 @@ let NpmService = class NpmService {
     }
 };
 NpmService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], NpmService);
 exports.NpmService = NpmService;

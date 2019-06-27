@@ -33,6 +33,7 @@ const bootstraps_service_1 = require("../bootstraps/bootstraps.service");
 const services_service_1 = require("../services/services.service");
 const after_starter_service_1 = require("../after-starter/after-starter.service");
 const log_1 = require("../../helpers/log");
+const Service_1 = require("../../decorators/service/Service");
 let BootstrapService = class BootstrapService {
     constructor(logger, cacheService, lazyFactoriesService, configService, controllersService, effectsService, pluginService, componentsService, bootstrapsService, servicesService, afterStarterService) {
         this.logger = logger;
@@ -177,7 +178,7 @@ let BootstrapService = class BootstrapService {
         // Remove first chainable unused observable
         chainables.splice(0, 1);
         let count = 0;
-        res.map((name) => {
+        res.map(name => {
             log_1.logExtendedInjectables(name, this.configService.config.experimental.logExtendedInjectables);
             container_1.Container.set(name, chainables[count++]);
         });
@@ -192,7 +193,7 @@ let BootstrapService = class BootstrapService {
     }
 };
 BootstrapService = __decorate([
-    container_1.Service(),
+    Service_1.Service(),
     __metadata("design:paramtypes", [bootstrap_logger_1.BootstrapLogger,
         cache_layer_service_1.CacheService,
         lazy_factory_service_1.LazyFactory,

@@ -37,7 +37,9 @@ class CacheLayer {
     putItem(layerItem) {
         this.map.set(layerItem['key'], layerItem);
         const item = this.get(layerItem['key']);
-        const filteredItems = this.items.getValue().filter(item => item['key'] !== layerItem['key']);
+        const filteredItems = this.items
+            .getValue()
+            .filter(item => item['key'] !== layerItem['key']);
         this.items.next([...filteredItems, item]);
         this.putItemHook(layerItem);
         return layerItem;
@@ -48,17 +50,17 @@ class CacheLayer {
             .subscribe(() => this.removeItem(key));
     }
     removeItem(key) {
-        const newLayerItems = this.items.getValue().filter(item => item['key'] !== key);
+        const newLayerItems = this.items
+            .getValue()
+            .filter(item => item['key'] !== key);
         this.map.delete(key);
         this.items.next(newLayerItems);
     }
     getItemObservable(key) {
-        return this.items.asObservable()
-            .pipe(operators_1.filter(() => !!this.map.has(key)), operators_1.map(() => this.map.get(key)));
+        return this.items.asObservable().pipe(operators_1.filter(() => !!this.map.has(key)), operators_1.map(() => this.map.get(key)));
     }
     flushCache() {
-        return this.items.asObservable()
-            .pipe(operators_1.map(items => {
+        return this.items.asObservable().pipe(operators_1.map(items => {
             items.forEach(i => this.removeItem(i['key']));
             return true;
         }));

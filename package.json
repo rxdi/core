@@ -12,7 +12,7 @@
   "scripts": {
     "postpublish": "git push -f ssh://git@gitlab.youvolio.com:522/rxdi/core.git && git push --tags && git push ssh://git@gitlab.youvolio.com:522/rxdi/core.git --tags",
     "start": "gapi start --local --path=./src/testing-app/main.ts",
-    "build": "gapi build core",
+    "build": "gapi module build-node",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
     "test-browser": "gapi testing browser",
@@ -33,7 +33,7 @@
   "homepage": "https://github.com/rxdi/core/blob/master/README.md",
   "dependencies": {
     "reflect-metadata": "0.1.13",
-    "rxjs": "6.5.1",
+    "rxjs": "6.5.2",
     "systemjs": "0.21.4"
   },
   "devDependencies": {

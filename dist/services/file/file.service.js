@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const fs_1 = require("fs");
 const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
@@ -112,6 +112,6 @@ __decorate([
     __metadata("design:type", bootstrap_logger_1.BootstrapLogger)
 ], FileService.prototype, "logger", void 0);
 FileService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], FileService);
 exports.FileService = FileService;

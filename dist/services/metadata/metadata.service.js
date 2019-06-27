@@ -6,22 +6,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const helpers_1 = require("../../helpers");
 let MetadataService = class MetadataService {
     generateHashData(module, original) {
         const services = module.services || [];
         const imports = module.imports || [];
-        const fillMetadata = (injectable) => {
+        const fillMetadata = injectable => {
             if (injectable && injectable['provide']) {
                 return injectable['provide'];
             }
             else if (injectable) {
                 this.validateCustomInjectable(injectable, module, original);
-                return { moduleName: injectable['metadata']['moduleName'], hash: injectable['metadata']['moduleHash'] };
+                return {
+                    moduleName: injectable['metadata']['moduleName'],
+                    hash: injectable['metadata']['moduleHash']
+                };
             }
         };
-        return [[...services.map((i) => fillMetadata(i))], [...imports.map((i) => fillMetadata(i))]];
+        return [
+            [...services.map(i => fillMetadata(i))],
+            [...imports.map(i => fillMetadata(i))]
+        ];
     }
     validateCustomInjectableKeys(keys) {
         // keys.forEach(key => {
@@ -33,7 +39,12 @@ let MetadataService = class MetadataService {
             throw new Error(`
                 ---- Wrong service ${JSON.stringify(injectable)} provided inside '${original.name}' ----
                 @Module({
-                    services: ${JSON.stringify([...module.services.filter(i => !i['metadata']), ...module.services.filter(i => i && i['metadata'] && i['metadata']['moduleName']).map(i => i['metadata']['moduleName'])])}
+                    services: ${JSON.stringify([
+                ...module.services.filter(i => !i['metadata']),
+                ...module.services
+                    .filter(i => i && i['metadata'] && i['metadata']['moduleName'])
+                    .map(i => i['metadata']['moduleName'])
+            ])}
                 })
                 ${JSON.stringify(`${original}`, null, 2)}
 
@@ -68,6 +79,6 @@ let MetadataService = class MetadataService {
     }
 };
 MetadataService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], MetadataService);
 exports.MetadataService = MetadataService;

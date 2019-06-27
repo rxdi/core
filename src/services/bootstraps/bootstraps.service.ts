@@ -1,4 +1,4 @@
-import { Service } from '../../container/decorators/Service';
+import { Service } from '../../decorators/service/Service';
 import { BehaviorSubject } from 'rxjs';
 import { ServiceArgumentsInternal } from '../../decorators/module/module.interfaces';
 

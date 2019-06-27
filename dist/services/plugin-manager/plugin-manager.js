@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const plugin_service_1 = require("../plugin/plugin.service");
-const index_1 = require("../../container/index");
+const Service_1 = require("../../decorators/service/Service");
 let PluginManager = class PluginManager {
     constructor(pluginService) {
         this.pluginService = pluginService;
@@ -19,11 +19,13 @@ let PluginManager = class PluginManager {
         return this.pluginService.getPlugins();
     }
     getPlugin(pluginClass) {
-        return this.pluginService.getPlugins().filter(p => p.name === pluginClass.name)[0];
+        return this.pluginService
+            .getPlugins()
+            .filter(p => p.name === pluginClass.name)[0];
     }
 };
 PluginManager = __decorate([
-    index_1.Service(),
+    Service_1.Service(),
     __metadata("design:paramtypes", [plugin_service_1.PluginService])
 ], PluginManager);
 exports.PluginManager = PluginManager;

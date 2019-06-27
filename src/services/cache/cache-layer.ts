@@ -1,9 +1,11 @@
-import { CacheLayerInterface, CacheServiceConfigInterface } from './cache-layer.interfaces';
+import {
+  CacheLayerInterface,
+  CacheServiceConfigInterface
+} from './cache-layer.interfaces';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, timeoutWith, skip, take } from 'rxjs/operators';
 
 export class CacheLayer<T> {
-
   public items: BehaviorSubject<Array<T>> = new BehaviorSubject([]);
   public name: string;
   public config: CacheServiceConfigInterface;
@@ -46,7 +48,9 @@ export class CacheLayer<T> {
   public putItem(layerItem: T): T {
     this.map.set(layerItem['key'], layerItem);
     const item = this.get(layerItem['key']);
-    const filteredItems = this.items.getValue().filter(item => item['key'] !== layerItem['key']);
+    const filteredItems = this.items
+      .getValue()
+      .filter(item => item['key'] !== layerItem['key']);
     this.items.next([...filteredItems, item]);
     this.putItemHook(layerItem);
     return layerItem;
@@ -63,27 +67,26 @@ export class CacheLayer<T> {
   }
 
   public removeItem(key: string): void {
-    const newLayerItems = this.items.getValue().filter(item => item['key'] !== key);
+    const newLayerItems = this.items
+      .getValue()
+      .filter(item => item['key'] !== key);
     this.map.delete(key);
     this.items.next(newLayerItems);
   }
 
   public getItemObservable(key: string): Observable<T> {
-    return this.items.asObservable()
-      .pipe(
-        filter(() => !!this.map.has(key)),
-        map(() => this.map.get(key))
-      );
+    return this.items.asObservable().pipe(
+      filter(() => !!this.map.has(key)),
+      map(() => this.map.get(key))
+    );
   }
 
   public flushCache(): Observable<boolean> {
-    return this.items.asObservable()
-      .pipe(
-        map(items => {
-          items.forEach(i => this.removeItem(i['key']));
-          return true;
-        })
-      );
+    return this.items.asObservable().pipe(
+      map(items => {
+        items.forEach(i => this.removeItem(i['key']));
+        return true;
+      })
+    );
   }
-
 }

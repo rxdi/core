@@ -1,4 +1,4 @@
-import { Service } from '../../container';
+import { Service } from '../../decorators/service/Service';
 import {
   writeFileSync,
   existsSync,
@@ -78,7 +78,10 @@ export class FileService {
     });
   }
 
-  public fileWalker(dir: string, exclude: string = 'node_modules'): Observable<string[]> {
+  public fileWalker(
+    dir: string,
+    exclude: string = 'node_modules'
+  ): Observable<string[]> {
     return new Observable(observer => {
       this.filewalker(
         dir,

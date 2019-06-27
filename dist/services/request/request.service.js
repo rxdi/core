@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const rxjs_1 = require("rxjs");
 const http_1 = require("http");
 const https_1 = require("https");
@@ -23,29 +23,28 @@ let RequestService = class RequestService {
             this.logger.log(`Item returned from cacahe: ${link}`);
             return rxjs_1.of(this.cache.cacheLayer.get(link).data);
         }
-        return new rxjs_1.Observable((o) => {
+        return new rxjs_1.Observable(o => {
             if (link.includes('https://')) {
-                https_1.get(link, (resp) => {
+                https_1.get(link, resp => {
                     let data = '';
-                    resp.on('data', (chunk) => data += chunk);
+                    resp.on('data', chunk => (data += chunk));
                     resp.on('end', () => o.next(data));
-                }).on('error', (err) => {
+                }).on('error', err => {
                     console.error('Error: ' + err.message);
                     o.error(err);
                 });
             }
             else {
-                http_1.get(link, (resp) => {
+                http_1.get(link, resp => {
                     let data = '';
-                    resp.on('data', (chunk) => data += chunk);
+                    resp.on('data', chunk => (data += chunk));
                     resp.on('end', () => o.next(data));
-                }).on('error', (err) => {
+                }).on('error', err => {
                     console.error('Error: ' + err.message);
                     o.error(err);
                 });
             }
-        })
-            .pipe(operators_1.tap((res) => this.cache.cacheLayer.putItem({ key: link, data: res })));
+        }).pipe(operators_1.tap(res => this.cache.cacheLayer.putItem({ key: link, data: res })));
     }
 };
 __decorate([
@@ -57,6 +56,6 @@ __decorate([
     __metadata("design:type", bootstrap_logger_1.BootstrapLogger)
 ], RequestService.prototype, "logger", void 0);
 RequestService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], RequestService);
 exports.RequestService = RequestService;

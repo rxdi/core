@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../cache/index");
 const container_1 = require("../../container");
 const bootstrap_logger_1 = require("../bootstrap-logger");
+const Service_1 = require("../../decorators/service/Service");
 let RequestCacheService = class RequestCacheService extends index_1.CacheService {
     constructor() {
         super(container_1.Container.get(bootstrap_logger_1.BootstrapLogger));
@@ -25,7 +26,7 @@ let RequestCacheService = class RequestCacheService extends index_1.CacheService
     }
 };
 RequestCacheService = __decorate([
-    container_1.Service(),
+    Service_1.Service(),
     __metadata("design:paramtypes", [])
 ], RequestCacheService);
 exports.RequestCacheService = RequestCacheService;

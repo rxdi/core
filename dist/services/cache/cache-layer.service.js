@@ -14,7 +14,7 @@ const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
 const cache_layer_1 = require("./cache-layer");
 const events_1 = require("../../helpers/events");
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const index_1 = require("../bootstrap-logger/index");
 const FRIENDLY_ERROR_MESSAGES = {
     TRY_TO_UNSUBSCRIBE: 'Someone try to unsubscribe from collection directly... agghhh.. read docs! Blame: '
@@ -81,7 +81,8 @@ let CacheService = CacheService_1 = class CacheService {
         return i === events_1.InternalEvents.config || i === events_1.InternalEvents.load;
     }
     searchForItem(classItem) {
-        return Array.from(this.map.keys()).map(module => {
+        return Array.from(this.map.keys())
+            .map(module => {
             const currentModule = this.getLayer(module);
             const currentModuleDependencies = Array.from(currentModule.map.keys());
             const found = currentModuleDependencies.filter(i => {
@@ -95,10 +96,12 @@ let CacheService = CacheService_1 = class CacheService {
             if (found.length) {
                 return currentModule.getItem(found[0]).data;
             }
-        }).filter(i => !!i)[0];
+        })
+            .filter(i => !!i)[0];
     }
     searchForDuplicatesByHash(key) {
-        return Array.from(this.map.keys()).map(module => {
+        return Array.from(this.map.keys())
+            .map(module => {
             const currentModule = this.getLayer(module);
             const found = Array.from(currentModule.map.keys()).filter(i => {
                 if (this.isExcludedEvent(i)) {
@@ -118,7 +121,8 @@ let CacheService = CacheService_1 = class CacheService {
                     class: currentFoundItem.data
                 };
             }
-        }).filter(i => !!i);
+        })
+            .filter(i => !!i);
     }
     createLayer(layer) {
         const exists = this.map.has(layer.name);
@@ -182,7 +186,7 @@ let CacheService = CacheService_1 = class CacheService {
     }
 };
 CacheService = CacheService_1 = __decorate([
-    container_1.Service(),
+    Service_1.Service(),
     __metadata("design:paramtypes", [index_1.BootstrapLogger])
 ], CacheService);
 exports.CacheService = CacheService;

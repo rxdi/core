@@ -1,86 +1,106 @@
-import { Service } from '../../../container';
-import { Metadata, DecoratorType, ServiceArgumentsInternal } from '../../../decorators/module/module.interfaces';
+import { Service } from '../../../decorators/service/Service';
+import {
+  DecoratorType,
+  ServiceArgumentsInternal
+} from '../../../decorators/module/module.interfaces';
 
 @Service()
 export class ModuleValidators {
-
-    validateEmpty(m, original: ServiceArgumentsInternal, type: DecoratorType) {
-        if (!m) {
-            const requiredType = type.charAt(0).toUpperCase() + type.slice(1);
-            throw new Error(`
+  validateEmpty(m, original: ServiceArgumentsInternal, type: DecoratorType) {
+    if (!m) {
+      const requiredType = type.charAt(0).toUpperCase() + type.slice(1);
+      throw new Error(`
             ${original.metadata.raw}
             -> @Module: ${original.metadata.moduleName}
             -> @Module hash: ${original.metadata.moduleHash}
-                --> Maybe you forgot to import some ${requiredType} inside ${original.metadata.moduleName} ?
+                --> Maybe you forgot to import some ${requiredType} inside ${
+        original.metadata.moduleName
+      } ?
 
-                Hint: run ts-lint again, looks like imported ${requiredType} is undefined or null inside ${original.metadata.moduleName}
+                Hint: run ts-lint again, looks like imported ${requiredType} is undefined or null inside ${
+        original.metadata.moduleName
+      }
             `);
-        }
     }
+  }
 
-    genericWrongPluggableError(m, original: ServiceArgumentsInternal, type: DecoratorType) {
-        if (m.metadata.type !== type) {
-            const moduleType = m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1);
-            const requiredType = type.charAt(0).toUpperCase() + type.slice(1);
-            throw new Error(`
+  genericWrongPluggableError(
+    m,
+    original: ServiceArgumentsInternal,
+    type: DecoratorType
+  ) {
+    if (m.metadata.type !== type) {
+      const moduleType =
+        m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1);
+      const requiredType = type.charAt(0).toUpperCase() + type.slice(1);
+      throw new Error(`
             ${original.metadata.raw}
             -> @Module: '${original.metadata.moduleName}'
             -> @Module hash: '${original.metadata.moduleHash}'
-                --> @${moduleType} '${m.metadata.moduleName}' provided, where expected class decorated with '@${requiredType}' instead,
-            -> @Hint: please provide class with @Service decorator or remove ${m.metadata.moduleName} class
+                --> @${moduleType} '${
+        m.metadata.moduleName
+      }' provided, where expected class decorated with '@${requiredType}' instead,
+            -> @Hint: please provide class with @Service decorator or remove ${
+              m.metadata.moduleName
+            } class
             `);
-        }
     }
+  }
 
-    validateImports(m, original: ServiceArgumentsInternal) {
-        if (m.metadata.type !== 'module') {
-            throw new Error(`
+  validateImports(m, original: ServiceArgumentsInternal) {
+    if (m.metadata.type !== 'module') {
+      throw new Error(`
             ${original.metadata.raw}
             -> @Module: '${original.metadata.moduleName}'
             -> @Module hash: '${original.metadata.moduleHash}'
-                --> @${m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1)} '${m.originalName}' provided, where expected class decorated with '@Module' instead,
-            -> @Hint: please provide class with @Module decorator or remove ${m.originalName} from imports
+                --> @${m.metadata.type.charAt(0).toUpperCase() +
+                  m.metadata.type.slice(1)} '${
+        m.originalName
+      }' provided, where expected class decorated with '@Module' instead,
+            -> @Hint: please provide class with @Module decorator or remove ${
+              m.originalName
+            } from imports
             `);
-        }
     }
+  }
 
-    validateServices(m, original: ServiceArgumentsInternal) {
-        this.validateEmpty(m, original, 'service');
-        if (m.provide) {
-            return;
-        }
-        this.genericWrongPluggableError(m, original, 'service');
+  validateServices(m, original: ServiceArgumentsInternal) {
+    this.validateEmpty(m, original, 'service');
+    if (m.provide) {
+      return;
     }
+    this.genericWrongPluggableError(m, original, 'service');
+  }
 
-    validatePlugin(m, original: ServiceArgumentsInternal) {
-        this.validateEmpty(m, original, 'plugin');
-        if (m.provide) {
-            return;
-        }
-        this.genericWrongPluggableError(m, original, 'plugin');
+  validatePlugin(m, original: ServiceArgumentsInternal) {
+    this.validateEmpty(m, original, 'plugin');
+    if (m.provide) {
+      return;
     }
+    this.genericWrongPluggableError(m, original, 'plugin');
+  }
 
-    validateController(m, original: ServiceArgumentsInternal) {
-        this.validateEmpty(m, original, 'controller');
-        if (m.provide) {
-            return;
-        }
-        this.genericWrongPluggableError(m, original, 'controller');
+  validateController(m, original: ServiceArgumentsInternal) {
+    this.validateEmpty(m, original, 'controller');
+    if (m.provide) {
+      return;
     }
+    this.genericWrongPluggableError(m, original, 'controller');
+  }
 
-    validateEffect(m, original: ServiceArgumentsInternal) {
-        this.validateEmpty(m, original, 'effect');
-        if (m.provide) {
-            return;
-        }
-        this.genericWrongPluggableError(m, original, 'effect');
+  validateEffect(m, original: ServiceArgumentsInternal) {
+    this.validateEmpty(m, original, 'effect');
+    if (m.provide) {
+      return;
     }
+    this.genericWrongPluggableError(m, original, 'effect');
+  }
 
-    validateComponent(m, original: ServiceArgumentsInternal) {
-        this.validateEmpty(m, original, 'component');
-        if (m.provide) {
-            return;
-        }
-        this.genericWrongPluggableError(m, original, 'component');
+  validateComponent(m, original: ServiceArgumentsInternal) {
+    this.validateEmpty(m, original, 'component');
+    if (m.provide) {
+      return;
     }
+    this.genericWrongPluggableError(m, original, 'component');
+  }
 }

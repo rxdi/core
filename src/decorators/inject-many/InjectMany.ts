@@ -1,7 +1,7 @@
-import { Container } from '../Container';
-import { Token } from '../Token';
+import { Container } from '../../container/Container';
+import { Token } from '../../container/Token';
 import { getIdentifier, isClient } from '../../helpers/get-identifier';
-import { TypeOrName } from '../types/type-or-name';
+import { TypeOrName } from '../../container/types/type-or-name';
 
 /**
  * Injects a service into a class property or constructor parameter.

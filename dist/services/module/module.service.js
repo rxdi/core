@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const rxjs_1 = require("rxjs");
 const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const lazy_factory_service_1 = require("../lazy-factory/lazy-factory.service");
 const plugin_service_1 = require("../plugin/plugin.service");
 const external_importer_1 = require("../external-importer");
@@ -39,7 +40,9 @@ let ModuleService = class ModuleService {
             else if (service.provide && service.useDynamic) {
                 this.setUseDynamic(service);
             }
-            else if (service.provide && service.useClass && service.useClass.constructor === Function) {
+            else if (service.provide &&
+                service.useClass &&
+                service.useClass.constructor === Function) {
                 this.setUseClass(service);
             }
             else if (service.provide && service.useValue) {
@@ -204,6 +207,6 @@ __decorate([
     __metadata("design:type", services_service_1.ServicesService)
 ], ModuleService.prototype, "servicesService", void 0);
 ModuleService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], ModuleService);
 exports.ModuleService = ModuleService;

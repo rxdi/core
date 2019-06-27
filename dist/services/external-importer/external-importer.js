@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
 const request_1 = require("../request");
@@ -379,6 +379,6 @@ __decorate([
     __metadata("design:type", npm_service_1.NpmService)
 ], ExternalImporter.prototype, "npmService", void 0);
 ExternalImporter = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], ExternalImporter);
 exports.ExternalImporter = ExternalImporter;

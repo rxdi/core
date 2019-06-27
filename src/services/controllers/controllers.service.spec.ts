@@ -9,9 +9,9 @@ const controllersService = Container.get(ControllersService);
 class TestEffect {}
 
 describe('Service: ControllersService', () => {
-    it('Should register appropriate controller', (done) => {
-        controllersService.register(TestEffect);
-        expect(controllersService.getControllers().length).toBe(1);
-        done();
-    });
+  it('Should register appropriate controller', done => {
+    controllersService.register(TestEffect);
+    expect(controllersService.getControllers().length).toBe(1);
+    done();
+  });
 });

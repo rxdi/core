@@ -1,5 +1,5 @@
-import { ServiceOptions } from '../types/ServiceOptions';
-import { Token } from '../Token';
+import { ServiceOptions } from '../../container/types/ServiceOptions';
+import { Token } from '../../container/Token';
 export interface TypeProvide<T> extends Function {
     new (...args: any[]): T;
 }
@@ -7,10 +7,6 @@ export interface TypeProvide<T> extends Function {
  * Marks class as a service that can be injected using Container.
  */
 export declare function Service(): Function;
-export declare function Service(config: {
-    providedIn?: TypeProvide<any> | 'root' | null;
-    useFactory?: () => any;
-}): Function;
 /**
  * Marks class as a service that can be injected using Container.
  */

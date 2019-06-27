@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import { createReadStream, createWriteStream } from 'fs';
 // import { createGzip, createGunzip } from 'zlib';
 // import { Observable } from 'rxjs';
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const index_1 = require("../config/index");
 let CompressionService = class CompressionService {
@@ -62,6 +62,6 @@ __decorate([
     __metadata("design:type", index_1.ConfigService)
 ], CompressionService.prototype, "config", void 0);
 CompressionService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], CompressionService);
 exports.CompressionService = CompressionService;

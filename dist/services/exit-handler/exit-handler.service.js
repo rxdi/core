@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const bootstrap_logger_1 = require("../bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const rxjs_1 = require("rxjs");
@@ -31,7 +31,9 @@ let ExitHandlerService = class ExitHandlerService {
         process.exit(0);
     }
     onExitApp(events) {
-        return new rxjs_1.Observable(o => events && events.length && events.forEach(event => process.on(event, (e) => o.next(e))));
+        return new rxjs_1.Observable(o => events &&
+            events.length &&
+            events.forEach(event => process.on(event, e => o.next(e))));
     }
 };
 __decorate([
@@ -39,6 +41,6 @@ __decorate([
     __metadata("design:type", bootstrap_logger_1.BootstrapLogger)
 ], ExitHandlerService.prototype, "logger", void 0);
 ExitHandlerService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], ExitHandlerService);
 exports.ExitHandlerService = ExitHandlerService;

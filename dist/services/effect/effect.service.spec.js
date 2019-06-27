@@ -17,7 +17,7 @@ TestEffect = __decorate([
     effect_decorator_1.Effect()
 ], TestEffect);
 describe('Service: EffectsService', () => {
-    it('Should register appropriate effect inside effects observable', (done) => {
+    it('Should register appropriate effect inside effects observable', done => {
         effectService.register(TestEffect);
         expect(effectService.getEffects().length).toBe(1);
         done();

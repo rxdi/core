@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const container_1 = require("../../../container");
+const Service_1 = require("../../../decorators/service/Service");
 let ModuleValidators = class ModuleValidators {
     validateEmpty(m, original, type) {
         if (!m) {
@@ -40,7 +40,8 @@ let ModuleValidators = class ModuleValidators {
             ${original.metadata.raw}
             -> @Module: '${original.metadata.moduleName}'
             -> @Module hash: '${original.metadata.moduleHash}'
-                --> @${m.metadata.type.charAt(0).toUpperCase() + m.metadata.type.slice(1)} '${m.originalName}' provided, where expected class decorated with '@Module' instead,
+                --> @${m.metadata.type.charAt(0).toUpperCase() +
+                m.metadata.type.slice(1)} '${m.originalName}' provided, where expected class decorated with '@Module' instead,
             -> @Hint: please provide class with @Module decorator or remove ${m.originalName} from imports
             `);
         }
@@ -82,6 +83,6 @@ let ModuleValidators = class ModuleValidators {
     }
 };
 ModuleValidators = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], ModuleValidators);
 exports.ModuleValidators = ModuleValidators;

@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const Container_1 = require("../../container/Container");
 const metadata_service_1 = require("./metadata.service");
-const container_1 = require("../../container");
+const Service_1 = require("../../decorators/service/Service");
 const module_decorator_1 = require("../../decorators/module/module.decorator");
 require("jest");
 class Pesho {
@@ -16,7 +16,7 @@ class Pesho {
 let PeshoService = class PeshoService {
 };
 PeshoService = __decorate([
-    container_1.Service()
+    Service_1.Service()
 ], PeshoService);
 let PeshoModule = class PeshoModule {
 };
@@ -27,7 +27,7 @@ PeshoModule = __decorate([
 ], PeshoModule);
 const metadataService = Container_1.Container.get(metadata_service_1.MetadataService);
 describe('Service: Metadata', () => {
-    it('Should create appropriate metadata based on imports inside module and hash should equal 32 signs', (done) => {
+    it('Should create appropriate metadata based on imports inside module and hash should equal 32 signs', done => {
         const modules = {
             imports: [PeshoModule],
             services: [PeshoService]
