@@ -5,6 +5,6 @@ export interface PluginInterface {
     register(server?, options?): void;
     handler?(request, h);
 }
-export function Plugin<T, K extends keyof T>(options: any): Function {
+export function Plugin<T, K extends keyof T>(options?: any): Function {
     return ReflectDecorator<T, K>(options, { type: 'plugin' });
 }
