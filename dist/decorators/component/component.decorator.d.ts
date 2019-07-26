@@ -1,3 +1,3 @@
-export declare function Component<T, K extends keyof T>(options?: {
+export declare function Component(options?: {
     init?: boolean;
 }): Function;

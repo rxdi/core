@@ -31,7 +31,7 @@ export function Service<T, K extends keyof T>(options?: ServiceOptions<T, K>): F
 /**
  * Marks class as a service that can be injected using container.
  */
-export function Service<T, K extends keyof T>(options?: ServiceOptions<T, K> | Token<any> | string): Function {
-    return ReflectDecorator<T, K>(options, { type: 'service' });
+export function Service(options?: ServiceOptions<any, any> | Token<any> | string): Function {
+    return ReflectDecorator(options, { type: 'service' });
 }
 

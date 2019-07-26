@@ -1,3 +1,3 @@
-export declare function Effect<T, K extends keyof T>(options?: {
+export declare function Effect(options?: {
     init?: boolean;
 }): Function;

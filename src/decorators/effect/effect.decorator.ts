@@ -1,5 +1,5 @@
 import { ReflectDecorator } from '../../helpers/reflect.decorator';
 
-export function Effect<T, K extends keyof T>(options?: {init?: boolean}): Function {
-    return ReflectDecorator<T, K>(options, { type: 'effect' });
+export function Effect(options?: {init?: boolean}): Function {
+    return ReflectDecorator<any, any>(options, { type: 'effect' });
 }

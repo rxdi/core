@@ -1,7 +1,7 @@
 import { ReflectDecorator } from '../../helpers/reflect.decorator';
 
-export function Component<T, K extends keyof T>(options?: {
+export function Component(options?: {
   init?: boolean;
 }): Function {
-  return ReflectDecorator<T, K>(options, { type: 'component' });
+  return ReflectDecorator(options, { type: 'component' });
 }
