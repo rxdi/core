@@ -297,3 +297,49 @@ If you want to start app with `ts-node` for example you need to set inside `tsco
 }
 
 ```
+
+
+
+# Possible pattern with `@rxdi/core`
+
+```typescript
+import { setup } from '@rxdi/core';
+import { switchMap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+
+setup({
+  services: [
+    {
+      provide: 'gosho',
+      lazy: true,
+      useFactory: async () => 'yey'
+    }
+  ]
+})
+  .pipe(
+    switchMap(ctx =>
+      combineLatest(
+        setup({
+          services: [
+            {
+              provide: 'pesho',
+              useFactory: () => (ctx as any).get('gosho')
+            }
+          ]
+        }),
+        setup({
+          services: []
+        }),
+        setup({
+          services: []
+        }),
+        setup({
+          services: []
+        })
+      )
+    )
+  )
+  .subscribe(ctx => {
+    console.log((ctx as any).get('pesho'));
+  });
+````
