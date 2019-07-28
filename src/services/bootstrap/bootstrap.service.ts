@@ -22,6 +22,7 @@ import {
 import { logExtendedInjectables } from '../../helpers/log';
 import { Service } from '../../decorators/service/Service';
 import { PluginInterface } from '../../decorators';
+import { ObservableContainer } from '../../container/observable-interface';
 
 @Service()
 export class BootstrapService {
@@ -78,12 +79,12 @@ export class BootstrapService {
     );
   }
 
-  private final(): Container {
+  private final(): ObservableContainer {
     this.afterStarterService.appStarted.next(true);
     if (!this.configService.config.init) {
       this.logger.log('Bootstrap -> press start!');
     }
-    return Container;
+    return Container as ObservableContainer;
   }
 
   private asyncChainableComponents() {
