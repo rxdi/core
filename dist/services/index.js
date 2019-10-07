@@ -7,7 +7,7 @@ __export(require("./cache/index"));
 __export(require("./plugin/plugin.service"));
 __export(require("./bootstrap-logger/index"));
 __export(require("./exit-handler/index"));
-__export(require("./external-importer/index"));
+// export * from './external-importer/index';
 __export(require("./module/index"));
 __export(require("./resolver/index"));
 __export(require("./config/index"));

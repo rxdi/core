@@ -14,7 +14,7 @@ const container_1 = require("../../container");
 const Service_1 = require("../../decorators/service/Service");
 const lazy_factory_service_1 = require("../lazy-factory/lazy-factory.service");
 const plugin_service_1 = require("../plugin/plugin.service");
-const external_importer_1 = require("../external-importer");
+// import { ExternalImporter } from '../external-importer';
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const validators_1 = require("./helpers/validators");
 const constructor_watcher_1 = require("../constructor-watcher/constructor-watcher");
@@ -75,8 +75,11 @@ let ModuleService = class ModuleService {
         }
     }
     setUseDynamic(service) {
-        const factory = this.externalImporter.importModule(service.useDynamic, service.provide);
-        this.lazyFactoryService.setLazyFactory(service.provide, factory);
+        // const factory = this.externalImporter.importModule(
+        //   service.useDynamic,
+        //   service.provide
+        // );
+        // this.lazyFactoryService.setLazyFactory(service.provide, factory);
     }
     setUseFactory(service) {
         const factory = service.useFactory;
@@ -194,10 +197,6 @@ __decorate([
     injector_decorator_1.Injector(bootstraps_service_1.BootstrapsServices),
     __metadata("design:type", bootstraps_service_1.BootstrapsServices)
 ], ModuleService.prototype, "bootstraps", void 0);
-__decorate([
-    injector_decorator_1.Injector(external_importer_1.ExternalImporter),
-    __metadata("design:type", external_importer_1.ExternalImporter)
-], ModuleService.prototype, "externalImporter", void 0);
 __decorate([
     injector_decorator_1.Injector(validators_1.ModuleValidators),
     __metadata("design:type", validators_1.ModuleValidators)

@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import './reflection';
 
 import { Container } from '../container';
 import { BootstrapService } from '../services/bootstrap/bootstrap.service';

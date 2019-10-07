@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Service_1 = require("../../decorators/service/Service");
+// import { NpmPackageConfig } from '../external-importer/index';
 const rxjs_1 = require("rxjs");
 const childProcess = require("child_process");
 let NpmService = class NpmService {

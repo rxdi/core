@@ -1,12 +1,11 @@
 /// <reference types="node" />
-import { NpmPackageConfig } from '../external-importer/index';
 import { BehaviorSubject } from 'rxjs';
 import childProcess = require('child_process');
 export declare class NpmService {
-    packagesToDownload: BehaviorSubject<NpmPackageConfig[]>;
+    packagesToDownload: BehaviorSubject<any[]>;
     packages: string[];
     child: childProcess.ChildProcess;
-    setPackages(packages: NpmPackageConfig[]): void;
+    setPackages(packages: any[]): void;
     preparePackages(): void;
     installPackages(): Promise<unknown>;
 }
