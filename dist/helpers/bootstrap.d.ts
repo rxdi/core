@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import './reflection';
 import { ConfigModel } from '../services/config/config.model';
 import { Observable } from 'rxjs';
 import { ModuleArguments } from '../decorators/module/module.interfaces';

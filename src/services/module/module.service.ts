@@ -7,7 +7,7 @@ import {
   ServiceArgumentsInternal,
   Metadata
 } from '../../decorators/module/module.interfaces';
-import { ExternalImporter } from '../external-importer';
+// import { ExternalImporter } from '../external-importer';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { ModuleValidators } from './helpers/validators';
 import {
@@ -31,7 +31,7 @@ export class ModuleService {
   @Injector(ControllersService) private controllersService: ControllersService;
   @Injector(EffectsService) private effectsService: EffectsService;
   @Injector(BootstrapsServices) private bootstraps: BootstrapsServices;
-  @Injector(ExternalImporter) private externalImporter: ExternalImporter;
+  // @Injector(ExternalImporter) private externalImporter: ExternalImporter;
   @Injector(ModuleValidators) private validators: ModuleValidators;
   @Injector(ServicesService) private servicesService: ServicesService;
 
@@ -97,11 +97,11 @@ export class ModuleService {
   }
 
   setUseDynamic(service) {
-    const factory = this.externalImporter.importModule(
-      service.useDynamic,
-      service.provide
-    );
-    this.lazyFactoryService.setLazyFactory(service.provide, factory);
+    // const factory = this.externalImporter.importModule(
+    //   service.useDynamic,
+    //   service.provide
+    // );
+    // this.lazyFactoryService.setLazyFactory(service.provide, factory);
   }
 
   setUseFactory(service) {

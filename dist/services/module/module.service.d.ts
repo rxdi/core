@@ -9,7 +9,6 @@ export declare class ModuleService {
     private controllersService;
     private effectsService;
     private bootstraps;
-    private externalImporter;
     private validators;
     private servicesService;
     setServices(services: ServiceArgumentsInternal[], original: ServiceArgumentsInternal, currentModule: CacheLayer<CacheLayerItem<Function>>): void;

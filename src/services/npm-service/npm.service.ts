@@ -1,17 +1,17 @@
 import { Service } from '../../decorators/service/Service';
-import { NpmPackageConfig } from '../external-importer/index';
+// import { NpmPackageConfig } from '../external-importer/index';
 import { BehaviorSubject } from 'rxjs';
 import childProcess = require('child_process');
 
 @Service()
 export class NpmService {
-  packagesToDownload: BehaviorSubject<NpmPackageConfig[]> = new BehaviorSubject(
+  packagesToDownload: BehaviorSubject<any[]> = new BehaviorSubject(
     []
   );
   packages: string[] = [];
   child: childProcess.ChildProcess;
 
-  setPackages(packages: NpmPackageConfig[]) {
+  setPackages(packages: any[]) {
     this.packagesToDownload.next([
       ...this.packagesToDownload.getValue(),
       ...packages

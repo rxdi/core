@@ -2,7 +2,6 @@ export * from './cache/index';
 export * from './plugin/plugin.service';
 export * from './bootstrap-logger/index';
 export * from './exit-handler/index';
-export * from './external-importer/index';
 export * from './module/index';
 export * from './resolver/index';
 export * from './config/index';

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
+require("./reflection");
 const container_1 = require("../container");
 const bootstrap_service_1 = require("../services/bootstrap/bootstrap.service");
 const exit_handler_1 = require("./exit-handler");
