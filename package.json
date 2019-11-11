@@ -35,7 +35,7 @@
     "reflect-metadata": "0.1.13",
     "rxjs": "^6.5.3",
     "systemjs": "0.21.4"
-  },
+  }, 
   "devDependencies": {
     "@rxdi/dts-merge": "^0.7.37",
     "@types/jest": "^24.0.22",
