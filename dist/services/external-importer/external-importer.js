@@ -13,11 +13,12 @@ const Service_1 = require("../../decorators/service/Service");
 const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
 const request_1 = require("../request");
-const file_1 = require("../file");
+// import { FileService } from '../file';
 const bootstrap_logger_1 = require("../bootstrap-logger/bootstrap-logger");
 const injector_decorator_1 = require("../../decorators/injector/injector.decorator");
 const compression_service_1 = require("../compression/compression.service");
 const npm_service_1 = require("../npm-service/npm.service");
+// import { PackagesConfig } from '../../bin/root';
 const providers_1 = require("./providers");
 const SystemJS = require("systemjs");
 let ExternalImporter = class ExternalImporter {
@@ -362,10 +363,6 @@ __decorate([
     injector_decorator_1.Injector(request_1.RequestService),
     __metadata("design:type", request_1.RequestService)
 ], ExternalImporter.prototype, "requestService", void 0);
-__decorate([
-    injector_decorator_1.Injector(file_1.FileService),
-    __metadata("design:type", file_1.FileService)
-], ExternalImporter.prototype, "fileService", void 0);
 __decorate([
     injector_decorator_1.Injector(bootstrap_logger_1.BootstrapLogger),
     __metadata("design:type", bootstrap_logger_1.BootstrapLogger)

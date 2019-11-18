@@ -14,12 +14,12 @@ import {
 } from 'rxjs';
 import { map, switchMap, take, filter, tap, takeUntil } from 'rxjs/operators';
 import { RequestService } from '../request';
-import { FileService } from '../file';
+// import { FileService } from '../file';
 import { BootstrapLogger } from '../bootstrap-logger/bootstrap-logger';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { CompressionService } from '../compression/compression.service';
 import { NpmService } from '../npm-service/npm.service';
-import { PackagesConfig } from '../../bin/root';
+// import { PackagesConfig } from '../../bin/root';
 import { IPFS_PROVIDERS } from './providers';
 import SystemJS = require('systemjs');
 
@@ -29,7 +29,7 @@ export class ExternalImporter {
   defaultTypescriptConfigJsonFolder: string = `${process.cwd()}/tsconfig.json`;
 
   @Injector(RequestService) private requestService: RequestService;
-  @Injector(FileService) private fileService: FileService;
+  private fileService;
   @Injector(BootstrapLogger) private logger: BootstrapLogger;
   @Injector(CompressionService) compressionService: CompressionService;
   @Injector(NpmService) private npmService: NpmService;
@@ -160,7 +160,7 @@ export class ExternalImporter {
 
   isModulePresent(hash) {
     const file = this.loadPackageJson();
-    let ipfsConfig: PackagesConfig[] = file.ipfs;
+    let ipfsConfig: any[] = file.ipfs;
     const found = [];
     if (!ipfsConfig) {
       ipfsConfig = this.defaultIpfsConfig();
@@ -176,7 +176,7 @@ export class ExternalImporter {
 
   filterUniquePackages() {
     const file = this.loadPackageJson();
-    let ipfsConfig: PackagesConfig[] = file.ipfs;
+    let ipfsConfig: any[] = file.ipfs;
     let dups = [];
     if (!ipfsConfig) {
       ipfsConfig = this.defaultIpfsConfig();
@@ -211,7 +211,7 @@ export class ExternalImporter {
 
   addPackageToJson(hash: string) {
     const file = this.loadPackageJson();
-    let ipfsConfig: PackagesConfig[] = file.ipfs;
+    let ipfsConfig: any[] = file.ipfs;
     if (!ipfsConfig) {
       ipfsConfig = this.defaultIpfsConfig();
     }
