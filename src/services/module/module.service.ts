@@ -20,6 +20,7 @@ import { ComponentsService } from '../components/components.service';
 import { BootstrapsServices } from '../bootstraps/bootstraps.service';
 import { ServicesService } from '../services/services.service';
 import { CacheLayer, CacheLayerItem } from '../../services/cache/';
+import { ReflectDecorator } from '../../helpers/reflect.decorator';
 
 @Service()
 export class ModuleService {
@@ -153,6 +154,9 @@ export class ModuleService {
     currentModule: CacheLayer<CacheLayerItem<Function>>
   ) {
     components.forEach(component => {
+      if (!component['metadata']) {
+        ReflectDecorator({}, { type: 'component' })(component);
+      }
       this.validators.validateComponent(component, original);
       currentModule.putItem({
         data: component,
@@ -183,6 +187,9 @@ export class ModuleService {
     currentModule: CacheLayer<CacheLayerItem<Function>>
   ) {
     bootstraps.forEach(bootstrap => {
+      if (!bootstrap['metadata']) {
+        ReflectDecorator({}, { type: 'component' })(bootstrap);
+      }
       this.validators.validateEmpty(
         bootstrap,
         original,

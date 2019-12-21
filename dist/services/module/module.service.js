@@ -23,6 +23,7 @@ const effect_service_1 = require("../effect/effect.service");
 const components_service_1 = require("../components/components.service");
 const bootstraps_service_1 = require("../bootstraps/bootstraps.service");
 const services_service_1 = require("../services/services.service");
+const reflect_decorator_1 = require("../../helpers/reflect.decorator");
 let ModuleService = class ModuleService {
     constructor() {
         this.watcherService = constructor_watcher_1.constructorWatcherService;
@@ -110,6 +111,9 @@ let ModuleService = class ModuleService {
     }
     setComponents(components, original, currentModule) {
         components.forEach(component => {
+            if (!component['metadata']) {
+                reflect_decorator_1.ReflectDecorator({}, { type: 'component' })(component);
+            }
             this.validators.validateComponent(component, original);
             currentModule.putItem({
                 data: component,
@@ -130,6 +134,9 @@ let ModuleService = class ModuleService {
     }
     setBootstraps(bootstraps, original, currentModule) {
         bootstraps.forEach(bootstrap => {
+            if (!bootstrap['metadata']) {
+                reflect_decorator_1.ReflectDecorator({}, { type: 'component' })(bootstrap);
+            }
             this.validators.validateEmpty(bootstrap, original, bootstrap['metadata']['type']);
             currentModule.putItem({
                 data: bootstrap,
