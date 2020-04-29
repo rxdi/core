@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/core",
-  "version": "0.7.45",
+  "version": "0.7.46",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,7 +10,6 @@
     "dist"
   ],
   "scripts": {
-    "postpublish": "git push -f ssh://git@gitlab.youvolio.com:522/rxdi/core.git && git push --tags && git push ssh://git@gitlab.youvolio.com:522/rxdi/core.git --tags",
     "start": "gapi start --local --path=./src/testing-app/main.ts",
     "build": "gapi module build-node",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
